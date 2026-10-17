@@ -43,7 +43,7 @@ For manual installation, copy this entire `create-threat-model` directory, inclu
 - `threat-model.md` at the target repository root: scope, sources, assets, actors, system flows and trust boundaries, threat scenarios, treatments, verification criteria, and open questions.
 - A relative link from the existing `SECURITY.md` or `security.md`. If neither exists, the skill creates a short `SECURITY.md` containing the link.
 
-The result starts as a draft. Proposed controls and unresolved assumptions stay visible; they are not recorded as verified controls or accepted risks. The skill does not commit or publish the files.
+The result starts as a draft. It distinguishes current exposure from expected residual risk after effective treatment. Proposed controls and unresolved assumptions stay visible; they are not recorded as verified controls or accepted risks. The skill does not commit or publish the files.
 
 ## Common requests
 

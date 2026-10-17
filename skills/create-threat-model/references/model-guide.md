@@ -10,7 +10,7 @@ Use these sections for a new model; adapt an existing model's structure instead 
 | Actors and constraints | Goals, starting access, privileges, controlled inputs, binding obligations, negotiable choices, and dependencies. |
 | System model | Components, stores, external parties, interactions, and changes in trust assumptions. Include a compact diagram and supporting prose. |
 | Threat scenarios | Stable IDs, system-specific mechanisms, prerequisites, objectives, consequences, applicability, and explained priority. |
-| Treatment and verification | Controls and their states, treatment decisions, remaining exposure, responsible roles, evidence, and testable criteria. May be kept with each scenario. |
+| Treatment and verification | Controls and their states, treatment decisions, current exposure, expected residual risk, responsible roles, evidence, and testable criteria. May be kept with each scenario. |
 | Review and open questions | Participants and reviewed scope, unresolved decisions, coverage gaps, and reassessment triggers. |
 
 Assign stable identifiers where elements are referenced, for example `S-001` for sources, `O-001` for objectives, `F-001` for flows, and `T-001` for scenarios. Preserve established identifiers and do not renumber them just to close gaps. Every source reference must resolve to an inspected source or be marked unverified; do not invent filenames, requirement IDs, or evidence.
@@ -45,6 +45,8 @@ Keep these dimensions separate:
 
 An applicable scenario can have effective treatment and remain in the model. A proposed response is not a decision. A stakeholder's report that a control exists does not establish that it works. Verification criteria describe future checks until results and conditions are recorded.
 
+Distinguish current exposure, based on available evidence, from expected residual risk conditional on effective treatment. Proposed or planned controls do not establish current risk reduction. If applicability or effectiveness is unresolved, keep that uncertainty explicit.
+
 Explicit acceptance records the responsible person's decision, rationale, scope, remaining exposure, and review date or trigger. A constraint or ordinary dialogue answer does not waive an obligation. Surface conflicts and alternatives without silently accepting the risk.
 
 ## Example
@@ -64,7 +66,8 @@ A supplier account changes the destination on an approved payment request, and s
 - Priority: High if the edit reaches settlement without reapproval; payment diversion has direct integrity impact. Confidence is limited by the missing rule.
 - Proposed response: Bind approval to the reviewed amount and destination; require renewed approval after a relevant change.
 - Control state: Proposed; implementation and effectiveness are unverified.
-- Remaining exposure: A compromised approver could approve an unwanted destination; recovery after settlement needs separate treatment.
+- Current exposure: Unresolved until post-approval edit rules are clarified; the proposed control establishes no current risk reduction.
+- Expected residual risk if the response is implemented and effective: A compromised approver could still approve an unwanted destination; recovery after settlement needs separate treatment.
 - Verification criteria: A destination change prevents settlement under the old approval; an unchanged, authorized request can still settle. Include concurrent edit and settlement behavior.
 - Decision: Proposed. Control owner and treatment decision remain open; no risk acceptance is recorded.
 - Open question: Which post-approval corrections are permitted without renewed approval?
@@ -74,5 +77,3 @@ A supplier account changes the destination on an approved payment request, and s
 Check coverage of significant objectives, actors, interactions, boundaries, and supplied known threats. Explain exclusions and gaps. Check whether each treatment addresses the actual mechanism and whether verification includes intended behavior and a representative failure or abuse case. Do not run these tests or change application code merely because they appear in the model.
 
 Keep risk priority proportionate to stated prerequisites and controls. Do not turn lack of evidence into certainty that a control is absent, or treat a planned control as a completed mitigation.
-
-For changed requirements or design, identify affected scenarios, assumptions, and decisions; preserve unrelated content. Mark the reviewed scope precisely. Reassess on relevant changes to roles, permissions, assets, dependencies, interactions, or operating assumptions. Keep human review status only where it still applies.
