@@ -8,6 +8,7 @@ Application security skills for coding assistants. Part of [AppSec Foundry](http
 | --- | --- |
 | [create-threat-model](skills/create-threat-model/README.md) | Create, update, or review a threat model from requirements, design documents, and team context. Works before code exists; no Analyzer required. |
 | [security-score](skills/security-score/README.md) | Present Analyzer scoring version 2 without model calls. |
+| [repo-profile](skills/repo-profile/README.md) | Show size, languages and build manifests of a local repository via Analyzer, without model calls. |
 | [authnz-review](skills/authnz-review/README.md) | Run an independent Analyzer AuthN/AuthZ review with explicit Claude/model-use authorization. |
 | [analyze-threats](skills/analyze-threats/README.md) | Use Analyzer question-first focused analysis, preview, clarification and lifecycle operations. |
 
