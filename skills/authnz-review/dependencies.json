@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "engine": "appsec-analyzer",
+  "interface_versions": [1],
+  "required_commands": ["version", "capabilities", "authnz-review"],
+  "required_capabilities": {"authnz_review": {"available": true, "model_calls": true, "hosts": ["claude-cli"]}},
+  "model_prerequisites": ["Authenticated Claude CLI", "Explicit source/model-use authorization and hard USD budget"],
+  "optional_tools": [],
+  "qualification": "offline-workflow; live model and platform qualification pending"
+}

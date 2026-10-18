@@ -6,7 +6,10 @@ Application security skills for coding assistants. Part of [AppSec Foundry](http
 
 | Skill | Purpose |
 | --- | --- |
-| [create-threat-model](skills/create-threat-model/README.md) | Create, update, or review a threat model from requirements, design documents, and team context. Works before code exists. |
+| [create-threat-model](skills/create-threat-model/README.md) | Create, update, or review a threat model from requirements, design documents, and team context. Works before code exists; no Analyzer required. |
+| [security-score](skills/security-score/README.md) | Present Analyzer scoring version 2 without model calls. |
+| [authnz-review](skills/authnz-review/README.md) | Run an independent Analyzer AuthN/AuthZ review with explicit Claude/model-use authorization. |
+| [analyze-threats](skills/analyze-threats/README.md) | Use Analyzer question-first focused analysis, preview, clarification and lifecycle operations. |
 
 ## Quick start
 
@@ -35,6 +38,6 @@ The `npx` command installs the skill; modeling happens in your assistant. See th
 
 Each skill lives in `skills/<name>/`: `README.md` explains usage, `SKILL.md` contains the assistant instructions, and `references/` holds supporting material. For manual installation, copy the complete skill directory into your assistant's skill location.
 
-These skills do not require AppSec Advisor or AppSec Analyzer.
+`create-threat-model` requires neither AppSec Advisor nor AppSec Analyzer. The other skills require an independently installed compatible Analyzer; their `dependencies.json` files declare interface versions, commands, capabilities, optional tools and model prerequisites using the [dependency schema](schemas/skill-dependencies.schema.json). Model-backed skills require explicit source/model-use authorization. No skill installs packages automatically. A plugin may provide a trusted binding to its bundled tested engine; portable instructions contain no plugin-root or sibling-checkout paths. Existing Advisor commands remain available until their compatibility gaps and qualification gates are closed.
 
 For development, follow [AGENTS.md](AGENTS.md) and the relevant skill's requirements, starting with [create-threat-model](skills/create-threat-model/requirements.md).
