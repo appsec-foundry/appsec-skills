@@ -103,13 +103,17 @@ The dialogue uses your language and normally asks one short question at a time, 
 
 The assistant uses a checklist internally to keep the dialogue focused; you do not have to answer every checklist item. Questions about consequences concern what people could lose or be unable to do. You are not expected to determine whether an attack would succeed, and asking the assistant to examine a concern does not confirm that it is an actual weakness.
 
+The model's main sections explain the risks and recommended actions in plain language. Each threat links to its supporting evidence and detailed checks in an appendix, so you can read the recommendations without working through code references. Important uncertainties stay beside the risk; a source observation is not presented as proof that an attack succeeds.
+
+If you have already requested an update or review, an existing model does not trigger another choice of operation. If a choice is needed, the assistant asks and waits for your reply. With an interactive interface that supports waiting, it keeps the question pending instead of ending with a "No files changed" report. In ordinary chat, it pauses for your reply and continues the task afterward.
+
 You can answer “unknown,” skip questions, or stop the dialogue. Missing information stays visible in the draft. If there is too little context to describe a concrete system, the assistant explains what is missing instead of producing generic threats.
 
 Source reading has fixed limits on files, text, tool calls, and exploration time. Larger projects may be only partly examined, even with architecture reading enabled. Name the service or feature you want to focus on; the model records important coverage gaps. The exact limits are in the [assistant workflow](SKILL.md#execution-boundaries).
 
-After creating or updating the model, the assistant summarizes the central threats and next steps. Updates distinguish new threats from changed assessments of existing ones. Where useful, it suggests a follow-up skill and an example request, with any prerequisites.
+After creating or updating the model, the assistant summarizes the central threats and recommends where to start. Usually one to three next steps explain the harm to reduce, a proposed measure, and how to check its effect. If a fact must be checked first, it explains which decision that check will support. Updates distinguish new threats from changed assessments of existing ones. A short example request helps you continue with the recommended next step; where useful, it names a suitable follow-up skill and any prerequisites.
 
-The assistant offers an optional review or decision round after delivery. A discussion of risk decisions starts only when you request it. You can plan a response, accept a risk, or clarify a missing fact first. Acceptance requires an explicit decision by a responsible person, with a rationale and review date or trigger. To save decisions in the model, include an update request; a review stays read-only.
+The assistant offers an optional review or discussion of possible measures after delivery. That discussion starts only when you request it. It explains concrete options and their trade-offs before asking you to decide. You can plan a response, accept a risk, or clarify a missing fact first. Acceptance requires an explicit decision by a responsible person, with a rationale and review date or trigger. To save decisions in the model, include an update request; a review stays read-only.
 
 ## Internal or public models
 
@@ -128,6 +132,14 @@ The model carries a visible audience notice. That notice does not restrict acces
 ## Use the model during development
 
 Use the recommendations to plan changes to requirements, design, or implementation. Each explains what to change, why it addresses the threat, and how to check the result. Applying those changes is a separate task.
+
+To work through possible measures, use your actual scenario IDs in a request such as:
+
+```text
+Use create-threat-model to work through practical measures for T-001 and T-002
+with me. Explain the options and trade-offs and recommend where to start.
+Update the model with the decisions I explicitly make.
+```
 
 For example, consider [T-003: changing a payment destination after approval](references/model-guide.md#t-003-payment-details-can-change-after-approval):
 

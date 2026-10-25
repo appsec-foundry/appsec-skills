@@ -2,7 +2,7 @@
 
 Use this reading order for a new model; adapt an existing model's structure instead of reformatting it wholesale. Write primarily for developers without requiring security expertise; product owners and reviewers should also be able to follow the reasoning.
 
-The structure below is a content guide, not a form or serialization schema. Use descriptive headings and short prose; use compact tables for comparisons and overviews, and keep long explanations in the scenario text. Explain unfamiliar terms and IDs in context. A reader should understand what can go wrong, why it matters, and what to do next without reading the skill or assistant conversation.
+The structure below is a content guide, not a form or serialization schema. Use descriptive headings and short prose; use compact tables for comparisons and overviews. Keep the scenario text short enough to scan; put detailed technical explanations and evidence in the appendix. Explain unfamiliar terms and IDs in context. A reader should understand what can go wrong, why it matters, and what to do next without reading the skill or assistant conversation.
 
 Prefer concrete descriptions over specialist labels: "A customer can read another customer's invoice" instead of "cross-tenant confidentiality violation," and "Check the user may access this invoice on every download" instead of "enforce resource-level authorization." Keep exact endpoint names or code references when they help developers locate or verify the change. Use analysis terms such as STRIDE internally; do not require readers to understand them to use the model.
 
@@ -11,11 +11,11 @@ Keep each scenario's reasoning, recommendations, decisions, and open questions t
 | Section | Include |
 | --- | --- |
 | Audience notice | A prominent notice immediately below the title, before any overview. Reflect the established audience; use internal provisionally when unanswered and identify the unresolved audience. Use the notices below. |
-| At a glance | Purpose, scope, exclusions, draft/review status, known owner, and the few most important next actions linked to scenarios. Give each action a brief priority reason, proposed or decided response, known owner, and next check. |
-| System in brief | Valuable data and operations, data sensitivity, supported business processes, security objectives and consequences for the organization and affected people, actors, main interactions and trust boundaries, with a compact diagram. Integrate relevant constraints and assumptions into this explanation. |
-| Threats and recommended changes | Short scenario sections with stable IDs, reasoning, concrete recommendations, verification, and decisions together. |
+| At a glance | One sentence on purpose and scope, a short status note, and the few most important actions linked to scenarios. For each, make the benefit and next action clear. Include known responsibility and material exclusions without turning the opening into a change history or inspection report. |
+| System in brief | A compact diagram and a plain-language explanation of users, important data and operations, external connections, and what must stay protected. Keep critical boundaries and assumptions visible; move detailed control inventories and implementation traces to the appendix. |
+| Threats and recommended changes | Short scenario sections with stable IDs, concrete harm, material conditions, a recommended response, and the next check or decision. Link each to its evidence and detailed verification in the appendix. |
 | Open decisions and review | Remaining decisions, actual review participation and scope, and reassessment triggers. Link to scenario details instead of repeating them. |
-| Appendix: sources and coverage | Source locations, revisions and status, detailed evidence, conflicts, coverage gaps, and the checklist items that are not clarified. Identify abuse-pattern sources and material unresolved or unexamined coverage without reproducing the catalog. Keep decision-relevant uncertainty beside the affected scenario as well. |
+| Appendix: evidence, verification, and coverage | Evidence grouped by scenario or shared claim, inspected source links, revisions and status, detailed verification procedures, conflicts, coverage gaps, and checklist items that are not clarified. Identify abuse-pattern sources and material unresolved or unexamined coverage without reproducing the catalog. Keep decision-relevant uncertainty beside the affected scenario as well. |
 
 Use stable scenario IDs such as `T-001`. Add other IDs only when repeated cross-references benefit from them; named source links and plain-language references are often sufficient. Preserve established identifiers and do not renumber them just to close gaps. Every source reference must resolve to an inspected source or be marked unverified; do not invent filenames, requirement IDs, or evidence.
 
@@ -92,7 +92,9 @@ A scenario should answer:
 - Which controls address the mechanism, what is their actual state, and what remains?
 - What decision is needed, who is responsible, and how could the response be verified?
 
-Use these questions to check content, not as mandatory output fields. A descriptive scenario heading and a few short paragraphs covering risk, recommendation, verification, and decision will usually suffice. Combine actor, mechanism, prerequisites, harm, and priority in the explanation. Separate proposed checks, residual risk, and recorded decisions into short paragraphs when combining them would obscure their status. Keep detailed evidence in the appendix with a direct reference when needed. Readers should not have to decode chains of IDs to understand a scenario.
+Use these questions to check content, not as mandatory output fields. Prefer a descriptive scenario heading followed by a few short paragraphs: what could happen and why it matters; the recommended response; and the next check or decision. A straightforward scenario can often be explained in roughly 120–200 words excluding its evidence appendix; this is a readability guide, not a limit that justifies dropping material facts. Combine actor, mechanism, prerequisites, harm, and conditional priority in the explanation. Keep actual decisions and material residual risk visible. Do not repeat default statements such as "not tested," "no owner assigned," or "not accepted" in every paragraph when a shared status note suffices. Retain the specific uncertainty that affects this scenario's priority or response.
+
+End the scenario with a descriptive link such as "Evidence and verification for T-003." Put source-by-source reasoning, exact configuration observations, implementation paths, and detailed test steps in that appendix entry. Keep enough causal explanation in the main text for the risk and recommendation to make sense without following the link. A reader should not need to understand file names, middleware, or a chain of source citations before reaching the proposed response.
 
 Keep these dimensions distinct in meaning; they need not be separate labeled fields:
 
@@ -113,11 +115,13 @@ Explicit acceptance records the responsible person's decision, rationale, scope,
 
 ## Make scenarios checkable
 
-Put the few decisive source links beside the claims they support in each scenario. Use descriptive labels such as "Payment requirements: changes after approval" and link to the relevant section or requirement where possible. Prefer repository-relative links for local documents. Keep the full source inventory and revision details in the appendix; readers should not need it to understand the argument.
+Keep each scenario traceable through a short evidence link, normally to a scenario-specific entry in the appendix of the same document. In that entry, explain what each source establishes and link to the inspected passage, requirement, or implementation location. Prefer repository-relative links for local documents. Retain a direct source link in the main text when it helps the reader understand the key claim or locate the proposed change; do not scatter every inspected file across the risk narrative. This replaces citation clutter with an explicit claim-to-evidence path, not an unconnected bibliography.
+
+For each evidence entry, distinguish observed implementation, intended behavior, user reports, assumptions, and actual test results. Put proposed verification procedures in a separate paragraph from observed results. Shared evidence may serve several scenarios when those relationships are explicit. Keep citations close to their claims within the appendix, and preserve checked revisions and conditions when known. Do not copy the whole scenario into the appendix or reproduce a full source excerpt when a concise explanation and link suffice. Critical unknowns, conflicts, and conditions must remain visible in the main scenario even when their supporting detail moves down.
 
 Apply the skill's [audience rules](../SKILL.md#establish-the-audience) to evidence as well as scenario prose. Source names, paths, URL parameters, diagrams, and decision records can themselves disclose restricted details. Include only references suitable for the readers; otherwise give a safe source description and state the traceability limit. Internal models may retain necessary confidential security details for authorized readers. Public models must exclude those details without implying that an unresolved risk is fixed.
 
-Explain what each source establishes: intended behavior in a requirement, a design choice, an implementation observation, or a recorded test result. A proposed requirement belongs in the recommendation, not among existing obligations. When the basis is a team statement or assumption, identify it as such; record a missing requirement as a gap and propose wording where useful. Do not invent a document or anchor to make a scenario appear supported.
+A proposed requirement belongs in the recommendation, not among existing obligations. Record a missing requirement as a gap and propose wording where useful. Do not invent a document or anchor to make a scenario appear supported.
 
 Check that the cited passage supports the claim, not just that the link resolves. Verify local targets and anchors within the authorized sources; mark inaccessible references and their limits. For effectiveness claims, link available test results or review evidence and state the checked revision and conditions when known. A link to test code describes a check, not a passing result; a requirement, design document, or merged PR alone does not verify effectiveness. Keep missing evidence explicit.
 
@@ -135,15 +139,19 @@ This fictional example illustrates a compact scenario, not a default threat or a
 
 ### T-003 Payment details can change after approval
 
-**Risk — high if changed payments do not need approval again.** A supplier who can edit an approved payment could send the money to a different recipient. The [payment-edit rules](#payment-edit-rules) allow corrections, but the [approval design](#approval-design) does not explain whether the changed payment needs approval again. We have not established whether the application prevents this.
+**Risk — high if changed payments do not need approval again.** A supplier could change the recipient after a payment is approved and redirect the money. The design allows edits but leaves renewed approval unclear; whether the application prevents this is unverified.
 
-**Recommended change.** Add this requirement: "Changing the amount or recipient cancels the existing approval. The changed payment must be approved before money is sent." Store the approved payment details and check that the payment still uses them. Prevent a simultaneous edit from changing those details between the check and sending the money; how the application and payment provider coordinate this still needs clarification. Alternatively, block edits after approval, but that would require a new request for every correction.
+**Recommended change.** Require renewed approval whenever the amount or recipient changes. Bind the approval to the reviewed details and prevent changes between the final check and sending the money. Alternatively, forbid edits after approval, at the cost of a new request for every correction. A compromised approver account remains a separate risk.
 
-**Checks to perform.** Confirm that an unchanged, approved payment can be sent. Changing the amount or recipient must require approval again, including when an edit happens while the payment is being processed. These checks have not been run.
+**Next step.** Agree which editing rule to adopt and clarify how the application and payment provider keep the checked details unchanged until payment. Then verify that approved, unchanged payments succeed and changed payments require new approval, including edits during processing. This response is proposed; the checks have not run.
 
-**What this does not prevent.** Someone controlling an approver's account could still approve a payment to the wrong recipient. How to stop or recover that payment needs separate consideration.
+[Evidence and verification for T-003](#evidence-and-verification-for-t-003)
 
-**Decision needed.** Agree what should happen when an approved payment changes. The change above is a proposal; nobody has been assigned to implement it and no deadline or decision to accept the risk has been recorded.
+### Evidence and verification for T-003
+
+In a complete model, this entry belongs in the evidence appendix. The [payment-edit rules](#payment-edit-rules) permit corrections after approval. The [approval design](#approval-design) does not state whether such edits invalidate approval. These sources establish a design gap, not a demonstrated implementation flaw; no runtime behavior was examined. No owner, deadline, or acceptance decision has been supplied.
+
+Proposed requirement: "Changing the amount or recipient cancels the existing approval. The changed payment must be approved before money is sent." Proposed verification: an unchanged approved payment succeeds; changing either value prevents payment until renewed approval; an edit concurrent with settlement cannot replace the reviewed details. The application/payment-provider coordination needs design clarification before selecting an implementation. These are future checks, not observed results.
 
 ### Fictional source excerpts for the example
 
@@ -173,7 +181,7 @@ Neither version includes an access token from a source URL or unrelated customer
 
 Check coverage of significant objectives, actors, interactions, boundaries, checklist items, abuse patterns, and supplied known threats. Explain material exclusions and gaps; distinguish a source-backed exclusion from an unknown prerequisite or effective treatment. Check whether each treatment addresses the actual mechanism and whether verification includes intended behavior and a representative failure or abuse case. Check that recommendations identify the appropriate level, affected element, concrete change, rationale, and verification criteria, with material trade-offs where relevant. In updates, reassess recommendations affected by changed sources or decisions. Do not run these tests or change application code merely because they appear in the model.
 
-Check readability and traceability together: can a team member identify the main concerns and next actions from the opening, distinguish proposed checks from completed verification, and follow each scenario's key links to supporting passages? Check that summary decisions match the scenario records. Remove duplicated explanations and repeated default status text, keeping material conditions and decisions intact. Prefer everyday wording; explain technical terms where they are needed to understand an attack or response. Do not force existing human-written models into this layout during an unrelated update.
+Check readability and traceability together: can a team member identify the main concerns and next actions from the opening, understand each scenario without its appendix, distinguish proposed checks from completed verification, and follow its evidence link to the supporting passages? Check that summary decisions match the scenario records. Remove duplicated explanations and repeated default status text, keeping material conditions and decisions intact. Prefer everyday wording; explain technical terms where they are needed to understand an attack or response. If a scenario spends several paragraphs listing implementation observations before recommending an action, move that evidence into its appendix entry and shorten the main explanation. When an update changes a scenario, replace superseded explanation rather than appending another history paragraph. Do not force existing human-written models into this layout during an unrelated update.
 
 Keep risk priority proportionate to stated prerequisites and controls. Do not turn lack of evidence into certainty that a control is absent, or treat a planned control as a completed mitigation.
 

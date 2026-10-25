@@ -86,6 +86,18 @@ Repeat with no permitted interactive question tool: expect the same understandab
 - **Provisional audience:** Request an update or review of a model marked internal only as an unresolved fallback, with no prior skip or no-questions instruction in the current task. Expect the audience question first. The provisional heading alone must not count as an answer.
 - **Skipped or undecided:** Skip the audience question or choose undecided. Expect the audience to remain unresolved and affected confidential details to remain omitted. Do not repeat the question during that task or treat the fallback as permission to disclose. An explicit no-questions request must still be honored.
 
+### Check waiting and resumption (REQ-03, REQ-09, REQ-10, REQ-11)
+
+Start with a fictional existing `threat-model.md` and its security-document link. Use a host with an asynchronous question tool and supported waiting, then inspect the conversation through the submitted answer:
+
+- **Explicit update or review:** Request a focused update, or separately a read-only review. Expect the requested operation to proceed without a redundant update/review menu just because the model exists. A review must remain read-only.
+- **Creation with an existing model:** Request creation without authorizing replacement or update. Expect one clarification offering a focused update, with the existing model preserved while unanswered. Delay the reply beyond a tool return or wait timeout. Expect the question to remain pending, no dependent write, and no final "No files changed; please choose" report. Independent reads may finish, but must not become filler activity.
+- **Answer and continue:** Select an update and provide the change to assess. Expect the assistant to resume from that answer, preserve the existing scope unless changed explicitly, and complete the authorized update and checks. It must not stop at acknowledging the selection or ask the operation question again. Selecting review instead must lead to review observations without writes.
+- **No authorization supplied:** Skip the operation choice or stop the task. Expect no inferred update permission and no overwrite of the existing model or link. A factual confirmation skipped during an already authorized update follows the supported-draft rules instead; do not confuse these cases.
+- **Chat-only host:** With no supported interactive waiting, expect a concise question and a normal turn yielded for the reply. On the reply, expect continuation rather than a claimed completed task or a fresh interview. Do not fail this case merely because the chat turn ended.
+
+These cases need a real host session to verify answer delivery and waiting behavior. Static skill validation cannot prove that an interactive question stays live.
+
 ### Check question necessity and answer interpretation (REQ-03, REQ-04, REQ-07, REQ-14, REQ-15, REQ-19)
 
 Use a fictional training application with an optional AI integration and an older note saying an exercise compromise has no material impact. Inspect the conversation as well as the resulting model:
@@ -99,5 +111,27 @@ Use a fictional training application with an optional AI integration and an olde
 - **Stop:** Say "I don't know; continue without further questions." Expect no more questions, supported analysis, and explicit unresolved context rather than invented confirmation.
 
 For each actual question, be able to identify the missing fact and the assessment or permitted action it changes, or the required confirmation it satisfies. Reject a round justified only by checklist completion. These are manual behavior checks; static validation does not establish that a live model follows them.
+
+### Check the transition to measures (REQ-07, REQ-11, REQ-19)
+
+Supply a fictional local-training model whose T-001 concerns access to unrelated work files, T-002 concerns unwanted network exposure, and T-003 concerns external requests. Request an update for direct Node.js operation. Provide proposed measures in the fixture, but leave runtime effectiveness unverified. Inspect the closing and a separately requested follow-up:
+
+- **Actionable closing:** Expect the key harms and a recommended starting point, with a short reason for its priority. Each next step should identify a source-supported measure or a specific check and the decision it informs. "Host access needs verification; check permissions, listeners, and outbound access" is insufficient. A check might establish which unrelated directories the process account can access, informing whether its permissions need to be reduced; this must remain a planned check, not an executed result.
+- **Usable continuation:** Expect a copyable request in the user's language to work through measures for the actual relevant IDs, compare meaningful alternatives, and record only explicit decisions if an update is requested. A bare instruction to "decide treatments" is insufficient. Routine source-link or ID checks must not displace the recommended actions.
+- **Explain before deciding:** Send that continuation request. Expect a concrete proposal with benefit, relevant trade-offs, and needed evidence before a decision question. Do not start with unexplained risk-treatment categories or demand an owner for an undefined measure.
+- **Boundaries and uncertainty:** With no requested follow-up, expect the model delivery to finish after the useful invitation, without launching another questionnaire. No example prompt or chosen plan authorizes runtime checks or application changes. Missing evidence must not turn into a confirmed weakness, and missing technical detail must not produce invented commands or settings.
+
+These are manual behavior checks. Static validation does not establish that a real model produces useful recommendations or respects the transition in practice.
+
+### Check readable scenarios and evidence placement (REQ-04, REQ-06, REQ-07, REQ-19)
+
+Use a fictional image-import scenario whose source notes describe a server download and a browser fallback after download failure. Supply links to those observations, but no runtime results. Request a model, or explicitly request a readability update to a dense existing model:
+
+- **Main text:** Expect a short explanation that both server and browser may contact destinations outside the exercise, why this matters, a proposed response covering both paths, and a concrete next action. The reader must reach the recommendation without first reading several paragraphs of file-by-file analysis. Actual destination reachability and consequence remain conditional.
+- **Evidence appendix:** Expect a descriptive link from the scenario to evidence explaining both paths, with the supplied source references and their limits. Detailed proposed tests belong separately from observed facts. Moving the browser-fallback trace must not remove the browser from the main recommendation or imply server-only restrictions are sufficient.
+- **Shared status and updates:** State shared limits once, while preserving material scenario-specific unknowns. During an authorized readability update, retain stable IDs, explicit decisions, source traceability, and unresolved conflicts; replace repetition rather than accumulating update history. A read-only review must propose this restructuring without changing the target model.
+- **Human reading check:** Read only the overview and one scenario. It should be clear what could go wrong, under what important condition, what to do next, and what remains uncertain. Follow the evidence link to check the basis. An appendix containing only a source list without explaining which claim each source supports fails this check.
+
+These are manual reading and behavior checks; word counts and valid Markdown alone do not establish that the explanation is understandable.
 
 Also review all user-visible text for a developer audience (REQ-19): the opening, progress updates, questions and choices, diagram labels, model, and closing. A developer should understand what happens, why it matters, and what to answer or do without knowing security terminology. For example, prefer "Could someone read another customer's invoice?" over "Is cross-tenant confidentiality guaranteed?" Keep details that help locate or check a change; remove unexplained analysis labels, repeated caveats, and procedural commentary that does not help the reader.
