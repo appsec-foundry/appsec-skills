@@ -1,6 +1,6 @@
 # Create Threat Model
 
-Create a threat model from requirements, design documents, and team knowledge. Use the same skill to update it as the design changes or review it without editing files. You can start before any code exists.
+Create a threat model from requirements, design documents, and team knowledge. Use the same skill to update it as the design changes or review it without editing files. You can start before any code exists. The conversation and model are written primarily for developers: clear language, concrete examples from your application, and no assumed security expertise. Technical details are included when they help explain a risk or make and check a change.
 
 ## Quick start
 
@@ -34,6 +34,8 @@ The assistant writes **`threat-model.md` at the project root** and links it from
 - A system summary and diagram showing interactions and trust boundaries.
 - Threat scenarios explaining what could go wrong, the harm, recommended changes, and how to check them.
 - Open decisions, assumptions, and source references, with detailed coverage in an appendix.
+
+Before detailed scenario analysis, the assistant asks you to confirm or correct the business purpose, relevant data sensitivity, and plausible worst-case consequences. It proposes context from the sources and reuses answers you have already given for the same scope. Audience or deployment questions do not replace this step; clarification may take another short round of at most three questions. You can skip questions or request work without questions; unconfirmed context stays explicit. Updates revisit only affected context.
 
 The first model is a draft for the team to review. It separates proposed measures from implemented or verified controls and explains what remains unknown. Each scenario has a stable ID, such as `T-003`, for use in tickets and pull requests. You can edit the document in any Markdown editor.
 

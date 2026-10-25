@@ -42,3 +42,16 @@ The starter creates a fresh temporary project, copies the current skill into it,
 To use the app instead of the CLI, run `bash scripts/test-threat-model.sh --prepare-only`, open the printed folder, and send the text from `PROMPT.txt` in a fresh conversation.
 
 The example deliberately leaves audience, data sensitivity, and business impact unspecified. Check that the early dialogue clarifies these within the three-question limit (REQ-03, REQ-05–07, REQ-11, REQ-14), and that your answers inform the scenarios and priorities. In a fresh run, skip an answer or add "Do not ask questions" to the prompt and check that the uncertainty stays visible (REQ-04). This is a manual behavior test; the starter does not automatically evaluate the resulting model.
+
+### Check context confirmation (REQ-03)
+
+Use these cases to check the dialogue before detailed scenario analysis; inspect the actual conversation, not just the finished model:
+
+- **Training regression:** Request a new internal model for a local training application. Answer the deployment question with "isolated local training with synthetic data" and permit confidential findings for authorized repository readers. Expect a further short round proposing the supported training purpose, clarifying the sensitivity and recipients of any other relevant data, and asking which plausible worst-case consequences matter. Host compromise or lost training time may be proposals, not confirmed business impact. The two initial answers alone must not end clarification.
+- **Documented context:** Supply purpose, data classifications, and harmful outcomes in project documents. Expect source-derived proposals for confirmation, not a demand to describe everything again. Explicit user statements already covering those aspects for the same scope should not be asked again.
+- **Skip or no questions:** Skip worst-case confirmation or request no questions. Expect a supported draft with that context explicitly unconfirmed and affected priorities provisional; no repeated demand or invented confirmation. Silence or a timeout must not be treated as a skip.
+- **Focused update:** Change one data flow in an existing model. Expect confirmation only for affected context, preserving unrelated confirmations and decisions.
+
+These are manual behavior checks; documentation review or a passing installer test does not establish that a model session followed the dialogue.
+
+Also review all user-visible text for a developer audience (REQ-19): the opening, progress updates, questions and choices, diagram labels, model, and closing. A developer should understand what happens, why it matters, and what to answer or do without knowing security terminology. For example, prefer "Could someone read another customer's invoice?" over "Is cross-tenant confidentiality guaranteed?" Keep details that help locate or check a change; remove unexplained analysis labels, repeated caveats, and procedural commentary that does not help the reader.

@@ -4,7 +4,7 @@
 
 - **REQ-02 — Define the scope.** State the system, feature, or change covered, exclusions, and known owners. Keep conclusions within the examined scope.
 
-- **REQ-03 — Fill gaps through dialogue.** Read sources first, then ask about relevant gaps, contradictions, and overlooked concerns. Incorporate answers in short rounds of at most three questions. Users may skip or stop questions; unanswered points remain open.
+- **REQ-03 — Fill gaps through dialogue.** Read sources first, then ask about relevant gaps, contradictions, and overlooked concerns. Incorporate answers in short rounds of at most three questions. Users may skip or stop questions; unanswered points remain open. Before detailed scenario analysis, ask the user to confirm or correct the business purpose and supported processes, the sensitivity of relevant data, and the plausible worst-case consequences. Present source-derived context as a proposal where available. Reuse explicit confirmations already given for the same scope; for updates, revisit only affected context. Respect skipped questions and requests to proceed without questions, and keep unconfirmed context explicit.
 
 - **REQ-04 — Make uncertainty visible.** Cite sources and distinguish facts, user statements, assumptions, and proposals. Show conflicts between intended and observed behavior, missing context, and review limits. Label drafts and unverified controls honestly; explain insufficient context instead of inventing a model.
 
@@ -33,3 +33,5 @@
 - **REQ-17 — Default model language.** Create new threat models in English unless the user explicitly requests another language. Preserve an existing model’s language during updates unless translation is requested. The conversation may use the user’s language.
 
 - **REQ-18 — Check maintainable abuse patterns.** Check the system against a small set of reusable abuse patterns. Teams can add or refine patterns and explain exclusions in project documents that remain intact across skill updates. Assess applicability from project evidence, merge overlapping scenarios, and show material unresolved or unexamined coverage. Ask only about material gaps within REQ-03.
+
+- **REQ-19 — Communicate clearly for developers.** Write all user-visible text primarily for developers without assuming security expertise. This includes questions, answer choices, progress updates, diagrams, the threat model, and summaries. Use clear, concise language and concrete application examples. Explain necessary security terms and include only details that help users understand, answer, decide, implement, or verify.

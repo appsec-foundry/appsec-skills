@@ -1,8 +1,10 @@
 # Model guide
 
-Use this reading order for a new model; adapt an existing model's structure instead of reformatting it wholesale. Keep the document readable by developers, product owners, and reviewers.
+Use this reading order for a new model; adapt an existing model's structure instead of reformatting it wholesale. Write primarily for developers without requiring security expertise; product owners and reviewers should also be able to follow the reasoning.
 
 The structure below is a content guide, not a form or serialization schema. Use descriptive headings and short prose; use compact tables for comparisons and overviews, and keep long explanations in the scenario text. Explain unfamiliar terms and IDs in context. A reader should understand what can go wrong, why it matters, and what to do next without reading the skill or assistant conversation.
+
+Prefer concrete descriptions over specialist labels: "A customer can read another customer's invoice" instead of "cross-tenant confidentiality violation," and "Check the user may access this invoice on every download" instead of "enforce resource-level authorization." Keep exact endpoint names or code references when they help developers locate or verify the change. Use analysis terms such as STRIDE internally; do not require readers to understand them to use the model.
 
 Keep each scenario's reasoning, recommendations, decisions, and open questions together so a person can extend them directly in Markdown. Preserve meaningful manual additions and the team's layout during updates. Do not require generated metadata, special delimiters, or a separate machine-readable copy to maintain the model.
 
@@ -75,7 +77,7 @@ Connect the technical outcome to the affected data or operation, the business pr
 
 Explain the scale, duration, or recovery limits when they affect priority. Even public product data may be critical if incorrect prices drive binding orders. Conversely, the presence of personal data alone does not establish the severity of every scenario; consider its actual sensitivity, affected people, reach, and plausible misuse. Keep likelihood prerequisites and evidence confidence distinct from impact.
 
-Record shared business context once in the system summary and use it in scenario reasoning. If the consequences remain unknown, state which missing fact could change the assessment and keep that priority provisional. Do not turn an unanswered question into a low rating or invent monetary losses, outage tolerances, or stakeholder confirmation.
+Record shared business context once in the system summary and use it in scenario reasoning. Distinguish source-derived proposals from explicit user statements or confirmations of purpose, data sensitivity, and worst-case consequences. If confirmation was skipped or questions were disabled, identify the unconfirmed aspects without inventing approval. If the consequences remain unknown, state which missing fact could change the assessment and keep that priority provisional. Do not turn an unanswered question into a low rating or invent monetary losses, outage tolerances, or stakeholder confirmation.
 
 ## Scenario records
 
@@ -129,17 +131,17 @@ Keep these recommendations with the scenario and summarize the next action in th
 
 This fictional example illustrates a compact scenario, not a default threat or a mandatory set of fields. Its links point to fictional source excerpts below; actual models link to the inspected project sources.
 
-### T-003 An approval survives a change to the payment destination
+### T-003 Payment details can change after approval
 
-**Risk — high if edits bypass renewed approval.** A supplier allowed to edit an approved payment could redirect funds to another recipient. The [payment-edit rules](#payment-edit-rules) allow corrections, but the [approval design](#approval-design) does not say whether they invalidate approval. Current exposure and control effectiveness remain unresolved.
+**Risk — high if changed payments do not need approval again.** A supplier who can edit an approved payment could send the money to a different recipient. The [payment-edit rules](#payment-edit-rules) allow corrections, but the [approval design](#approval-design) does not explain whether the changed payment needs approval again. We have not established whether the application prevents this.
 
-**Recommended change.** Add this requirement: "Changing the amount or recipient invalidates the existing approval. Settlement requires approval of the changed payment details." In the design, bind approval to the reviewed version and have settlement use those details. During implementation, prevent concurrent edits from changing them between the approval check and payment; the transaction and external-payment boundaries still need clarification. If corrections are needed, prefer this approach. Making approved requests immutable is an alternative, but requires suppliers and approvers to process replacement requests.
+**Recommended change.** Add this requirement: "Changing the amount or recipient cancels the existing approval. The changed payment must be approved before money is sent." Store the approved payment details and check that the payment still uses them. Prevent a simultaneous edit from changing those details between the check and sending the money; how the application and payment provider coordinate this still needs clarification. Alternatively, block edits after approval, but that would require a new request for every correction.
 
-**Proposed checks — not performed.** Check that an unchanged, authorized request can settle and that changing its amount or recipient requires renewed approval, including when editing and settlement occur concurrently.
+**Checks to perform.** Confirm that an unchanged, approved payment can be sent. Changing the amount or recipient must require approval again, including when an edit happens while the payment is being processed. These checks have not been run.
 
-**Residual risk.** Even if effective, the response does not prevent a compromised approver from approving an unwanted recipient; recovery needs separate treatment.
+**What this does not prevent.** Someone controlling an approver's account could still approve a payment to the wrong recipient. How to stop or recover that payment needs separate consideration.
 
-**Decision — open.** The requirements permit changes to the amount and recipient after approval. First clarify what should happen to the existing approval when either changes. The response is proposed; owner and target date are unset. No risk acceptance is recorded.
+**Decision needed.** Agree what should happen when an approved payment changes. The change above is a proposal; nobody has been assigned to implement it and no deadline or decision to accept the risk has been recorded.
 
 ### Fictional source excerpts for the example
 
