@@ -1,6 +1,6 @@
 # Create Threat Model
 
-Create a threat model from requirements, design documents, and team knowledge. Use the same skill to update it as the design changes or review it without editing files. You can start before any code exists. The conversation and model are written primarily for developers: clear language, concrete examples from your application, and no assumed security expertise. Technical details are included when they help explain a risk or make and check a change.
+Create a threat model from requirements, design documents, and team knowledge. Use the same skill to update it as the design changes or review it without editing files. You can start before any code exists. The conversation and model use short, concrete developer language: what can go wrong, when it matters, and what to do next. No security expertise is assumed. Details appear only when they help a decision, implementation, or check.
 
 For a repository request, the model covers the application described by the project across its intended uses and supported configurations. Questions clarify gaps in that system's behavior, data, and architecture. Your personal computer, test data, and locally enabled features do not define its scope. Threats involving optional features or particular operating modes state the conditions under which they apply. Assessment of a specific installation requires an explicit request for that scope.
 
@@ -130,15 +130,15 @@ The dialogue uses your language and normally asks you to confirm one short, sour
 
 For repository models, questions address missing project-level expectations. Optional features remain conditional parts of the assessment when in scope, even if disabled in your installation. Console messages use short paragraphs, consistent activity labels, and readable diagrams. Questions and choices stay together; answers do not trigger a repeated introduction or a full recap.
 
-Progress messages identify the current activity, a concrete intermediate result, and the next action or important open point. For example:
+Progress messages use a short activity label, a concrete result, and the next action or blocker. For example:
 
-> **Assessing scenarios** — The design separates customer and support access. I am checking which order operations each role may perform.
+> **Checking access** — The design limits orders to their owner. Next: check the download route.
 
 Messages use your conversation language and appear at useful transitions and during longer work, without a status line for every file read. If an answer is needed, the assistant makes clear whether it can continue other work or is waiting for you. Missing sources and unfinished checks remain visible. There are no simulated progress bars or invented completion percentages; the skill guides assistant messages rather than installing a console interface. Shorter wording preserves important conditions and uncertainties; it does not turn an assumption into a confirmed fact.
 
 The assistant uses a checklist internally to keep the dialogue focused; you do not have to answer every checklist item. Questions about consequences concern what people could lose or be unable to do. You are not expected to determine whether an attack would succeed, and asking the assistant to examine a concern does not confirm that it is an actual weakness.
 
-The model's main sections explain the risks and recommended actions in plain language. Each threat links to its supporting evidence and detailed checks in an appendix, so you can read the recommendations without working through code references. Important uncertainties stay beside the risk; a source observation is not presented as proof that an attack succeeds.
+Each scenario briefly explains the risk, the condition that makes it relevant, the recommended change, and the next check or decision. Shared limitations appear once. Evidence and detailed tests belong in the appendix; important uncertainties stay beside the risk. A source observation is not proof that an attack succeeds.
 
 If you have already requested an update or review, an existing model does not trigger another choice of operation. If a choice is needed, the assistant asks and waits for your reply. With an interactive interface that supports waiting, it keeps the question pending instead of ending with a "No files changed" report. In ordinary chat, it pauses for your reply and continues the task afterward.
 
@@ -146,9 +146,9 @@ You can answer “unknown,” skip questions, or stop the dialogue. Missing info
 
 Source reading has fixed limits on files, text, tool calls, and exploration time. Larger projects may be only partly examined, even with architecture reading enabled. Name the service or feature you want to focus on; the model records important coverage gaps. The exact limits are in the [assistant workflow](SKILL.md#execution-boundaries).
 
-After creating, updating, or reviewing the model, the assistant starts its closing with a short **verdict**: what the result means for the examined use, whether measures or clarification are needed, and why. The judgment stays within the evidence; it is not a security approval. It identifies whether the model was created, updated, reviewed without edits, or remains incomplete, and marks drafts and material limits. It then summarizes the central findings without repeating the progress history. Updates distinguish new threats from changed assessments of existing ones.
+The closing gives a brief **assessment**, the **result** with a model link, and **one next action**. It names the concrete harm and relevant uncertainty, identifies drafts or incomplete work, and distinguishes new threats from revised assessments. A focused update needs only a few sentences. Routine check results and repeated caveats are omitted; document review remains distinct from testing the application. The assessment is not security approval.
 
-The closing briefly recommends useful measures and gives you **one recommended next step**, with a goal, expected result, and a copyable request naming the appropriate known skill or a plain assistant task. It may add up to two further actions where useful. Examples include reviewing the model for gaps, comparing measures, planning a specific check, or implementing an already agreed change as a separate task. A model review is distinguished from code review and runtime testing. If a fact must be checked first, the assistant explains which choice the result will inform. The closing uses your conversation language, even when the model is in English.
+The next action states the expected result. A copyable request is included when it helps you start; further actions appear only when a dependency or material alternative affects the first step. If a fact must be checked first, the assistant explains which choice it informs. The closing uses your conversation language, even when the model is in English.
 
 The assistant finishes after delivery and the suggested next steps. It may end with a short invitation such as “Would you like to plan suitable measures together?” in your language. It does not automatically open measure-selection or risk-acceptance questions, even when the model contains open decisions. A suggested review or measures discussion starts only when you request it; answering the invitation is optional. With no questions requested, it suggests the continuation without asking. For example, a suggested review request may be:
 
