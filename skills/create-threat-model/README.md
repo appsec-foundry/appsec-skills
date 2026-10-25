@@ -1,22 +1,18 @@
 # Create Threat Model
 
-Create a threat model from requirements, design documents, and team knowledge. Use the same skill to update it as the design changes or review it without editing files. Source code is optional.
-
-The model connects security objectives, system interactions, threat scenarios, controls, and remaining risks. It is a Markdown document the team can review and maintain alongside the project.
-
-New models are written in **English by default**, even when the conversation or source documents use another language. Explicitly request another document language if needed. Updates preserve the existing model's language unless you request a translation; questions and conversation can remain in your language.
+Create a threat model from requirements, design documents, and team knowledge. Use the same skill to update it as the design changes or review it without editing files. You can start before any code exists.
 
 ## Quick start
 
-You need a coding assistant that supports skills. For the [Skills CLI](https://github.com/vercel-labs/skills/tree/v1.7.2) installation, use Node.js 22.20 or newer, npm, and Git.
+You need a coding assistant that supports skills. Installation with the [Skills CLI](https://github.com/vercel-labs/skills/tree/v1.7.2) requires Node.js 22.20 or newer, npm, and Git.
 
-Run this from the project you want to model, then select your assistant when prompted:
+From the project you want to model, run this command and select your assistant when prompted:
 
 ```bash
 npx skills@1.7.2 add appsec-foundry/appsec-skills --skill create-threat-model
 ```
 
-This requires the skill to be published on GitHub. For an unpublished checkout, use the local command below. The CLI version is pinned so the installation example uses a specific release.
+This installs the skill from GitHub. To use an unpublished checkout, follow the [local installation instructions](#install-from-a-local-checkout).
 
 Open your assistant in the target project and send:
 
@@ -26,103 +22,28 @@ Start with docs/requirements.md and docs/architecture.md.
 Ask about material gaps before writing the draft.
 ```
 
-Replace those paths with your own requirements, specifications, ADRs, or design documents. If you have no documents yet, describe the system's purpose, valuable data or operations, users, and main interactions in the prompt.
+Replace the paths with your own documents. If you have none yet, describe what the system does, who uses it, what data it handles, and what needs protection.
 
-The `npx` command installs the skill. The assistant performs the modeling and may ask up to three contextual questions per round.
-
-### Install from a local checkout
-
-From the target project, replace `/path/to/appsec-skills` with the absolute path to your checkout:
-
-```bash
-npx skills@1.7.2 add /path/to/appsec-skills --skill create-threat-model
-```
-
-For manual installation, copy this entire `create-threat-model` directory, including `references/`, into your assistant's skill location. The assistant entry point is [SKILL.md](SKILL.md).
-
-### Load a development version into Codex or Claude Code
-
-From the root of this checkout, install or update your current working version:
-
-```bash
-make install-dev          # Codex and Claude Code
-make install-dev-codex    # Codex only
-make install-dev-claude   # Claude Code only
-```
-
-This requires Make and Python 3 and installs a snapshot named **create-threat-model-dev** under `~/.agents/skills/` for Codex or `~/.claude/skills/` for Claude Code. The regular `create-threat-model` installation remains intact. Without Make, run `python3 scripts/install-dev-skill.py both` (or select `codex` or `claude`). To install only for one project, use `python3 scripts/install-dev-skill.py both --project /path/to/project`.
-
-In a fresh session in your target project, invoke:
-
-```text
-Codex:       $create-threat-model-dev
-Claude Code: /create-threat-model-dev
-```
-
-Then describe the modeling task as usual. The opening displays the dev name and a version containing a fingerprint of the local source files (REQ-16). **After editing the source skill, rerun the same installation command** to refresh the snapshot; uncommitted changes are included. Make edits in this checkout, not the installed copy. The installer preserves unrelated installations and refuses to replace a dev copy with local edits or an unmanaged folder. It installs no packages and starts no model session. These paths apply to local Codex and Claude Code, not Claude web chat or Cowork.
-
-Anyone with a local checkout can use these targets; paths are resolved from that checkout and the current user's home directory. Run `make help` to list targets and `make test` for the local installer and test-starter checks without model calls.
-
-See the official [Codex local skill documentation](https://learn.chatgpt.com/docs/build-skills#where-codex-loads-local-skills) and [Claude Code skill documentation](https://code.claude.com/docs/en/skills#choose-where-skills-load).
-
-### Optional: try a fictional project
-
-From the root of this repository, run:
-
-```bash
-bash scripts/test-threat-model.sh
-```
-
-The starter creates a fresh temporary project, copies the current skill into it, adds a fictional customer-portal description, and opens an interactive Codex CLI session with the prompt already supplied. It requires Bash and an installed, configured Codex CLI; it uses your existing login and configuration. Each run copies your latest local changes. Results remain in the printed test directory; move them elsewhere if you need to keep them beyond temporary-directory cleanup.
-
-To use the app instead of the CLI, run `bash scripts/test-threat-model.sh --prepare-only`, open the printed folder, and send the text from `PROMPT.txt` in a fresh conversation.
-
-The example deliberately leaves audience, data sensitivity, and business impact unspecified. Check that the early dialogue clarifies these within the three-question limit (REQ-03, REQ-05–07, REQ-11, REQ-14), and that your answers inform the scenarios and priorities. In a fresh run, skip an answer or add "Do not ask questions" to the prompt and check that the uncertainty stays visible (REQ-04). This is a manual behavior test; the starter does not automatically evaluate the resulting model.
-
-## What the conversation looks like
-
-Each invocation starts by showing the installed skill's name and version, for example `create-threat-model · Version 0.1.0`. This applies to creation, updates, and reviews, including requests without questions. The version comes from `metadata.version` in the installed [SKILL.md](SKILL.md); it identifies the skill, separately from the Skills CLI version in the installation command.
-
-The assistant briefly explains the scope and next steps, then reads the available sources. It shares a working system summary and compact diagram when enough context exists, so you can correct misunderstandings early. A focused update concentrates on the affected flows and boundaries.
-
-Questions target gaps whose answers could change system understanding, a relevant threat, its priority, or a response. Each explains why the missing information matters. Some arise during the initial reading; others emerge while examining scenarios. You can answer "unknown," skip questions, or stop the dialogue. Unresolved points stay visible with a next clarification step where possible; you do not need to complete a questionnaire before receiving a supported draft.
-
-When the sources leave material gaps, early questions cover **data sensitivity and business impact**: what information needs protection, who could be harmed by disclosure or unauthorized changes, and how misuse or disruption would affect the business process. For example, the assistant may ask what kinds of confidential information an upload contains or when an outage would become costly. Data categories and qualitative consequences are enough; no sensitive sample records or formal impact analysis are needed. Existing answers are reused, and the same three-question limit applies.
-
-The model connects technical outcomes to those consequences when prioritizing threats. Public data can still support a critical business operation. If you skip a material impact question or request no questions, the affected assessment remains provisional with the missing context visible.
-
-After delivering the draft or update, the assistant links the model and summarizes the central threats with scenario references, possible harm, and material uncertainty. For updates, it distinguishes newly identified threats from changed assessments of existing scenarios, or states that no new threats were identified in the examined scope. The closing then gives prioritized next steps and important open decisions tied to those scenarios.
-
-Where useful, the next steps name suitable skills, explain their purpose, and include example requests and relevant prerequisites. For example, an open treatment decision for T-003 could lead to: "Use create-threat-model to guide me through the treatment decision for T-003 in threat-model.md. Update the model with the decisions I explicitly make." A focused implementation review may call for another skill when its capabilities and prerequisites are known; a recommendation does not mean it is installed or has been run.
-
-The assistant briefly offers an optional review or decision round as part of the next steps and finishes without asking you to respond. Follow-up questions start only when you explicitly request that dialogue, either in your original request or afterward. Factual questions during modeling remain part of the workflow above.
-
-## Internal or public models
-
-For a new model, the assistant explicitly asks in the first clarification round whether it is intended for **internal or public use**, unless your request or established project guidance already answers that question. The choice determines which details the document can contain; it is separate from whether the application is publicly reachable. The question counts toward the usual limit of three questions per round, alongside questions about data sensitivity and business impact.
-
-You can specify the audience directly, for example: "Create a public threat model using only information suitable for publication." Updates and reviews retain an established audience; the assistant asks again only if it is missing, contradictory, or may have changed. If you skip the question or request no questions, new models provisionally default to **internal**, with the unresolved audience visible and affected confidential details omitted.
-
-Internal models can describe confidential open security issues, missing controls, attack prerequisites, and architecture details needed to address risks. Those details must be suitable for the repository's readers; a private repository or an "internal" heading alone is not sufficient. Public models exclude confidential details while retaining a useful explanation of the risks and required responses.
-
-Each model has a prominent English notice immediately below its title: **INTERNAL — NOT FOR PUBLIC DISTRIBUTION** or **PUBLIC USE INTENDED — NOT A PUBLICATION APPROVAL**. Internal models identify the intended readers when known. If the readers or repository access are unresolved, the notice explicitly states **AUDIENCE OR REPOSITORY ACCESS UNCONFIRMED — CONFIDENTIAL DETAILS OMITTED**, and the affected details are left out. The [notice templates](references/model-guide.md#audience-notice) keep this distinction separate from draft/review status; a notice does not provide access control or authorize publication.
-
-Before first writing confidential findings, the assistant checks whether the repository is suitable using available project context and asks once if that remains unclear, within the same question limit. Choosing "internal" alone does not establish that the repository's readers may receive those findings. It does not first save a confidential draft and then sanitize it.
-
-Neither version includes real secrets or unnecessary personal data. Before each write, the assistant checks the content, including diagrams, source links, appendices, and later decisions. If the destination is unsuitable for confidential details, it withholds them and explains the limitation. An unanswered clarification or a request without questions retains the internal default or established audience; unresolved access or disclosure questions remain visible and the affected confidential details are omitted. Updates retain the existing audience unless circumstances change; the skill does not silently convert a model's audience.
-
-These are assistant workflow checks, not an automated guarantee that every sensitive detail will be detected. The [audience example](references/model-guide.md#audience-example) shows how the same issue can be documented for different readers.
+New models are written in **English by default**. To use another language, ask explicitly, for example: “Write the threat model in German.” Updates keep the existing document's language; the conversation can use your language throughout.
 
 ## What you get
 
-- `threat-model.md` at the target repository root: a short opening with the main concerns and next actions, a system summary with a diagram, and concise threat scenarios explaining recommended changes, checks, and decisions. The overview highlights the most important actions rather than listing every scenario. Sources and detailed checklist coverage follow in an appendix in the same document; uncertainty affecting a decision stays beside the relevant scenario.
-- A relative link from the existing `SECURITY.md` or `security.md`. If neither exists, the skill creates a short `SECURITY.md` containing the link.
+The assistant writes **`threat-model.md` at the project root** and links it from `SECURITY.md` or `security.md`, creating a short `SECURITY.md` if needed. The model contains:
 
-The result starts as a draft. It distinguishes current exposure from expected residual risk after effective treatment. Proposed controls and unresolved assumptions stay visible; they are not recorded as verified controls or accepted risks. The overview reflects recorded decisions, including agreed clarification steps whose outcomes are still pending. Future checks, actual results, and decisions are clearly separated, and shared limitations are stated once. Scenarios that depend on an explicitly excluded use are kept brief, with a reason to revisit them if the scope changes. The skill does not commit or publish the files.
+- The main concerns and prioritized next steps.
+- A system summary and diagram showing interactions and trust boundaries.
+- Threat scenarios explaining what could go wrong, the harm, recommended changes, and how to check them.
+- Open decisions, assumptions, and source references, with detailed coverage in an appendix.
 
-Scenarios link directly to the relevant requirements, design sections, or available evidence using readable link names. These references let you check the reasoning without decoding IDs or searching the appendix. Existing rules, proposed changes, and evidence that a control works remain distinct. Missing sources are marked as gaps or assumptions; a document link alone is not proof that a control works.
+The first model is a draft for the team to review. It separates proposed measures from implemented or verified controls and explains what remains unknown. Each scenario has a stable ID, such as `T-003`, for use in tickets and pull requests. You can edit the document in any Markdown editor.
 
-If you request a decision round, the skill asks about the most important open scenarios, at most three at a time: plan a response, accept the risk, or clarify first. The options name the scenario's concrete response, exposure, and missing information. For updates, questions stay with affected scenarios and use decisions you already supplied; a decision is revisited only when its assumptions change. If no decisions remain open in scope, there is no decision round. With an update request, the skill records explicit decisions and the details you supply in the model; during a review or discussion, it returns proposed changes in the conversation. Planning does not implement the measure or create tickets. Missing details and unanswered decisions stay open. Risk acceptance requires an explicit decision by a responsible person, with rationale and a review date or trigger. You can leave remaining decisions for a later update.
+| Request | Result |
+| --- | --- |
+| Create | Writes an initial model. Preserves an existing one and offers an update. |
+| Update | Revises affected sections, preserving unrelated content, manual additions, and scenario IDs. |
+| Review | Reports gaps and suggestions in the conversation without changing files or review status. |
+
+Modeling does not change application code, create tickets, commit files, or publish the model.
 
 ## Common requests
 
@@ -147,9 +68,16 @@ Use create-threat-model to create a threat model for this service.
 Start with docs/requirements.md and include architecture reading of the code.
 ```
 
-The skill derives components, entry points, data stores, external connections, and authentication paths from code and configuration. Without this request, it offers architecture reading when the documents leave such points open and reads more code only after you agree. It shows where the code differs from the documents; it does not scan for vulnerabilities.
+Architecture reading identifies components, entry points, data stores, external connections, and authentication paths. It records differences between the code and the intended design. Without your opt-in, code reading stays limited to specific structural questions; the assistant offers broader reading when the documents leave those questions open. This is not a code vulnerability scan.
 
-**Start a decision round and record the results**
+**Review an existing model**
+
+```text
+Use create-threat-model to review threat-model.md against docs/design.md.
+Report gaps and proposed changes without editing files.
+```
+
+**Discuss open decisions and record the results**
 
 ```text
 Use create-threat-model to guide me through the open decisions in threat-model.md.
@@ -163,42 +91,49 @@ Use create-threat-model to update threat-model.md with our decisions:
 T-001 plan the proposed response, owner Finance Platform team, target 2026-12-15.
 ```
 
-**Review an existing model**
+Replace the example ID, owner, and date with your team's decision.
+
+## What to expect
+
+The assistant starts with the installed skill's name and version, reads the available sources, and shares a system summary and diagram when there is enough context. It asks up to three questions per round about gaps that could change the assessment. Early questions may cover sensitive data, the consequences of misuse or an outage, and who will read the model.
+
+You can answer “unknown,” skip questions, or stop the dialogue. Missing information stays visible in the draft. If there is too little context to describe a concrete system, the assistant explains what is missing instead of producing generic threats.
+
+Source reading has fixed limits on files, text, tool calls, and exploration time. Larger projects may be only partly examined, even with architecture reading enabled. Name the service or feature you want to focus on; the model records important coverage gaps. The exact limits are in the [assistant workflow](SKILL.md#execution-boundaries).
+
+After creating or updating the model, the assistant summarizes the central threats and next steps. Updates distinguish new threats from changed assessments of existing ones. Where useful, it suggests a follow-up skill and an example request, with any prerequisites.
+
+The assistant offers an optional review or decision round after delivery. A discussion of risk decisions starts only when you request it. You can plan a response, accept a risk, or clarify a missing fact first. Acceptance requires an explicit decision by a responsible person, with a rationale and review date or trigger. To save decisions in the model, include an update request; a review stays read-only.
+
+## Internal or public models
+
+For a new model, the assistant asks whether it is for internal or public use unless your request or project guidance already says so. You can specify this in the initial prompt:
 
 ```text
-Use create-threat-model to review threat-model.md against docs/design.md.
-Report gaps and proposed changes without editing files.
+Create a public threat model using only information suitable for publication.
 ```
 
-A creation request never replaces an existing model. Updates integrate features into that model; reviews leave the model and security document unchanged. If there is too little context to model a concrete system, the skill explains what is missing.
+Internal models can include confidential security findings only when the repository's readers are authorized to receive them. If that is unclear, the assistant asks before writing those details. Public models omit confidential details while explaining the risks and needed responses. Neither includes real secrets or unnecessary personal data.
+
+If you skip the audience question or request no questions, a new model is provisionally marked internal, with the uncertainty recorded and confidential details affected by it omitted. Updates retain the established audience unless circumstances change.
+
+The model carries a visible audience notice. That notice does not restrict access or approve publication, and the assistant's content checks are not a guarantee that every sensitive detail will be detected. See the [notice templates and examples](references/model-guide.md#audience-notice).
 
 ## Use the model during development
 
-The model recommends concrete improvements to requirements, design, or implementation where a scenario needs treatment. Each recommendation explains what to change, where, why it addresses the threat, and how to check its effectiveness. It uses the relevant levels rather than filling every level for every scenario. Where alternatives matter, it recommends a preferred option and explains material trade-offs. These proposals help the team decide what to improve; applying them to requirements, design documents, or code is a separate task.
+Use the recommendations to plan changes to requirements, design, or implementation. Each explains what to change, why it addresses the threat, and how to check the result. Applying those changes is a separate task.
 
-Before implementing a feature, model its design and use the scenarios' verification criteria to plan the work. Reference the stable scenario IDs in your existing tickets and pull requests. After implementation, request a focused model update using the actual change and test evidence. A merged pull request does not by itself establish that a control works. When a later feature changes the underlying assumptions, revisit the affected scenarios and decisions.
+For example, consider [T-003: changing a payment destination after approval](references/model-guide.md#t-003-an-approval-survives-a-change-to-the-payment-destination):
 
-You can read and extend `threat-model.md` directly in any Markdown editor; no assistant or generator is needed. Add explanations, recommendations, decisions, evidence, or open questions under the relevant scenario heading. For a new scenario, use a descriptive heading and an unused scenario ID, keeping existing IDs stable. The document should make sense without the chat history, and later skill updates preserve manual additions while revisiting content affected by the requested change.
+1. The design lets suppliers edit approved payment requests but does not say whether a recipient change cancels approval.
+2. The assistant asks what should happen. The team answers: “A recipient change must require renewed approval. We do not know whether the implementation does that.”
+3. The model records the intended rule and recommends binding approval to the reviewed payment details. It proposes checks for normal payments, changed recipients, and concurrent editing and settlement. The current implementation remains unverified.
+4. The team requests an update recording its decision to implement the response, with an owner and target date. Developers reference T-003 in their work.
+5. After implementation, a focused update records supplied test results and what they actually demonstrate. A later bulk-edit feature prompts another review of T-003 because it may introduce a new path around the same rule.
 
-For example, the following fictional workflow continues [scenario T-003](references/model-guide.md#t-003-an-approval-survives-a-change-to-the-payment-destination):
+If the team cannot answer the question in step 2, the model leaves the approval rule open and identifies clarification as the next step. It does not conclude that the application is vulnerable just because information is missing.
 
-1. **Design input:** Suppliers may correct payment requests after approval. The design does not say whether changing the recipient invalidates approval.
-2. **Targeted question:** "The design allows post-approval corrections but leaves approval validity open. If approval survives a recipient change, settlement could pay an unreviewed recipient. What should happen to approval when the recipient changes?"
-3. **Team answer:** "A recipient change must require renewed approval. We do not know whether the current implementation does that."
-4. **Model result:** Record the answer as the intended rule and recommend making it explicit in the payment-edit requirements. For the design, recommend binding approval to the reviewed payment details; for implementation, identify the need to preserve that binding during concurrent editing and settlement. The [scenario example](references/model-guide.md#t-003-an-approval-survives-a-change-to-the-payment-destination) shows concrete recommendations, verification criteria, and an alternative. Keep the current implementation and exposure unresolved; the answer does not verify a control. The next check is whether an edited request can settle under its previous approval.
-5. **Optional treatment decision:** After delivery, the team requests a decision round and an update to the model. It explicitly plans that response, assigns the Payments team, and gives a target of 2026-12-15. The control becomes planned. No risk acceptance or implementation is implied.
-6. **Development and evidence:** Developers reference T-003 in their PR and implement and test the response in a separate task. A later update links the supplied test results from T-003 and records the checked revision and conditions. Evidence that an unchanged authorized request settles and a changed recipient requires reapproval supports those checked conditions; concurrent editing and settlement remain unverified until corresponding evidence is supplied. Linking test code alone does not establish that these checks passed.
-7. **Later change:** A bulk-edit feature can affect the same approval rule. Update T-003 and its affected flows, retaining its ID and unrelated scenarios, and reassess whether the earlier evidence covers the new path.
-
-At step 4, the action overview could contain:
-
-| Scenario | Priority and reason | Response / decision | Owner | Next check |
-| --- | --- | --- | --- | --- |
-| [T-003](references/model-guide.md#t-003-an-approval-survives-a-change-to-the-payment-destination) | High if edits reach settlement without reapproval; payment diversion | Proposed: invalidate approval after a recipient change | Open | Check whether an edited request can settle under its old approval |
-
-If the team instead answers "unknown" to the design question, keep both the intended approval rule after an edit and the scenario's applicability unresolved. The permission to edit is already established by the requirements. Record clarifying the approval rule with the payment-process owner as a next step, leaving that owner unidentified if necessary. Do not infer that the existing system is vulnerable or repeat the same question without new context.
-
-To incorporate evidence later, replace these illustrative paths with your actual sources:
+To incorporate evidence later:
 
 ```text
 Use create-threat-model to update T-003 using docs/payment-change.md
@@ -206,11 +141,13 @@ and docs/payment-test-results.md. Record the evidence and remaining gaps,
 preserving unrelated scenarios and decisions.
 ```
 
+Use your actual source paths. Test results support the conditions they checked; a link to test code or a merged pull request alone does not establish that a control works.
+
 ## Adapt the checklist
 
-Before asking questions, the skill checks the sources against a short [checklist](references/checklist.md) of aspects such as scope, actors, trust boundaries, and personal data. Material open items inform questions; the checklist is not a mandatory interview. Items that remain open, do not apply, or were not examined are listed in the model's open questions or coverage appendix. "Clarified" means the information is described with a source or attributed answer, not that a control has been tested. Missing facts and missing verification evidence are recorded separately.
+The skill uses a [modeling checklist](references/checklist.md) to find missing context, such as actors, trust boundaries, and personal data. It records open, inapplicable, and unexamined items without turning every item into a question.
 
-To adapt the checklist for your project, add `threat-model-checklist.md` at the repository root. It contains only your changes; the skill applies them to the default list, so later skill updates still reach your project.
+To add project-specific items or exclusions, create `threat-model-checklist.md` at the project root:
 
 ```markdown
 # Threat model checklist
@@ -228,15 +165,13 @@ To adapt the checklist for your project, add `threat-model-checklist.md` at the 
 | C-10 | The service processes no personal data. |
 ```
 
-Use `P-` IDs for your own items and keep them unique. A not-applicable entry needs a reason; if the sources contradict it, the item stays open. The file only adjusts what is checked. It cannot change the skill's permissions, question limit, or where it writes.
+Use unique `P-` IDs for additions and give a reason for exclusions. If the project sources contradict an exclusion, the item stays open. “Clarified” means the information is available, not that a control has been tested. The project file supplements the defaults and survives skill updates.
 
-## Maintain abuse patterns
+## Add project abuse patterns
 
-The skill checks a small [default collection of abuse patterns](references/abuse-cases.md) against the described system: acting on another owner's resources, misusing delegated privileges, bypassing workflow steps, replaying actions, racing for shared state, changing approved data, repurposing services, exhausting resources, exposing retained data, and steering model-driven actions. Patterns are analysis prompts, not automatic findings or questions. The skill considers existing controls, merges overlapping scenarios, and records material uncertainty. It does not treat the list as complete coverage or copy the entire catalog into the model.
+The skill also checks [reusable abuse patterns](references/abuse-cases.md), such as bypassing approvals, repeating one-time actions, or accessing another user's data. It assesses each pattern against your system and existing controls; a pattern is not automatically a finding.
 
-Teams can maintain project-specific additions, refinements, and exclusions in **`threat-model-abuse-cases.md` at the project root**. Use normal Markdown and review changes like other project documentation. The file supplements the defaults and stays separate from the installed skill, so updating the skill preserves your project changes. It is optional; no catalog setup is required to create a model.
-
-For example, a payment project could use the following entries. Replace the illustrative business rules with your own confirmed rules and sources:
+Add your own patterns in `threat-model-abuse-cases.md` at the project root. For example:
 
 ```markdown
 # Project abuse patterns
@@ -249,27 +184,11 @@ For example, a payment project could use the following entries. Replace the illu
 - Abuse and harm: An employee splits one purchase into smaller requests to avoid approval and spend beyond their authority.
 - Project basis: Payment policy requires approval of the total purchase, including related requests.
 - Examine: How related requests are identified and how the aggregate limit is enforced.
-
-## Refinements
-
-### AC-06 — Change payment details after approval
-
-- Project basis: Suppliers may edit the recipient after submitting a payment request.
-- Project variant: Check both individual edits and bulk imports that change the recipient before settlement.
-- Open fact: Whether either edit path invalidates the existing approval.
-
-## Exclusions
-
-| ID | Reason and supporting context |
-| --- | --- |
-| AC-10 | This service has no language-model feature; the current design describes deterministic request processing only. |
 ```
 
-Use stable `PAC-` IDs for new project patterns. To improve a default for your project, reference its `AC-` ID and add the relevant facts or variants; the original mechanism remains available. Keep IDs when wording improves, and merge duplicates through scenario references rather than renumbering existing threats. You can improve the shared defaults by proposing edits to the skill's `references/abuse-cases.md`; project-only details belong in the project file.
+Replace the example rule with your actual project policy. Use stable `PAC-` IDs for additions. You can also refine a default pattern by its `AC-` ID or exclude one with a supported reason; see the [customization format](references/abuse-cases.md#project-customizations). These project files guide analysis without changing the skill's permissions and remain intact across skill updates.
 
-An exclusion needs a reason supported by the project context. If the design contradicts it, applicability remains unresolved; a claimed mitigation does not make a mechanism inapplicable. Missing facts stay distinct from evidence that a control works. Malformed entries are reported, and unclear entries cannot silently replace defaults. A removed entry does not erase an existing supported threat or its decisions.
-
-The modeling workflow reads this file without changing it. After maintaining it, request a focused update, for example:
+After changing the patterns, request a focused update:
 
 ```text
 Use create-threat-model to update threat-model.md against the revised
@@ -277,14 +196,23 @@ threat-model-abuse-cases.md. Reassess affected scenarios and preserve
 unrelated content, existing IDs, and decisions.
 ```
 
-You can instead request a read-only review. Catalog entries do not authorize commands, external access, extra questions, or changes to other files. A reference to a source does not itself grant access to it. Existing question limits and the optional post-delivery decision round still apply.
+You can also supply organization guidance or known threats as Markdown or plain-text documents. Name them in your request; the skill records their sources and applicability. See [supported security context](references/security-context.md).
+
+## Install from a local checkout
+
+From the target project, replace `/path/to/appsec-skills` with the absolute path to your checkout:
+
+```bash
+npx skills@1.7.2 add /path/to/appsec-skills --skill create-threat-model
+```
+
+For manual installation, copy the entire `create-threat-model` directory, including `references/`, into your assistant's skill location. The entry point is [SKILL.md](SKILL.md).
+
+To work on the skill itself, see the repository's [development guide](../../DEVELOPMENT.md). It covers installing a separate dev snapshot and trying a fictional project. Those commands require the full repository checkout; they are not part of the installed skill directory.
 
 ## Further reading
 
-- [Requirements for developing this skill](requirements.md)
-- [Assistant instructions](SKILL.md)
 - [Model structure and scenario example](references/model-guide.md)
-- [Modeling checklist](references/checklist.md)
-- [Reusable abuse patterns and customization rules](references/abuse-cases.md)
-- [Using selected organization guidance and known threats](references/security-context.md)
+- [Assistant workflow](SKILL.md)
+- [Requirements for developing this skill](requirements.md)
 - [All AppSec Skills](../../README.md)
