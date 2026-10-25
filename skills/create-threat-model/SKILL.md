@@ -1,6 +1,8 @@
 ---
 name: create-threat-model
 description: Create, update, or review a maintained threat model from requirements, specifications, design documents, and team context, with optional bounded code reading. Use for system, feature, or design-change threat modeling, including before implementation exists. Not a code vulnerability scan.
+metadata:
+  version: "0.1.0"
 ---
 
 # Create a threat model
@@ -39,6 +41,8 @@ Before the first write containing confidential findings, establish that the dest
 Without an answer to a necessary clarification, including in no-questions mode, retain the internal default or established audience, record the unresolved access or disclosure question, and omit the affected confidential details. Do not silently convert an existing model's audience or remove unrelated content. If existing confidential content conflicts with repository access, report the mismatch without repeating it and leave the affected write pending clarification.
 
 ## Keep the team oriented
+
+At the start of each invocation, display the skill name and installed version once in the conversation, using `name` and `metadata.version` from this loaded file: `<name> · Version <metadata.version>`. Include this in the opening message for creation, updates, and reviews, including no-questions mode.
 
 Briefly state the operation, scope, and next steps: understand the system, clarify material gaps, assess scenarios, and deliver the model or review observations. For creation and updates, explain that treatment decisions follow the draft. Adapt this outline to the request; a focused update need not repeat the full creation workflow.
 

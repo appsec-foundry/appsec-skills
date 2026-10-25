@@ -40,6 +40,8 @@ For manual installation, copy this entire `create-threat-model` directory, inclu
 
 ## What the conversation looks like
 
+Each invocation starts by showing the installed skill's name and version, for example `create-threat-model · Version 0.1.0`. This applies to creation, updates, and reviews, including requests without questions. The version comes from `metadata.version` in the installed [SKILL.md](SKILL.md); it identifies the skill, separately from the Skills CLI version in the installation command.
+
 The assistant briefly explains the scope and next steps, then reads the available sources. It shares a working system summary and compact diagram when enough context exists, so you can correct misunderstandings early. A focused update concentrates on the affected flows and boundaries.
 
 Questions target gaps whose answers could change system understanding, a relevant threat, its priority, or a response. Each explains why the missing information matters. Some arise during the initial reading; others emerge while examining scenarios. You can answer "unknown," skip questions, or stop the dialogue. Unresolved points stay visible with a next clarification step where possible; you do not need to complete a questionnaire before receiving a supported draft.
