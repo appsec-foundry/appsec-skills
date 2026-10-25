@@ -12,7 +12,7 @@
 
 - **REQ-06 — Derive traceable threats.** Tie each scenario to a requirement, design fact, or explicit assumption; explain actor, attack, prerequisites, and harm. Cover significant objectives and interactions, including business misuse and relevant privacy concerns, or explain gaps.
 
-- **REQ-07 — Guide decisions.** Prioritize threats by plausible harm and prerequisites, separately from evidence confidence. Record controls and their status, remaining risk, proposed responses, known owners, and verification criteria. After writing, ask for decisions on the most important open scenarios, at most three at a time. Risk acceptance requires an explicit, documented decision by a responsible person.
+- **REQ-07 — Guide decisions.** Prioritize threats by plausible harm and prerequisites, separately from evidence confidence. Record controls and their status, remaining risk, proposed responses, known owners, and verification criteria. Recommend concrete improvements to requirements, design, or implementation at the appropriate level. Identify what should change and why it addresses the threat, and define how its effectiveness can be checked. Explain material trade-offs when alternatives exist. After writing, ask for decisions on the most important open scenarios, at most three at a time. Risk acceptance requires an explicit, documented decision by a responsible person.
 
 - **REQ-08 — Keep one maintainable model.** Write directly editable `threat-model.md` at the repository root with stable scenario IDs. Link it from `SECURITY.md` or `security.md`, preserving disclosure instructions; create that document if absent.
 

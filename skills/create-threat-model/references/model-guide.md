@@ -1,22 +1,24 @@
 # Model guide
 
-Use these sections for a new model; adapt an existing model's structure instead of reformatting it wholesale. Keep the document readable by developers, product owners, and reviewers.
+Use this reading order for a new model; adapt an existing model's structure instead of reformatting it wholesale. Keep the document readable by developers, product owners, and reviewers.
+
+The structure below is a content guide, not a form or serialization schema. Use descriptive headings and short prose; use compact tables for comparisons and overviews, and keep long explanations in the scenario text. Explain unfamiliar terms and IDs in context. A reader should understand what can go wrong, why it matters, and what to do next without reading the skill or assistant conversation.
+
+Keep each scenario's reasoning, recommendations, decisions, and open questions together so a person can extend them directly in Markdown. Preserve meaningful manual additions and the team's layout during updates. Do not require generated metadata, special delimiters, or a separate machine-readable copy to maintain the model.
 
 | Section | Include |
 | --- | --- |
-| Scope and ownership | System or feature, purpose, responsible team, intended audience, exclusions, current/proposed/transition state, and actual review status. Leave unknown ownership explicit. |
-| Action overview | A compact table of the most important scenarios, linked by stable ID, with a short priority rationale, proposed or decided response, known owner, and next verification or clarification step. |
-| Sources and assumptions | Source IDs, locations and revisions where available, source status, assumptions, conflicts, inaccessible or unexamined context. |
-| Assets and security objectives | Data classification, valuable operations, confidentiality, integrity and availability needs, and consequences of violating them. Public data may still need strong integrity. |
-| Actors and constraints | Goals, starting access, privileges, controlled inputs, binding obligations, negotiable choices, and dependencies. |
-| System model | Components, stores, external parties, interactions, and changes in trust assumptions. Include a compact diagram and supporting prose. |
-| Threat scenarios | Stable IDs, system-specific mechanisms, prerequisites, objectives, consequences, applicability, and explained priority. |
-| Treatment and verification | Controls and their states, treatment decisions, current exposure, expected residual risk, responsible roles, target dates, evidence, and testable criteria. May be kept with each scenario. |
-| Review and open questions | Participants and reviewed scope, unresolved decisions, coverage gaps, checklist items that are not clarified, and reassessment triggers. |
+| At a glance | Purpose, scope, exclusions, draft/review status, known owner, and the few most important next actions linked to scenarios. Give each action a brief priority reason, proposed or decided response, known owner, and next check. |
+| System in brief | Valuable data and operations, their sensitivity and security objectives, actors, main interactions and trust boundaries, with a compact diagram. Integrate relevant constraints and assumptions into this explanation. |
+| Threats and recommended changes | Short scenario sections with stable IDs, reasoning, concrete recommendations, verification, and decisions together. |
+| Open decisions and review | Remaining decisions, actual review participation and scope, and reassessment triggers. Link to scenario details instead of repeating them. |
+| Appendix: sources and coverage | Source locations, revisions and status, detailed evidence, conflicts, coverage gaps, and the checklist items that are not clarified. Keep decision-relevant uncertainty beside the affected scenario as well. |
 
-Assign stable identifiers where elements are referenced, for example `S-001` for sources, `O-001` for objectives, `F-001` for flows, and `T-001` for scenarios. Preserve established identifiers and do not renumber them just to close gaps. Every source reference must resolve to an inspected source or be marked unverified; do not invent filenames, requirement IDs, or evidence.
+Use stable scenario IDs such as `T-001`. Add other IDs only when repeated cross-references benefit from them; named source links and plain-language references are often sufficient. Preserve established identifiers and do not renumber them just to close gaps. Every source reference must resolve to an inspected source or be marked unverified; do not invent filenames, requirement IDs, or evidence.
 
-Keep the action overview near the start and derive it from the scenario records; those records hold the full reasoning and decision details. Preserve conditional priorities and unresolved owners. Do not imply that the overview is complete coverage or maintain a separate task list. In an existing model, reuse an equivalent summary and update only affected entries.
+Aim for an opening that fits roughly one screen, usually highlighting three to five next actions rather than repeating the entire scenario list. Derive it from the scenario records, which hold the full reasoning and decision details. Preserve conditional priorities and unresolved owners. Do not imply that the overview is complete coverage or maintain a separate task list. In an existing model, reuse an equivalent summary and update only affected entries.
+
+Keep the main text focused on understanding and action. State shared caveats once, and repeat only conditions that materially change a scenario's meaning. Combine related open questions and link to their details. Keep source inventories and coverage accounting in the appendix of the same document; omit tool-by-tool activity logs and routine checks with no effect on the result. Moving text to an appendix is not a substitute for removing repetition. Add detail when it changes a decision or enables verification, not merely to fill a field; never omit a significant threat, uncertainty, or recorded decision to meet a length target.
 
 ## Reasoning perspectives
 
@@ -37,7 +39,9 @@ A scenario should answer:
 - Which controls address the mechanism, what is their actual state, and what remains?
 - What decision is needed, who is responsible, and how could the response be verified?
 
-Keep these dimensions separate:
+Use these questions to check content, not as mandatory output fields. A descriptive scenario heading and a few short paragraphs covering risk, recommendation, verification, and decision will usually suffice. Combine actor, mechanism, prerequisites, harm, and priority in the explanation. Keep detailed evidence in the appendix with a direct reference when needed. Readers should not have to decode chains of IDs to understand a scenario.
+
+Keep these dimensions distinct in meaning; they need not be separate labeled fields:
 
 | Dimension | Meaning |
 | --- | --- |
@@ -52,32 +56,51 @@ Distinguish current exposure, based on available evidence, from expected residua
 
 Explicit acceptance records the responsible person's decision, rationale, scope, remaining exposure, and review date or trigger. A constraint or ordinary dialogue answer does not waive an obligation. Surface conflicts and alternatives without silently accepting the risk.
 
+## Make scenarios checkable
+
+Put the few decisive source links beside the claims they support in each scenario. Use descriptive labels such as "Payment requirements: changes after approval" and link to the relevant section or requirement where possible. Prefer repository-relative links for local documents. Keep the full source inventory and revision details in the appendix; readers should not need it to understand the argument.
+
+Explain what each source establishes: intended behavior in a requirement, a design choice, an implementation observation, or a recorded test result. A proposed requirement belongs in the recommendation, not among existing obligations. When the basis is a team statement or assumption, identify it as such; record a missing requirement as a gap and propose wording where useful. Do not invent a document or anchor to make a scenario appear supported.
+
+Check that the cited passage supports the claim, not just that the link resolves. Verify local targets and anchors within the authorized sources; mark inaccessible references and their limits. For effectiveness claims, link available test results or review evidence and state the checked revision and conditions when known. A link to test code describes a check, not a passing result; a requirement, design document, or merged PR alone does not verify effectiveness. Keep missing evidence explicit.
+
+## Derive actionable improvements
+
+For significant scenarios needing treatment, recommend changes at the level that addresses the cause: clarify a missing business or security rule in requirements, change a design decision or interaction, or identify an implementation measure supported by the available context. Use only the relevant levels; do not fill every level mechanically or prescribe additional controls when existing effective treatment is sufficient.
+
+Name the affected requirement, design element, or component, citing its source when available. State the proposed change, explain how it interrupts the scenario, and give observable verification criteria for intended behavior and a representative failure or abuse case. If a rule is missing, propose wording rather than inventing an existing requirement ID. If technical detail is unknown, keep the recommendation at the supported level and identify what must be clarified. For material alternatives, recommend a preferred option and explain differences in protection, functionality, or implementation effort.
+
+Keep these recommendations with the scenario and summarize the next action in the overview. They are proposals for the team's decision; editing the referenced requirements, design, or code is a separate task.
+
 ## Example
 
-This fictional design example illustrates the record shape, not a default scenario for every project.
+This fictional example illustrates a compact scenario, not a default threat or a mandatory set of fields. Its links point to fictional source excerpts below; actual models link to the inspected project sources.
 
 ### T-003 An approval survives a change to the payment destination
 
-A supplier account changes the destination on an approved payment request, and settlement uses the revised destination without renewed approval.
+**Risk — high if edits bypass renewed approval.** A supplier allowed to edit an approved payment could redirect funds to another recipient. The [payment-edit rules](#payment-edit-rules) allow corrections, but the [approval design](#approval-design) does not say whether they invalidate approval. Current exposure and control effectiveness remain unresolved.
 
-- Objective: `O-002` — Payment approval covers the amount and recipient used for settlement.
-- Basis: `S-001` allows suppliers to correct submitted requests; `S-002` describes approval and settlement but leaves post-approval edits unresolved.
-- Actor and prerequisites: An authenticated supplier account with permission to edit a request that has already been approved.
-- Interaction: `F-004` — Request edit to approval state to settlement instruction.
-- Consequence: Funds may be redirected outside the recipient intended by the approver.
-- Applicability: Unresolved until the permitted edits and approval invalidation rule are clarified.
-- Priority: High if the edit reaches settlement without reapproval; payment diversion has direct integrity impact. Confidence is limited by the missing rule.
-- Proposed response: Bind approval to the reviewed amount and destination; require renewed approval after a relevant change.
-- Control state: Proposed; implementation and effectiveness are unverified.
-- Current exposure: Unresolved until post-approval edit rules are clarified; the proposed control establishes no current risk reduction.
-- Expected residual risk if the response is implemented and effective: A compromised approver could still approve an unwanted destination; recovery after settlement needs separate treatment.
-- Verification criteria: A destination change prevents settlement under the old approval; an unchanged, authorized request can still settle. Include concurrent edit and settlement behavior.
-- Decision: Proposed. Control owner and treatment decision remain open; no risk acceptance is recorded.
-- Open question: Which post-approval corrections are permitted without renewed approval?
+**Recommended change.** Add this requirement: "Changing the amount or recipient invalidates the existing approval. Settlement requires approval of the changed payment details." In the design, bind approval to the reviewed version and have settlement use those details. During implementation, prevent concurrent edits from changing them between the approval check and payment; the transaction and external-payment boundaries still need clarification. If corrections are needed, prefer this approach. Making approved requests immutable is an alternative, but requires suppliers and approvers to process replacement requests.
+
+**How to check.** An unchanged, authorized request can settle. Changing its amount or recipient requires renewed approval, including when editing and settlement occur concurrently. These checks have not been performed. Even if effective, the response does not prevent a compromised approver from approving an unwanted recipient; recovery needs separate treatment.
+
+**Decision — open.** First clarify which post-approval corrections are permitted. The response is proposed; owner and target date are unset. No risk acceptance is recorded.
+
+### Fictional source excerpts for the example
+
+#### Payment-edit rules
+
+Suppliers may correct the amount and recipient of a submitted payment request, including after approval.
+
+#### Approval design
+
+An approver reviews the payment details and marks the request approved. Settlement processes approved requests. The handling of later edits is unspecified.
 
 ## Review and maintenance
 
-Check coverage of significant objectives, actors, interactions, boundaries, checklist items, and supplied known threats. Explain exclusions and gaps. Check whether each treatment addresses the actual mechanism and whether verification includes intended behavior and a representative failure or abuse case. Do not run these tests or change application code merely because they appear in the model.
+Check coverage of significant objectives, actors, interactions, boundaries, checklist items, and supplied known threats. Explain exclusions and gaps. Check whether each treatment addresses the actual mechanism and whether verification includes intended behavior and a representative failure or abuse case. Check that recommendations identify the appropriate level, affected element, concrete change, rationale, and verification criteria, with material trade-offs where relevant. In updates, reassess recommendations affected by changed sources or decisions. Do not run these tests or change application code merely because they appear in the model.
+
+Check readability and traceability together: can a team member identify the main concerns and next actions from the opening, understand each scenario without chasing IDs, and follow its key links to passages that support the claims? Remove duplicated explanations and repeated default status text, keeping material conditions and decisions intact. Do not force existing human-written models into this layout during an unrelated update.
 
 Keep risk priority proportionate to stated prerequisites and controls. Do not turn lack of evidence into certainty that a control is absent, or treat a planned control as a completed mitigation.
 

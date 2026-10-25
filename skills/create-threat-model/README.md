@@ -48,10 +48,12 @@ After the draft, the conversation switches from factual clarification to treatme
 
 ## What you get
 
-- `threat-model.md` at the target repository root: scope, a compact action overview near the start, sources, assets, actors, system flows and trust boundaries, threat scenarios, treatments, verification criteria, and open questions. The overview links important scenarios to their priority rationale, proposed or decided response, known owner, and next check.
+- `threat-model.md` at the target repository root: a short opening with the main concerns and next actions, a system summary with a diagram, and concise threat scenarios explaining recommended changes, checks, and decisions. The overview highlights the most important actions rather than listing every scenario. Sources and detailed checklist coverage follow in an appendix in the same document; uncertainty affecting a decision stays beside the relevant scenario.
 - A relative link from the existing `SECURITY.md` or `security.md`. If neither exists, the skill creates a short `SECURITY.md` containing the link.
 
 The result starts as a draft. It distinguishes current exposure from expected residual risk after effective treatment. Proposed controls and unresolved assumptions stay visible; they are not recorded as verified controls or accepted risks. The skill does not commit or publish the files.
+
+Scenarios link directly to the relevant requirements, design sections, or available evidence using readable link names. These references let you check the reasoning without decoding IDs or searching the appendix. Existing rules, proposed changes, and evidence that a control works remain distinct. Missing sources are marked as gaps or assumptions; a document link alone is not proof that a control works.
 
 After writing, the skill asks for decisions on the most important open scenarios, at most three at a time: plan a response, accept the risk, or clarify first. Planning records the decision; it does not implement the measure or create tickets. It records only explicit answers and the details you supply; missing details and unanswered decisions stay open. Risk acceptance requires an explicit decision by a responsible person, with rationale and a review date or trigger. You can leave remaining decisions for a later update.
 
@@ -98,16 +100,20 @@ A creation request never replaces an existing model. Updates integrate features 
 
 ## Use the model during development
 
+The model recommends concrete improvements to requirements, design, or implementation where a scenario needs treatment. Each recommendation explains what to change, where, why it addresses the threat, and how to check its effectiveness. It uses the relevant levels rather than filling every level for every scenario. Where alternatives matter, it recommends a preferred option and explains material trade-offs. These proposals help the team decide what to improve; applying them to requirements, design documents, or code is a separate task.
+
 Before implementing a feature, model its design and use the scenarios' verification criteria to plan the work. Reference the stable scenario IDs in your existing tickets and pull requests. After implementation, request a focused model update using the actual change and test evidence. A merged pull request does not by itself establish that a control works. When a later feature changes the underlying assumptions, revisit the affected scenarios and decisions.
+
+You can read and extend `threat-model.md` directly in any Markdown editor; no assistant or generator is needed. Add explanations, recommendations, decisions, evidence, or open questions under the relevant scenario heading. For a new scenario, use a descriptive heading and an unused scenario ID, keeping existing IDs stable. The document should make sense without the chat history, and later skill updates preserve manual additions while revisiting content affected by the requested change.
 
 For example, the following fictional workflow continues [scenario T-003](references/model-guide.md#t-003-an-approval-survives-a-change-to-the-payment-destination):
 
 1. **Design input:** Suppliers may correct payment requests after approval. The design does not say whether changing the recipient invalidates approval.
 2. **Targeted question:** "The design allows post-approval corrections but leaves approval validity open. If approval survives a recipient change, settlement could pay an unreviewed recipient. What should happen to approval when the recipient changes?"
 3. **Team answer:** "A recipient change must require renewed approval. We do not know whether the current implementation does that."
-4. **Model result:** Record the answer as the intended rule. Keep the current implementation and exposure unresolved; the answer does not verify a control. T-003 proposes binding approval to the reviewed payment details. Its next check is whether an edited request can settle under its previous approval.
+4. **Model result:** Record the answer as the intended rule and recommend making it explicit in the payment-edit requirements. For the design, recommend binding approval to the reviewed payment details; for implementation, identify the need to preserve that binding during concurrent editing and settlement. The [scenario example](references/model-guide.md#t-003-an-approval-survives-a-change-to-the-payment-destination) shows concrete recommendations, verification criteria, and an alternative. Keep the current implementation and exposure unresolved; the answer does not verify a control. The next check is whether an edited request can settle under its previous approval.
 5. **Treatment decision:** The team explicitly plans that response, assigns the Payments team, and gives a target of 2026-12-15. The control becomes planned. No risk acceptance or implementation is implied.
-6. **Development and evidence:** Developers reference T-003 in their PR and implement and test the response in a separate task. A later update incorporates the supplied revision and test results. Evidence that an unchanged authorized request settles and a changed recipient requires reapproval supports those checked conditions; concurrent editing and settlement remain unverified until corresponding evidence is supplied.
+6. **Development and evidence:** Developers reference T-003 in their PR and implement and test the response in a separate task. A later update links the supplied test results from T-003 and records the checked revision and conditions. Evidence that an unchanged authorized request settles and a changed recipient requires reapproval supports those checked conditions; concurrent editing and settlement remain unverified until corresponding evidence is supplied. Linking test code alone does not establish that these checks passed.
 7. **Later change:** A bulk-edit feature can affect the same approval rule. Update T-003 and its affected flows, retaining its ID and unrelated scenarios, and reassess whether the earlier evidence covers the new path.
 
 At step 4, the action overview could contain:
@@ -128,7 +134,7 @@ preserving unrelated scenarios and decisions.
 
 ## Adapt the checklist
 
-Before asking questions, the skill checks the sources against a short [checklist](references/checklist.md) of aspects such as scope, actors, trust boundaries, and personal data. Material open items inform questions; the checklist is not a mandatory interview. Items that remain open, do not apply, or were not examined are listed in the model's open questions.
+Before asking questions, the skill checks the sources against a short [checklist](references/checklist.md) of aspects such as scope, actors, trust boundaries, and personal data. Material open items inform questions; the checklist is not a mandatory interview. Items that remain open, do not apply, or were not examined are listed in the model's open questions or coverage appendix.
 
 To adapt the checklist for your project, add `threat-model-checklist.md` at the repository root. It contains only your changes; the skill applies them to the default list, so later skill updates still reach your project.
 

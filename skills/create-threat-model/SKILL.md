@@ -9,6 +9,10 @@ Help the team connect security objectives, system interactions, threat scenarios
 
 The deliverable is `<repo>/threat-model.md`, linked from the repository's security document. Follow the project's language and document conventions. This skill supplies instructions and references, not an execution engine or plugin command.
 
+Write for the people who will read and maintain the model. Use ordinary Markdown, descriptive headings, concise explanations, and tables only where they improve readability. Explain unfamiliar terms and make scenarios and recommendations understandable without the assistant conversation. Keep the document directly editable by the team; use stable IDs for references, not a rigid machine-oriented schema.
+
+Default to the model guide's compact reading order: a brief overview of the main concerns and next actions, the system in brief, and short actionable scenarios. Place source inventories and checklist details in an appendix within the same document. Record shared limitations once; keep scenario-specific conditions beside the recommendation. Treat modeling questions as content checks, not mandatory fields to expand in every scenario.
+
 ## Choose the operation
 
 | Request | Behavior |
@@ -58,7 +62,7 @@ Without further answers, proceed with a supported draft and explicit open items.
 
 ## Develop and evaluate the model
 
-Use [references/model-guide.md](references/model-guide.md) for the model structure, scenario records, and treatment semantics.
+Use [references/model-guide.md](references/model-guide.md) for the model structure, scenario records, and treatment semantics. Follow its [source-link guidance](references/model-guide.md#make-scenarios-checkable) to put readable links to the supporting requirements, design, or evidence beside each scenario's claims. Distinguish the scenario's basis, proposed changes, and evidence of control effectiveness.
 
 Refine the working system summary into components, stores, external parties, flows, and trust boundaries. At each boundary, explain which identity, ownership, privilege, or control assumption changes. Keep a compact text diagram in the model; use Mermaid when supported by the repository.
 
@@ -69,6 +73,8 @@ Scenario analysis can reveal new material gaps. Use the available sources first,
 Prioritize with a qualitative explanation of plausible harm, prerequisites, access, reach, and relevant controls. Keep confidence separate from priority. Unknown impact stays unknown; do not invent probabilities, losses, or precise scores.
 
 Identify existing and planned responses, current exposure, expected residual risk, responsible roles, and verification criteria using the model guide. Risk acceptance requires an explicit, documented decision by a responsible person; do not manufacture an owner or acceptance.
+
+Derive concrete recommendations for significant scenarios needing treatment, using the model guide's [improvement guidance](references/model-guide.md#derive-actionable-improvements). Address the cause at the appropriate requirements, design, or implementation level. Identify what should change, where, why it addresses the scenario, and how to verify it. Recommend a preferred option with material trade-offs when alternatives matter. Keep recommendations distinct from agreed requirements, treatment decisions, and verified controls.
 
 For an update, trace changed sources to affected model elements and shared boundaries, including changes to roles, permissions, assets, dependencies, interactions, or operating assumptions. Preserve unrelated prose and still-applicable decisions. Retain treated or retired scenarios with their rationale. Recheck checklist items affected by the change and items added or changed in the project checklist. Reopen decisions whose assumptions changed; old acceptance does not cover new exposure. Keep human review status only for still-applicable scope; a feature update does not establish review of the whole application.
 
@@ -81,9 +87,9 @@ For creation or an authorized update:
 1. Restrict edits to the selected model and security document. Re-read both immediately before editing; if either changed since inspection, reconcile with the current text before applying a focused patch. If the remaining discovery budget cannot cover these checks, do not edit; report the limitation. Never overwrite intervening edits with a stale full-document replacement.
 2. Write the model before adding its link. Preserve existing `SECURITY.md` or `security.md` location, naming, disclosure instructions, and valid model links. If there are several security documents, use the repository's documented entry point; ask if the destination remains ambiguous.
 3. Add one relative link to the model, resolving it from the security document's directory. If no security document exists, create `<repo>/SECURITY.md` with a short security heading and model link. Do not invent a reporting address or disclosure policy.
-4. Check the actual diff for unrelated changes, duplicate or broken IDs, unresolved local links, unsupported claims, sensitive content, and accidentally carried-forward review or acceptance status. Verify each significant objective and interaction has a scenario or an explained coverage gap, and each checklist item is clarified in the model or listed with its status.
+4. Check the actual diff for unrelated changes, duplicate or broken IDs, unresolved local links, unsupported claims, sensitive content, and accidentally carried-forward review or acceptance status. Verify each significant objective and interaction has a scenario or an explained coverage gap, and each checklist item is clarified in the model or listed with its status. Apply the model guide's readability check, removing repetition while preserving decision-relevant detail.
 
-For review, perform the same content checks without writes. Report findings with the affected model section, rationale, and proposed change.
+For review, perform the same content checks without writes, including the model guide's checks for actionable recommendations. Report findings with the affected model section, rationale, and proposed change.
 
 ## Guide decisions
 

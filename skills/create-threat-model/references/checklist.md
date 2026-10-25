@@ -31,7 +31,7 @@ Give each item one status after preliminary analysis and revise it after answers
 
 An inference or proposal does not clarify an item; keep the item open and note the proposal. A user answer clarifies the item as an attributed, unverified statement.
 
-In the model's review and open questions section, name the checklists used and list every item that is not clarified with its ID, status, and reason or missing fact. State that items not listed are clarified.
+In the model's review and open questions section or coverage appendix, name the checklists used and list every item that is not clarified with its ID, status, and reason or missing fact. State that items not listed are clarified. Combine items sharing a question when useful, retaining their IDs and statuses; link to an existing scenario explanation instead of repeating it. Keep questions that affect the next decision visible in the main text.
 
 ## Project checklist
 
