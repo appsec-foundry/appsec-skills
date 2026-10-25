@@ -827,6 +827,182 @@ class ScoreTests(unittest.TestCase):
         self.assertEqual(result["findings"], [])
         self.assertIn("app.py", result["coverage"]["unclassified_files"])
 
+    def test_access_decision_change_uses_function_context_without_a_finding(self):
+        source = (
+            "def can_read(actor, owner):\n"
+            "    actor = actor.strip()\n"
+            "    owner = owner.strip()\n"
+            "    actor = actor.lower()\n"
+            "    owner = owner.lower()\n"
+            "    return actor == owner\n"
+        )
+        self.init(source)
+        self.write("app.py", source.replace("return actor == owner", "return True"))
+        status, result, _ = self.invoke("--worktree")
+        self.assertEqual(status, 0)
+        self.assertEqual(result["relevance_version"], 2)
+        self.assertEqual(result["relevance"], "high")
+        self.assertEqual(result["findings"], [])
+        self.assertTrue(
+            any(
+                signal["rule"] == "REL-AUTH"
+                and signal["line"] == 1
+                and signal["relation"] == "in changed function"
+                for signal in result["signals"]
+            )
+        )
+        self.assertNotIn("return actor", json.dumps(result))
+
+    def test_unchanged_sibling_security_function_is_not_change_evidence(self):
+        for path, before, after in (
+            (
+                "helpers.py",
+                "def can_read(actor, owner):\n    return actor == owner\ndef compute(value):\n    return value + 1\n",
+                "def can_read(actor, owner):\n    return actor == owner\ndef compute(value):\n    return value + 2\n",
+            ),
+            (
+                "helpers.js",
+                "function canRead(actor, owner) { return actor === owner; }\nfunction compute(value) { return value + 1; }\n",
+                "function canRead(actor, owner) { return actor === owner; }\nfunction compute(value) { return value + 2; }\n",
+            ),
+        ):
+            with self.subTest(path=path):
+                result = relevance.analyze(
+                    {path: {"text": before}},
+                    {path: {"text": after}},
+                    [],
+                    [],
+                    [],
+                    sources.Budget(),
+                )
+                self.assertEqual(result["relevance"], "unclear")
+                self.assertEqual(result["signals"], [])
+
+    def test_supported_function_context_includes_annotations_and_arrow_handlers(self):
+        for path, declaration, closing in (
+            ("helpers.ts", "const canRead = (actor, owner) => {", "}"),
+            (
+                "Handler.java",
+                '@PreAuthorize("hasRole(ADMIN)")\npublic boolean check(Actor actor) {',
+                "}",
+            ),
+            ("Handler.cs", "[Authorize]\npublic bool Check(Actor actor) {", "}"),
+            ("handler.go", "func canRead(actor string, owner string) bool {", "}"),
+            ("handler.rs", "fn can_read(actor: i32, owner: i32) -> bool {", "}"),
+            ("handler.kt", "fun canRead(actor: String, owner: String): Boolean {", "}"),
+        ):
+            with self.subTest(path=path):
+                prefix = (
+                    declaration + "\n  a = actor;\n  b = owner;\n  c = a;\n  d = b;\n"
+                )
+                result = relevance.analyze(
+                    {path: {"text": prefix + "  return a == b;\n" + closing}},
+                    {path: {"text": prefix + "  return true;\n" + closing}},
+                    [],
+                    [],
+                    [],
+                    sources.Budget(),
+                )
+                self.assertEqual(result["relevance"], "high")
+                self.assertTrue(
+                    any(signal["rule"] == "REL-AUTH" for signal in result["signals"])
+                )
+
+    def test_exposure_and_access_policy_configuration_indicate_review_needs(self):
+        for path, before, after, rule in (
+            (
+                "nginx.conf",
+                "listen 127.0.0.1:8080;\n",
+                "listen 0.0.0.0:8080;\n",
+                "REL-INTERFACE-CONFIG",
+            ),
+            (
+                "server.properties",
+                "server.address=127.0.0.1\n",
+                "server.address=0.0.0.0\n",
+                "REL-EXPOSURE",
+            ),
+            (
+                "policies/document.json",
+                '{"read":"owner"}',
+                '{"read":"everyone"}',
+                "REL-ACCESS-POLICY",
+            ),
+            (
+                "app.py",
+                "if document.owner_id != user.id:\n    raise PermissionError()\n",
+                "if False:\n    raise PermissionError()\n",
+                "REL-AUTH",
+            ),
+        ):
+            for reverse in (False, True):
+                with self.subTest(path=path, reverse=reverse):
+                    old, new = (after, before) if reverse else (before, after)
+                    result = relevance.analyze(
+                        {path: {"text": old}},
+                        {path: {"text": new}},
+                        [],
+                        [],
+                        [],
+                        sources.Budget(),
+                    )
+                    self.assertEqual(result["relevance"], "high")
+                    self.assertEqual(result["findings"], [])
+                    self.assertIn(
+                        rule, {signal["rule"] for signal in result["signals"]}
+                    )
+
+    def test_large_function_context_is_bounded_and_reports_the_limit(self):
+        for name, expected in (("can_read", "high"), ("compute", "unclear")):
+            with self.subTest(name=name):
+                prefix = f"def {name}(actor, owner):\n" + "    value = 1\n" * 205
+                result = relevance.analyze(
+                    {"helpers.py": {"text": prefix + "    return actor == owner\n"}},
+                    {"helpers.py": {"text": prefix + "    return True\n"}},
+                    [],
+                    [],
+                    [],
+                    sources.Budget(),
+                )
+                self.assertEqual(result["relevance"], expected)
+                self.assertEqual(
+                    result["coverage"]["context_limited_files"], ["helpers.py"]
+                )
+
+    def test_patch_context_does_not_bridge_separate_hunks(self):
+        patch = self.root / "change.diff"
+        patch.write_text(
+            "--- a/helpers.js\n+++ b/helpers.js\n"
+            "@@ -1 +1 @@\n function canRead(actor, owner) {\n"
+            "@@ -200 +200 @@\n-return first;\n+return second;\n"
+        )
+        status, result, _ = self.invoke("--patch", str(patch))
+        self.assertEqual(status, 0)
+        self.assertEqual(result["relevance"], "unclear")
+        self.assertEqual(result["signals"], [])
+
+    def test_security_names_in_comments_or_literals_do_not_indicate_changed_controls(
+        self,
+    ):
+        result = relevance.analyze(
+            {
+                "helpers.js": {
+                    "text": "// canRead(user, owner)\nconst label = 'authorize(user)';\nvalue = 1;\n"
+                }
+            },
+            {
+                "helpers.js": {
+                    "text": "// canRead(user, owner)\nconst label = 'authorize(user)';\nvalue = 2;\n"
+                }
+            },
+            [],
+            [],
+            [],
+            sources.Budget(),
+        )
+        self.assertEqual(result["relevance"], "unclear")
+        self.assertEqual(result["signals"], [])
+
     def test_fixing_parameterization_remains_highly_relevant(self):
         self.init('cursor.execute(f"SELECT name FROM items WHERE id={identifier}")\n')
         self.write(

@@ -952,9 +952,9 @@
       ]
     }
   ],
-  "rule_version": 2,
+  "rule_version": 3,
   "change_relevance": {
-    "version": 1,
+    "version": 2,
     "documentation_extensions": [
       ".md",
       ".rst",
@@ -996,6 +996,20 @@
         "aspect": "documented security assumptions",
         "pattern": "(?i)(^|/)(SECURITY\\.md|threat-model[^/]*\\.md|security-policy[^/]*\\.md)$",
         "reason": "Security policy or threat-model assumptions changed; review their applicability."
+      },
+      {
+        "id": "REL-ACCESS-POLICY",
+        "level": "high",
+        "aspect": "access control policy",
+        "pattern": "(?i)(^|/)(auth(?:entication|orization|nz|z)?|permissions?|access[_-]?control|policies|rbac|acl)(?:[._/-]|$)",
+        "reason": "An access-control implementation or policy file changed; inspect the affected access decisions."
+      },
+      {
+        "id": "REL-INTERFACE-CONFIG",
+        "level": "high",
+        "aspect": "interface exposure",
+        "pattern": "(?i)(^|/)(nginx(?:\\.[^/]*)?|httpd\\.conf|Caddyfile|traefik\\.(?:ya?ml|toml)|(?:routes|urls|endpoints)\\.(?:py|[cm]?js|ts|json|ya?ml)|(?:ingress|networkpolicy|network-policy)[^/]*\\.ya?ml)$",
+        "reason": "Routing, proxy or network-exposure configuration changed; inspect which interfaces and operations become reachable."
       }
     ],
     "code_rules": [
@@ -1003,50 +1017,57 @@
         "id": "REL-AUTH",
         "level": "high",
         "aspect": "identity and authorization",
-        "pattern": "(?i)@\\w*(?:auth|login|permission|role)\\w*|\\b(?:authorize|authenticate|requireAuth|requireRole|check_permission|hasRole|isAuthenticated|jwt\\.(?:verify|decode)|passport\\.\\w+)\\s*\\(|\\b(?:role|permissions|tenantId|tenant_id|ownerId|owner_id)\\b[\\\"\\x27]?\\s*[:=]",
-        "reason": "Identity, permissions or ownership behavior changed, regardless of whether a weakness was detected."
+        "pattern": "(?i)@\\w*(?:auth|login|permission|role)\\w*|@(?:PreAuthorize|PostAuthorize|RolesAllowed|PermitAll|DenyAll|Secured)\\b|\\[(?:Authorize|AllowAnonymous)\\b|\\b(?:authorize|authenticate|requireAuth|RequireAuthorization|AllowAnonymous|requireRole|check_permission|hasRole|hasAuthority|isAuthenticated|canActivate|jwt\\.(?:verify|decode)|passport\\.\\w+)\\s*\\(|\\b(?:can|may|is_allowed_to|is_permitted_to)_?(?:read|view|access|edit|update|write|delete|remove|manage|execute|download|upload)\\w*\\s*(?:\\(|[:=])|\\b(?:owner(?:_?id)?|tenant_?id|role|permissions)\\b(?:\\.\\w+)*[\"']?\\s*(?:[!=]==?|is\\b|in\\b|[:=])|\\.(?:authorizeHttpRequests|requestMatchers|antMatchers|permitAll|authenticated|denyAll|access)\\s*\\(|\\b(?:if|unless|return|assert)\\s+[^;\\n]{0,160}\\b(?:is_admin|is_superuser|is_authenticated|is_staff|has_permission|principal|user_id|tenant_id|owner_id|role|permissions)\\b",
+        "reason": "Changed code or its containing function references identity, permissions or ownership checks; inspect who may access which resource."
       },
       {
         "id": "REL-ENTRYPOINT",
         "level": "high",
         "aspect": "entry points and trust boundaries",
-        "pattern": "(?i)@\\w*(?:route|mapping)\\s*\\(|\\b(?:app|router|server)\\s*\\.\\s*(?:get|post|put|patch|delete|route|use|mapget|mappost)\\s*\\(|\\bhttp\\.Handle(?:Func)?\\s*\\(",
-        "reason": "An entry point, route or middleware registration changed; review callers and enforced boundaries."
+        "pattern": "(?i)@\\w*(?:route|mapping)\\b|\\[(?:Route|HttpGet|HttpPost|HttpPut|HttpPatch|HttpDelete)\\b|\\b(?:app|router|server)\\s*\\.\\s*(?:get|post|put|patch|delete|route|use|mapget|mappost)\\s*\\(|\\bhttp\\.Handle(?:Func)?\\s*\\(",
+        "reason": "Changed code or its containing function declares a route or middleware; inspect interface reachability, allowed operations and access controls."
       },
       {
         "id": "REL-NETWORK",
         "level": "high",
         "aspect": "external data flows",
         "pattern": "(?i)\\b(?:requests\\.(?:get|post|put|patch|delete|request)|fetch|axios\\.(?:get|post|request)|https?\\.request)\\s*\\(",
-        "reason": "An external request or data-flow operation changed; review destinations, data and credentials."
+        "reason": "Changed code or its containing function indicates an external data flow; inspect destinations, transmitted data and credentials."
       },
       {
         "id": "REL-DATA-ACCESS",
         "level": "high",
         "aspect": "persistence and data access",
         "pattern": "(?i)\\.(?:execute|executemany|query|findOne|findById|findUnique|queryRaw|queryRawUnsafe)\\s*\\(|\\b(?:from|import)\\s+(?:sqlalchemy|psycopg\\w*|sqlite3|pymongo)\\b",
-        "reason": "A persistence or query operation changed; review parameter binding, ownership and database privileges."
+        "reason": "Changed code or its containing function indicates data access; inspect parameter binding, ownership and database privileges."
       },
       {
         "id": "REL-PROTECTION",
         "level": "high",
         "aspect": "security controls",
         "pattern": "(?i)Content-Security-Policy|\\brejectUnauthorized\\b|\\b(?:httpOnly|sameSite|csrf|cors|CSP_\\w+|SESSION_COOKIE_\\w+)\\b\\s*[:=(]",
-        "reason": "A browser, request or transport protection changed; no defect is implied by relevance alone."
+        "reason": "Changed code or its containing function indicates a security control; inspect its configuration and enforcement."
       },
       {
         "id": "REL-CRYPTO",
         "level": "high",
         "aspect": "secrets and cryptography",
-        "pattern": "(?i)\\b(?:hashlib|crypto|bcrypt|argon2|scrypt|secrets)\\s*\\.|\\b(?:password|secret|token|api_key|private_key)\\w*\\s*[:=]",
-        "reason": "Secret handling or a cryptographic operation changed; review its purpose and lifecycle."
+        "pattern": "(?i)\\b(?:hashlib|crypto|bcrypt|argon2|scrypt|secrets)\\s*\\.|\\b(?:password|secret|token|api_key|private_key)\\w*\\s*[:=]|\\b(?:(?:verify|validate|check|hash|encode|decode|sign|generate|rotate)_?(?:password|token|credential|signature|csrf|session|secret|key)\\w*|encrypt|decrypt)\\s*(?:\\(|[:=])",
+        "reason": "Changed code or its containing function indicates secret handling or cryptography; inspect its purpose and lifecycle."
       },
       {
         "id": "REL-FRONTEND",
         "level": "medium",
         "aspect": "frontend output and input handling",
         "pattern": "(?i)\\b(?:dangerouslySetInnerHTML|innerHTML|textContent|bypassSecurityTrustHtml)\\b|\\b(?:validate|sanitize|escapeHtml|parse|serialize)\\s*\\(",
-        "reason": "Frontend output, validation or serialization changed; inspect the affected input and rendering context."
+        "reason": "Changed code or its containing function indicates input or output processing; inspect validation and rendering context."
+      },
+      {
+        "id": "REL-EXPOSURE",
+        "level": "high",
+        "aspect": "interface exposure",
+        "pattern": "(?i)\\b(?:app|server|httpServer|http|https|uvicorn)\\s*\\.\\s*(?:listen|run|serve|bind)\\s*\\(|^\\s*(?:listen\\s+\\S+|(?:server\\.(?:address|port)|bind_address|listen_address|allowed_hosts)\\s*[:=])|\\b(?:hostPort|nodePort|LoadBalancer|publicly_accessible|public_network_access_enabled)\\b|^\\s*(?:EXPOSE\\s+\\S+|(?:ports|expose|hostNetwork|containerPort)\\s*:|type\\s*:\\s*(?:LoadBalancer|NodePort)\\b)",
+        "reason": "Listener, binding or public-exposure configuration is in the changed context; inspect which callers can reach the interface."
       }
     ],
     "area_rules": {
@@ -1054,55 +1075,55 @@
         "id": "REL-CONTROL-EXECUTION",
         "level": "high",
         "aspect": "execution",
-        "reason": "A recognized security operation or control is in or near changed lines; review its changed context even when no finding is emitted."
+        "reason": "A recognized security operation or control is in the affected change context; inspect its behavior even when no weakness is detected."
       },
       "injection": {
         "id": "REL-CONTROL-INJECTION",
         "level": "high",
         "aspect": "injection",
-        "reason": "A recognized security operation or control is in or near changed lines; review its changed context even when no finding is emitted."
+        "reason": "A recognized security operation or control is in the affected change context; inspect its behavior even when no weakness is detected."
       },
       "transport": {
         "id": "REL-CONTROL-TRANSPORT",
         "level": "high",
         "aspect": "transport",
-        "reason": "A recognized security operation or control is in or near changed lines; review its changed context even when no finding is emitted."
+        "reason": "A recognized security operation or control is in the affected change context; inspect its behavior even when no weakness is detected."
       },
       "cryptography": {
         "id": "REL-CONTROL-CRYPTOGRAPHY",
         "level": "high",
         "aspect": "cryptography",
-        "reason": "A recognized security operation or control is in or near changed lines; review its changed context even when no finding is emitted."
+        "reason": "A recognized security operation or control is in the affected change context; inspect its behavior even when no weakness is detected."
       },
       "deserialization": {
         "id": "REL-CONTROL-DESERIALIZATION",
         "level": "high",
         "aspect": "deserialization",
-        "reason": "A recognized security operation or control is in or near changed lines; review its changed context even when no finding is emitted."
+        "reason": "A recognized security operation or control is in the affected change context; inspect its behavior even when no weakness is detected."
       },
       "hardening": {
         "id": "REL-CONTROL-HARDENING",
         "level": "high",
         "aspect": "hardening",
-        "reason": "A recognized security operation or control is in or near changed lines; review its changed context even when no finding is emitted."
+        "reason": "A recognized security operation or control is in the affected change context; inspect its behavior even when no weakness is detected."
       },
       "frontend-policy": {
         "id": "REL-CONTROL-FRONTEND-POLICY",
         "level": "high",
         "aspect": "frontend-policy",
-        "reason": "A recognized security operation or control is in or near changed lines; review its changed context even when no finding is emitted."
+        "reason": "A recognized security operation or control is in the affected change context; inspect its behavior even when no weakness is detected."
       },
       "supply-chain": {
         "id": "REL-CONTROL-SUPPLY-CHAIN",
         "level": "high",
         "aspect": "supply-chain",
-        "reason": "A recognized security operation or control is in or near changed lines; review its changed context even when no finding is emitted."
+        "reason": "A recognized security operation or control is in the affected change context; inspect its behavior even when no weakness is detected."
       },
       "output": {
         "id": "REL-CONTROL-OUTPUT",
         "level": "medium",
         "aspect": "output",
-        "reason": "A recognized security operation or control is in or near changed lines; review its changed context even when no finding is emitted."
+        "reason": "A recognized security operation or control is in the affected change context; inspect its behavior even when no weakness is detected."
       }
     },
     "documentation_rule": {
@@ -1185,6 +1206,78 @@
         "after": "print(1)\n",
         "before_executable": false,
         "after_executable": true,
+        "expected_relevance": "high"
+      },
+      {
+        "file": "helpers.py",
+        "before": "def can_read(actor, owner):\n    return actor == owner\n",
+        "after": "def can_read(actor, owner):\n    return True\n",
+        "expected_relevance": "high"
+      },
+      {
+        "file": "helpers.py",
+        "before": "def can_read(actor, owner):\n    value = actor\n    value = value.strip()\n    value = value.lower()\n    return value == owner\n",
+        "after": "def can_read(actor, owner):\n    value = actor\n    value = value.strip()\n    value = value.lower()\n    return True\n",
+        "expected_relevance": "high"
+      },
+      {
+        "file": "handler.js",
+        "before": "function canRead(actor, owner) {\n  const a = actor;\n  const b = owner;\n  const active = true;\n  return a === b;\n}\n",
+        "after": "function canRead(actor, owner) {\n  const a = actor;\n  const b = owner;\n  const active = true;\n  return true;\n}\n",
+        "expected_relevance": "high"
+      },
+      {
+        "file": "service.py",
+        "before": "if record.owner_id != user.id:\n    raise PermissionError()\n",
+        "after": "if False:\n    raise PermissionError()\n",
+        "expected_relevance": "high"
+      },
+      {
+        "file": "App.java",
+        "before": "@GetMapping\npublic String list() {\n  String result = first;\n  result = normalize(result);\n  result = format(result);\n  return result;\n}\n",
+        "after": "@GetMapping\npublic String list() {\n  String result = first;\n  result = normalize(result);\n  result = format(result);\n  return other;\n}\n",
+        "expected_relevance": "high"
+      },
+      {
+        "file": "nginx.conf",
+        "before": "listen 127.0.0.1:8080;\n",
+        "after": "listen 0.0.0.0:8080;\n",
+        "expected_relevance": "high"
+      },
+      {
+        "file": "server.properties",
+        "before": "server.address=127.0.0.1\n",
+        "after": "server.address=0.0.0.0\n",
+        "expected_relevance": "high"
+      },
+      {
+        "file": "app.py",
+        "before": "def can_read(actor, owner):\n    return actor == owner\n\n\ndef compute(value):\n    return value + 1\n",
+        "after": "def can_read(actor, owner):\n    return actor == owner\n\n\ndef compute(value):\n    return value + 2\n",
+        "expected_relevance": "unclear"
+      },
+      {
+        "file": "helpers.ts",
+        "before": "const canRead = (actor, owner) => {\n  const a = actor;\n  const b = owner;\n  const enabled = true;\n  return a === b;\n};\n",
+        "after": "const canRead = (actor, owner) => {\n  const a = actor;\n  const b = owner;\n  const enabled = true;\n  return true;\n};\n",
+        "expected_relevance": "high"
+      },
+      {
+        "file": "handler.py",
+        "before": "def view(user):\n    if user.is_admin:\n        return data\n",
+        "after": "def view(user):\n    if True:\n        return data\n",
+        "expected_relevance": "high"
+      },
+      {
+        "file": "helpers.py",
+        "before": "def verify_token(value):\n    value = value.strip()\n    value = value.lower()\n    enabled = True\n    return value == expected\n",
+        "after": "def verify_token(value):\n    value = value.strip()\n    value = value.lower()\n    enabled = True\n    return True\n",
+        "expected_relevance": "high"
+      },
+      {
+        "file": "service.yaml",
+        "before": "type: ClusterIP\n",
+        "after": "type: LoadBalancer\n",
         "expected_relevance": "high"
       }
     ]

@@ -48,16 +48,20 @@ Repository grades are **A: 90–100, B: 80–<90, C: 70–<80, D: 60–<70, E: 5
 
 Within each area, subtract `number of findings × points per severity` from 100, then apply the strictest severity cap and a floor of 0. For example, two high findings deduct `2 × 25 = 50` points: the area scores 50 (below the high cap of 59). If another area scores 100, the overall score is still 50 (E). `--details` shows each rule's count, points, deduction, cap and the overall calculation. The editable weights and caps are at the top of [rules.json](rules.json); see the [worked examples and adjustment guide](references/scoring.md#adjust-the-calculation).
 
-Change relevance describes review needs, independently of finding severity:
+Change relevance is an indication of whether a change touches access controls, security functions, interface exposure or other security-related behavior. It uses deterministic rules over the before/after change, bounded function context and configuration paths. This makes it useful even when no weakness is detected:
 
 | Relevance | Meaning |
 | --- | --- |
-| High | Recognized changes to security behavior, trust boundaries, dependency/build authority or other sensitive controls. Safe authentication additions and parameterization fixes can also be high. |
+| High | Indications of changes to access decisions, security functions, routes/listeners, trust boundaries or dependency/build authority. Safe additions and fixes can also be high. |
 | Medium | Recognized frontend/input/output changes or security-relevant documentation changes. |
 | Low | Positively identified ordinary documentation or supported non-functional changes, with complete processing and no security signal. |
 | Unclear | Available rules or context cannot classify the changed behavior. An empty finding list does not establish low relevance. |
 
 Findings distinguish introduced, worsened, resolved and relevant pre-existing observations. Incomplete comparisons retain unresolved findings. Relevance does not imply that a weakness exists, and a completed check does not approve a merge.
+
+For example, changing the return value inside `can_read(actor, owner)` is a high-relevance indication even when its name is several lines away from the diff. Changing a listener from `127.0.0.1` to `0.0.0.0` also indicates a possible change in interface exposure. An unchanged security helper elsewhere in the file does not by itself classify the changed function.
+
+Local comparisons provide captured function bodies: Python uses AST boundaries; JavaScript/TypeScript and selected other languages use declaration and brace heuristics. Function context is limited to 200 lines. Patches use only the supplied hunks, independently; they cannot reconstruct an omitted function header or its callers. `--details` shows the matching rule, location, side and relationship to the change. See the [relevance rules and examples](references/scoring.md#change-relevance) to adjust this policy. Unrecognized names, indirect calls and missing context can remain unclear.
 
 ## Select sources and coverage
 

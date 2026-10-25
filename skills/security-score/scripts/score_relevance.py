@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import ast
+from bisect import bisect_left, bisect_right
 from collections import Counter, defaultdict
 import difflib
 import io
@@ -20,6 +21,135 @@ PATH_RULES = [(rule, re.compile(rule["pattern"])) for rule in CONFIG["path_rules
 CODE_RULES = [(rule, re.compile(rule["pattern"])) for rule in CONFIG["code_rules"]]
 DOC_PATTERN = re.compile(CONFIG["documentation_rule"]["pattern"])
 LEVELS = {"high": 0, "medium": 1, "low": 2, "unclear": 3}
+MAX_CONTEXT_LINES = 200
+MAX_CONTEXT_FILE_LINES = 10000
+BRACE_LANGUAGES = JS_EXTENSIONS | {".java", ".kt", ".cs", ".go", ".rs", ".php"}
+FUNCTION_HEADER = re.compile(
+    r"(?:\bfunction\s*(?:\w+)?\s*\([^{};]*\)"
+    r"|\bfunc\s+(?:\([^{};]*\)\s*)?\w+\s*\([^{};]*\)[^{};]*"
+    r"|\b(?P<method>[A-Za-z_$][\w$]*)\s*\([^{};]*\)"
+    r"(?:\s*(?::|->)\s*[^{};=]+)?(?:\s+throws\s+[\w., ]+)?"
+    r"|(?:\([^{};]*\)|\b\w+)\s*=>)\s*$"
+)
+
+
+def function_spans(path, text, active, budget):
+    """Return bounded-source function extents, without importing target code."""
+    if Path(path).suffix.lower() == ".py":
+        try:
+            tree = ast.parse(text)
+        except (SyntaxError, ValueError, RecursionError):
+            return []
+        spans = []
+        for node in ast.walk(tree):
+            budget.check()
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                start = min(
+                    [node.lineno, *(item.lineno for item in node.decorator_list)]
+                )
+                spans.append((start - 1, node.end_lineno - 1, node.body[0].lineno - 2))
+        return spans
+    if Path(path).suffix.lower() not in BRACE_LANGUAGES:
+        return []
+    # Strings/comments have already been masked. Only balanced function bodies
+    # qualify; an if/for/class block must not become a function context.
+    code = "\n".join(active)
+    line_starts = [0, *(match.end() for match in re.finditer("\n", code))]
+    stack, spans = [], []
+    previous = 0
+    for match in re.finditer(r"[{};]", code):
+        budget.check()
+        token, offset = match[0], match.start()
+        if token == "{":
+            header_start = max(previous, offset - 1000)
+            header = code[header_start:offset]
+            signature = FUNCTION_HEADER.search(header)
+            is_function = signature and signature.group("method") not in {
+                "if",
+                "for",
+                "while",
+                "switch",
+                "catch",
+                "with",
+                "synchronized",
+            }
+            if is_function:
+                start = bisect_right(line_starts, header_start + signature.start()) - 1
+                # Include adjacent annotations/attributes such as @GetMapping or
+                # [Authorize], while staying inside this declaration's header.
+                first_header_line = bisect_right(line_starts, header_start) - 1
+                while start > first_header_line and active[
+                    start - 1
+                ].lstrip().startswith(("@", "[")):
+                    start -= 1
+                stack.append((start, bisect_right(line_starts, offset) - 1))
+            else:
+                stack.append(None)
+        elif token == "}" and stack:
+            scope = stack.pop()
+            if scope is not None:
+                start, header_end = scope
+                spans.append((start, bisect_right(line_starts, offset) - 1, header_end))
+        previous = match.end()
+    return spans
+
+
+def code_context(path, source, changed_indices, budget):
+    """Select changed/nearby lines and enclosing functions; keep hunks isolated.
+
+    Function bodies over 200 lines contribute their header only, in addition to
+    changed/nearby lines. Partial patches never invent a containing function.
+    """
+    actual = source.get("lines", {})
+    changed_lines = {actual.get(index + 1, index + 1) for index in changed_indices}
+    selected, locations = [], set()
+    limited = False
+    for segment in source.get("fragments", [source]):
+        budget.check()
+        text = segment["text"]
+        active = active_lines(path, text)
+        mapping = segment.get("lines", {})
+        changed = [
+            index
+            for index in range(len(active))
+            if mapping.get(index + 1, index + 1) in changed_lines
+        ]
+        spans = []
+        if not segment.get("fragment") and len(active) <= MAX_CONTEXT_FILE_LINES:
+            spans = function_spans(path, text, active, budget)
+        elif len(active) > MAX_CONTEXT_FILE_LINES:
+            limited = True
+        # Choose the innermost function for each changed line. A nearby sibling
+        # function is not evidence about the changed function.
+        owners = {}
+        for start, end, header_end in spans:
+            budget.check()
+            for index in changed[
+                bisect_left(changed, start) : bisect_right(changed, end)
+            ]:
+                if (
+                    index not in owners
+                    or end - start < owners[index][1] - owners[index][0]
+                ):
+                    owners[index] = (start, end, header_end)
+        context = {}
+        for index in changed:
+            start, end, _ = owners.get(index, (0, len(active) - 1, 0))
+            for neighbor in range(max(start, index - 2), min(end + 1, index + 3)):
+                context[neighbor] = "near changed lines"
+        for start, end, header_end in set(owners.values()):
+            if end - start + 1 > MAX_CONTEXT_LINES:
+                limited = True
+                end = min(header_end, start + 19)
+            for index in range(start, end + 1):
+                context.setdefault(index, "in changed function")
+        for index in changed:
+            context[index] = "changed"
+        for index, relation in sorted(context.items()):
+            line = mapping.get(index + 1, index + 1)
+            selected.append((line, active[index], relation))
+            locations.add(line)
+    return selected, locations, limited
 
 
 def same_program(path, old, new):
@@ -113,6 +243,7 @@ def analyze(before, after, checks, findings, exclusions, budget, *, complete=Tru
     contexts = {"baseline": {}, "proposed": {}}
     nonfunctional = []
     unclassified = []
+    context_limited = []
     changed_files = []
     uncertain_paths = {row["file"] for row in exclusions}
     checks_by_file = defaultdict(list)
@@ -190,38 +321,35 @@ def analyze(before, after, checks, findings, exclusions, budget, *, complete=Tru
         ):
             if source is None:
                 continue
-            active = (
-                lines[side_index] if is_document else active_lines(path, source["text"])
-            )
-            selected_indices = (
-                changed[side_index]
-                if is_document
-                else {
-                    index
-                    for index in range(len(active))
-                    if source.get("lines", {}).get(index + 1, index + 1)
-                    in context[side_index]
-                }
-            )
-            for index in sorted(selected_indices):
+            if is_document:
+                selected = [
+                    (
+                        source.get("lines", {}).get(index + 1, index + 1),
+                        lines[side_index][index],
+                        "changed",
+                    )
+                    for index in sorted(changed[side_index])
+                ]
+            else:
+                selected, contexts[side][path], limited = code_context(
+                    path, source, changed[side_index], budget
+                )
+                if limited:
+                    context_limited.append(path)
+            for actual_line, content, relation in selected:
                 budget.check()
-                if index >= len(active):
-                    continue
-                actual_line = source.get("lines", {}).get(index + 1, index + 1)
                 if is_document:
-                    if DOC_PATTERN.search(active[index]):
+                    if DOC_PATTERN.search(content):
                         add(CONFIG["documentation_rule"], path, side, actual_line)
                 else:
                     for rule, pattern in CODE_RULES:
-                        if pattern.search(active[index]):
+                        if pattern.search(content):
                             add(
                                 rule,
                                 path,
                                 side,
                                 actual_line,
-                                "changed"
-                                if index in changed[side_index]
-                                else "near changed lines",
+                                relation,
                             )
         for check in checks_by_file[path]:
             side = check.get("side", "proposed")
@@ -231,7 +359,9 @@ def analyze(before, after, checks, findings, exclusions, budget, *, complete=Tru
                     and check["area"] in CONFIG["area_rules"]
                 ):
                     rule = CONFIG["area_rules"][check["area"]]
-                    add(rule, path, side, location["line"], "in or near changed lines")
+                    add(
+                        rule, path, side, location["line"], "in affected change context"
+                    )
         if is_document and path not in uncertain_paths:
             nonfunctional.append(path)
         elif not metadata_changed and len(seen) == before_signal_count:
@@ -268,6 +398,7 @@ def analyze(before, after, checks, findings, exclusions, budget, *, complete=Tru
             "nonfunctional_or_documentation": sorted(set(nonfunctional)),
             "unclassified_files": sorted(set(unclassified)),
             "signals_truncated": truncated,
-            "basis": "Changed lines, bounded nearby control observations and known sensitive file types. Unrecognized behavior remains unclear.",
+            "context_limited_files": sorted(set(context_limited)),
+            "basis": "Indication from changed lines, bounded enclosing-function context and security-related paths/configuration. Unrecognized behavior remains unclear; signals do not establish a defect or verified security impact.",
         },
     }

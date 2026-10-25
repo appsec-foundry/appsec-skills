@@ -56,20 +56,39 @@ A headline requires at least one recognized source/dependency check, complete re
 
 ## Change relevance
 
-Changes, diffs, commits and PRs/MRs receive relevance and findings, with no numeric score, grade or scored area. The catalog's `change_relevance` policy is separate from severity weights and has its own version. A high relevance signal can describe a correctly implemented security feature or a fix, not just a detected weakness.
+Changes, diffs, commits and PRs/MRs receive an indication of security relevance and separate findings, with no numeric score, grade or scored area (REQ-02–04). The question is whether the change may affect access decisions, security functions, interface exposure or another security-related behavior. The catalog's `change_relevance` policy is separate from severity weights and has its own version. A high relevance signal can describe a correctly implemented security feature or a fix, not just a detected weakness.
 
 | Relevance | Meaning |
 | --- | --- |
-| High | Recognized changes to identity, authorization, data/entry-point boundaries, security controls, cryptography, dependency/build authority, agent instructions or executable permissions. |
+| High | Indications of changed identity/access decisions, security functions, interface exposure, data boundaries, cryptography, dependency/build authority, agent instructions or executable permissions. |
 | Medium | Recognized frontend/input/output changes or security-relevant documentation/policy changes. |
 | Low | The complete examined change is positively identified as ordinary documentation or supported non-functional changes, without a recognized security signal. |
 | Unclear | Changed behavior or context cannot be classified by the available deterministic rules. An empty finding list alone never establishes low relevance. |
 
-Signals examine changed lines, up to two nearby lines of control context, and explicit sensitive file types. Existing scanner observations also identify relevant controls, including satisfied controls. Comment/format-only equivalence is established only where parsing supports it (Python AST and JSON structure); no generic claim is made for opaque languages. Executable flags are captured from local/Git source metadata. Unsupported or excluded files prevent a low classification. Positive signals can remain visible during incomplete processing, but the result remains marked incomplete.
+Relevance version 2 collects indications through these editable rule families:
+
+| Family | Examples of evidence | Typical level |
+| --- | --- | --- |
+| Access decisions | `can_read` / `canRead`, permission calls, ownership/tenant comparisons, admin guards, authorization annotations, access-policy paths | High |
+| Security functions | Token/password verification helpers, cryptographic operations, session/CSRF/CORS/CSP/TLS settings | High |
+| Interface exposure | Route declarations/annotations, listener and binding settings, proxy/routing files, public service types and exposed ports | High |
+| Data boundaries | Query operations, external requests, frontend input/output processing | High for persistence/network; medium for frontend |
+| Execution/configuration authority | Dependency/build/deployment files, agent instructions, executable flags | High |
+| Security documentation | Changed policy, threat-model or security-related guidance | Medium |
+
+The strongest matching signal sets `high` or `medium`; signals are not added or averaged. Each signal records its rule, reason, aspect, location, side and relation to the change. Both added and removed code are inspected, so adding protection and removing it can receive the same relevance. No rule establishes that a control is effective or that an interface is actually reachable.
+
+For full local comparisons, inspect changed lines plus up to two nearby lines, confined to the enclosing function when its boundary is recognized. Expand the innermost changed function to at most 200 lines, including its declaration and decorators/attributes. Python uses AST function boundaries; JavaScript/TypeScript, Java, Kotlin, C#, Go, Rust and PHP use masked comments/literals with declaration and balanced-brace heuristics. These heuristics do not resolve types, call graphs or application-wide control flow. A security-related declaration or operation anywhere in that selected function can supply an indication, with relation `in changed function`. An unchanged sibling function is not included merely because it is nearby. Existing scanner observations can also contribute, including satisfied controls.
+
+Functions longer than 200 lines contribute only their declaration (up to 20 lines) and changed/nearby lines. Files over 10,000 lines skip function expansion. `coverage.context_limited_files` identifies both cases. Unclassified behavior stays unclear; a context limit cannot make it low. Patch inputs use only the available changed and nearby lines in each supplied hunk independently; they do not infer a containing function or combine separate hunks into one. To provide complete function context for a PR/MR, use its captured local base/head comparison.
+
+For example, changing the final return in a long-enough-to-exceed-nearby-context `can_read(actor, owner)` from `actor == owner` to `True` indicates an access-decision change through its enclosing declaration. A generic `compute(value)` return change with no recognized security evidence remains unclear. Switching `server.address` from `127.0.0.1` to `0.0.0.0` indicates possible exposure; it does not establish external reachability. Editing only a comment in a Python access helper remains low when AST equivalence proves unchanged code.
+
+Comment/format-only equivalence is established only where parsing supports it (Python AST and JSON structure); no generic claim is made for opaque languages. Executable flags are captured from local/Git source metadata. Unsupported or excluded files prevent a low classification. Positive signals can remain visible during incomplete processing, but the result remains marked incomplete.
 
 For local comparisons, line matching is bounded to 10,000 lines per file. Larger files use conservative affected-file context and remain listed as unclassified. Patch inputs use the explicit added/removed line positions and process hunks separately. Metadata-only entries, permission changes, symlinks and rename/copy metadata require a local Git comparison; the parser rejects these instead of silently omitting them. At most 1,000 relevance signals are retained, with truncation reported and evidence for the headline level preserved. Signals contain rule references, aspects, source locations and explanations, not source snippets.
 
-Findings are compared by rule, file and normalized observation signatures, with named Python context where available. New observations are `introduced`, additional instances are `worsened`, matches are `pre_existing`, and removed observations are `resolved`. Incomplete comparisons remain `unresolved`. Pre-existing observations are shown only in the affected nearby context. Signatures cannot establish whole-flow identity; a relevance check is not a full semantic review. A deeper model-backed review is a separate explicit choice.
+Findings are compared by rule, file and normalized observation signatures, with named Python context where available. New observations are `introduced`, additional instances are `worsened`, matches are `pre_existing`, and removed observations are `resolved`. Incomplete comparisons remain `unresolved`. Pre-existing observations are shown only in the affected context, including selected enclosing functions. Signatures cannot establish whole-flow identity; a relevance check is not a full semantic review. A deeper model-backed review is a separate explicit choice.
 
 A complete relevance check exits 0, including an unclear result. Missing knowledge is not an execution failure and does not approve the change. Incomplete processing exits 1. Repository-only score coverage can still return exit 2. Structured consumers use `analysis: change-relevance`, `relevance`, `relevance_version`, `signals` and `finding_changes`; no score/grade fields are assigned.
 
