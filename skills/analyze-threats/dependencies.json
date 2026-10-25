@@ -1,10 +1,11 @@
 {
   "schema_version": 1,
   "engine": "appsec-analyzer",
+  "engine_required": false,
   "interface_versions": [1],
   "required_commands": ["version", "capabilities", "analyze-threats", "analyst"],
   "required_capabilities": {"analyze_threats": {"available": true, "model_calls": true, "hosts": ["claude-cli"], "preview_model_calls": false}},
   "model_prerequisites": ["Authenticated Claude CLI", "Explicit source/model-use authorization with actual per-call and job limits"],
   "optional_tools": ["Git/HTTPS remote access only for an explicitly selected MR or PR"],
-  "qualification": "offline-workflow; live model and platform qualification pending"
+  "qualification": "standalone assistant workflow; optional Analyzer preview checked; live model and platform qualification pending"
 }

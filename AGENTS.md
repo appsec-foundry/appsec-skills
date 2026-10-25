@@ -11,9 +11,9 @@ Before changing any `requirements.md`:
 - Write requirements in clear, concise language focused on user-facing behavior, without unnecessary details.
 - Obtain explicit user approval for the concrete proposal before editing the file. General permission to implement a task or silence does not count as approval of requirements changes.
 
-## Create Threat Model
+## Threat-analysis skills
 
-Before changing `skills/create-threat-model/`, read its [requirements](skills/create-threat-model/requirements.md). They define the expected user-facing behavior and guide further development.
+Before changing `skills/create-threat-model/` or `skills/analyze-threats/`, read the affected skill's requirements: [Create Threat Model](skills/create-threat-model/requirements.md) or [Analyze Threats](skills/analyze-threats/requirements.md). They define the expected user-facing behavior and guide further development.
 
 - Use the affected `REQ-` IDs to connect behavior changes and their validation to the requirements.
 - If the requested behavior requires a requirement change, follow the approval process above. Do not silently change requirements to make an implementation appear correct.

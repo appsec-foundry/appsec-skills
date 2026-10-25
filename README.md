@@ -10,7 +10,7 @@ Application security skills for coding assistants. Part of [AppSec Foundry](http
 | [security-score](skills/security-score/README.md) | Present Analyzer scoring version 2 without model calls. |
 | [repo-profile](skills/repo-profile/README.md) | Show size, languages and build manifests of a local repository via Analyzer, without model calls. |
 | [authnz-review](skills/authnz-review/README.md) | Run an independent Analyzer AuthN/AuthZ review with explicit Claude/model-use authorization. |
-| [analyze-threats](skills/analyze-threats/README.md) | Use Analyzer question-first focused analysis, preview, clarification and lifecycle operations. |
+| [analyze-threats](skills/analyze-threats/README.md) | Analyze features, changes, PRs/MRs, and design decisions against relevant threat-model context. Works independently; Analyzer is optional. |
 
 ## Quick start
 
@@ -39,9 +39,11 @@ The `npx` command installs the skill; modeling happens in your assistant. See th
 
 Each skill lives in `skills/<name>/`: `README.md` explains usage, `SKILL.md` contains the assistant instructions, and `references/` holds supporting material. For manual installation, copy the complete skill directory into your assistant's skill location.
 
-`create-threat-model` requires neither AppSec Advisor nor AppSec Analyzer. The other skills require an independently installed compatible Analyzer; their `dependencies.json` files declare interface versions, commands, capabilities, optional tools and model prerequisites using the [dependency schema](schemas/skill-dependencies.schema.json). Model-backed skills require explicit source/model-use authorization. No skill installs packages automatically. A plugin may provide a trusted binding to its bundled tested engine; portable instructions contain no plugin-root or sibling-checkout paths. Existing Advisor commands remain available until their compatibility gaps and qualification gates are closed.
+`create-threat-model` and `analyze-threats` work without AppSec Advisor or AppSec Analyzer. `analyze-threats` also supports an optional Analyzer workflow. `security-score`, `repo-profile`, and `authnz-review` require an independently installed compatible Analyzer. Engine integrations use `dependencies.json` to declare interface versions, commands, capabilities, optional tools, and model prerequisites using the [dependency schema](schemas/skill-dependencies.schema.json). `engine_required: false` marks an optional integration; when omitted, the engine is required. These prerequisites apply only when that engine workflow is selected. Additional external model use requires source/model-use authorization. No skill installs packages automatically. A plugin may provide a trusted binding to its bundled tested engine; portable instructions contain no plugin-root or sibling-checkout paths. Existing Advisor commands remain available until their compatibility gaps and qualification gates are closed.
 
-For development, follow [AGENTS.md](AGENTS.md) and the relevant skill's requirements, starting with [create-threat-model](skills/create-threat-model/requirements.md).
+For development, follow [AGENTS.md](AGENTS.md) and the relevant skill's requirements: [Create Threat Model](skills/create-threat-model/requirements.md) or [Analyze Threats](skills/analyze-threats/requirements.md).
+
+For company-specific review criteria, see [Analyze Threats customization and distribution](skills/analyze-threats/README.md#company-customization-and-distribution). Keep known threats and security requirements in project documents or a separate versioned context package; an internal distribution can bundle that context with the upstream skill without maintaining a workflow fork.
 
 To load the current working version into Codex and Claude Code, run `make install-dev` from this checkout. Use `make install-dev-codex` or `make install-dev-claude` for just one host. These targets require Make and Python 3 and install a separate `create-threat-model-dev` snapshot for the current user; rerun after local changes. See the [development installation instructions](DEVELOPMENT.md#load-a-development-version-into-codex-or-claude-code) for project-only installation or use without Make. `make help` lists the targets; `make test` runs local tests without model calls.
 
