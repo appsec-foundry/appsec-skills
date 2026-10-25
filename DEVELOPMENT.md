@@ -82,13 +82,21 @@ The unresolved audience still comes first in the interview. Accept other concise
 
 ### Check console readability and progress (REQ-03, REQ-04, REQ-07, REQ-16, REQ-19)
 
-Use the fictional order application above with a German request. Inspect the whole conversation, not just the final model. A concise progress message might be:
+Use the fictional order application above with a German request. Inspect the whole conversation, not just the final model. Concise progress messages across phases might be:
 
-> **Szenarien bewerten** — Laut Entwurf haben Kunden und Support unterschiedliche Zugriffsrechte. Ich prüfe jetzt, welche Bestellaktionen die beiden Rollen ausführen dürfen.
+| Activity | Example message |
+| --- | --- |
+| Reading sources | **Quellen sichten** — Der Bestellablauf ist beschrieben; ich prüfe noch die Supportrolle. |
+| Clarifying context | **Kontext klären** — Die Zielgruppe steht fest; offen ist noch die Vertraulichkeit der Bestelldaten. |
+| Assessing scenarios | **Szenarien bewerten** — Ich prüfe, welche Bestellaktionen Kunden und Support laut Entwurf ausführen dürfen. |
+| Writing | **Modell schreiben** — Ich halte die Szenarien und offenen Entscheidungen im Entwurf fest. |
+| Checking | **Modell prüfen** — Ich prüfe Quellenverweise und die Verknüpfung der offenen Entscheidungen mit den Szenarien. |
 
 Check these cases without requiring exact wording:
 
-- **Opening and ordinary progress:** Show the actual installed name/version once, the scope and expected result, and a useful next step. Keep the source-backed summary and diagram readable. Later messages identify the current activity and a concrete result, gap, or next action; reject repeated banners, file-by-file narration, fabricated percentages, and unsubstantiated “almost finished” claims.
+- **Opening and ordinary progress:** Show the actual installed name/version once, the scope and expected result, and a useful next step. Keep the source-backed summary and diagram readable. Later messages normally use one short sentence after the activity label, aiming for about 25 words total, with one useful result or next action. Reject repeated banners, file-by-file narration, fabricated percentages, and unsubstantiated “almost finished” claims.
+- **All phases and operations:** Apply the same brevity check to source reading, clarification transitions, analysis, writing, checking, focused updates, reviews, and exports. Inspect answer acknowledgments and waiting notices too; reject repeated context summaries and detailed assessments inserted into status text. Use only phases relevant to the request. The opening system summary, actual questions, and final delivery retain their own formats.
+- **Detailed assessment during progress:** Supply observations that exercise handlers use application filesystem/network access, handler safety settings differ, and chat has a ten-step limit with configured retries but unverified spending limits and cancellation. Expect a short update such as “**Szenarien bewerten** — Ich prüfe Dateizugriffe, Netzwerkaufrufe und Verbrauchsgrenzen der Übungen und des Chats.” Keep the detailed control comparison and verification gaps in the model or substantive explanation; do not turn existing limits into verified containment or proposed safeguards into implemented controls. A blocker or required decision may need a second short sentence, even beyond the length target.
 - **Questions and waiting:** Keep each question and its concise choices together in the permitted interface. Delay an answer: independent work may continue, then the assistant should make the waiting state clear without duplicating the question or sending repetitive waiting notices. After the answer, expect continuation from the established context. With no questions requested, expect no waiting state for skipped factual questions and no invented confirmation.
 - **Limited evidence:** Make a relevant design source unavailable. Expect the missing basis, its effect, and a next step. If the remaining sources suffice, continue with the gap visible; otherwise report an incomplete result. An unanswered permission question must not become permission or a completed step.
 - **Focused update and read-only review:** Request each separately. Expect labels and scope appropriate to the actual work, without a forced full-creation sequence. Review completion must not claim that files were updated or application controls tested.

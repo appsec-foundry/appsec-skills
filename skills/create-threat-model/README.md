@@ -133,11 +133,15 @@ The dialogue uses your language and asks one short, concrete question at a time.
 
 For repository models, questions address missing project-level expectations. Optional features remain conditional parts of the assessment when in scope, even if disabled in your installation. Console messages use short paragraphs, consistent activity labels, and readable diagrams. Questions and choices stay together; answers do not trigger a repeated introduction or a full recap.
 
-Progress messages use a short activity label, a concrete result, and the next action or blocker. For example:
+Across all phases, progress messages normally use a short activity label and one short sentence, aiming for about 25 words total. They give one useful result or next step. For example:
 
-> **Checking access** — The design limits orders to their owner. Next: check the download route.
+> **Reading sources** — The order flow is documented; I’m checking the support role.
+>
+> **Assessing scenarios** — I’m checking who may download orders.
+>
+> **Checking the model** — I’m checking scenario references and open decisions.
 
-Messages use your conversation language and appear at useful transitions and during longer work, without a status line for every file read. If an answer is needed, the assistant makes clear whether it can continue other work or is waiting for you. Missing sources and unfinished checks remain visible. There are no simulated progress bars or invented completion percentages; the skill guides assistant messages rather than installing a console interface. Shorter wording preserves important conditions and uncertainties; it does not turn an assumption into a confirmed fact.
+Messages use your conversation language and appear at useful transitions and during longer work, without a status line for every file read. Answer acknowledgments and waiting notices stay equally brief. Detailed assessments belong in the model or a substantive explanation. Blockers and required decisions may need a second short sentence. If an answer is needed, the assistant makes clear whether it can continue other work or is waiting for you. Missing sources and unfinished checks remain visible. There are no simulated progress bars or invented completion percentages; the skill guides assistant messages rather than installing a console interface. Shorter wording preserves important conditions and uncertainties; it does not turn an assumption into a confirmed fact.
 
 The assistant uses a checklist internally to keep the dialogue focused; you do not have to answer every checklist item. Questions about consequences concern what people could lose or be unable to do. You are not expected to determine whether an attack would succeed, and asking the assistant to examine a concern does not confirm that it is an actual weakness.
 

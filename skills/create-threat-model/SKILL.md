@@ -68,7 +68,9 @@ Follow the name/version line with a short statement of the operation, scope, and
 
 ### Progress messages
 
-Use a short activity label and one or two short sentences in the user's language (REQ-04, REQ-16, REQ-19). State a concrete result, then the next action or blocker. For example: **Checking access** — The design limits orders to their owner. Next: check the download route. Describe modeling progress; do not imply that a documented control has passed a test.
+Apply the same concise format to progress messages in every phase and operation: reading sources, clarifying context, assessing scenarios, writing, checking, updating, reviewing, and exporting (REQ-04, REQ-16, REQ-19). Default to a short activity label and one short sentence in the user's language, aiming for about 25 words total. Give one useful result or next action; both are not required in every update. For example: **Checking access** — I’m checking who may download orders.
+
+Keep detailed findings, control comparisons, and verification caveats in the model or a substantive explanation. Mention uncertainty here when it affects the next action; use a second short sentence when needed to explain a blocker or required decision. Keep answer acknowledgments and waiting notices equally brief, without recapping the discussion. Describe modeling progress without implying that a documented control has passed a test. The system summary, questions, and final delivery have their own formats below.
 
 - Keep activity names consistent within the session. Useful labels include “Reading sources,” “Clarifying context,” “Assessing scenarios,” and “Checking the model”; adapt them for updates, reviews, and exports. They describe work, not mandatory stages or a fixed completion count.
 - Send an update at meaningful transitions and during longer work at the host's required cadence. Combine it with a system summary or answer acknowledgment when that already communicates the transition. Avoid a separate status message for every file, tool call, or answer, and do not reprint the whole plan.
@@ -97,7 +99,7 @@ Example layout only; derive the actual components, connections, and language fro
                     └─────────────┘
 ```
 
-End the summary with at most one or two important uncertainties, stated concretely without starting a questionnaire. Then begin the guided interview, starting with the audience question if unresolved; do not add a separate approval question for the summary or diagram. Follow the audience rules for the summary too: keep it at a suitable level and clarify an unclear reader group before sharing confidential details. For a focused update, show only the affected part of the system. Keep the summary even in no-questions mode, with uncertainties explicit. At later meaningful transitions, report what was learned, what remains uncertain, and what happens next without repeating the whole sketch unless it materially changes.
+End the summary with at most one or two important uncertainties, stated concretely without starting a questionnaire. Then begin the guided interview, starting with the audience question if unresolved; do not add a separate approval question for the summary or diagram. Follow the audience rules for the summary too: keep it at a suitable level and clarify an unclear reader group before sharing confidential details. For a focused update, show only the affected part of the system. Keep the summary even in no-questions mode, with uncertainties explicit. At later meaningful transitions, follow the short progress-message format without repeating the whole sketch unless it materially changes.
 
 ## Establish the modeling basis
 
