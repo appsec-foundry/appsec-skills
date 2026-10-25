@@ -8,8 +8,8 @@ Use the separate [abuse patterns](abuse-cases.md) to explore misuse of that desc
 | --- | --- | --- |
 | C-01 | Scope | Which system, feature, or change is covered, what is excluded, and whether it describes current or proposed behavior. |
 | C-02 | Responsibility | Who owns the system and who can decide on risks. |
-| C-03 | Valuable data and operations | Which data and operations need protection and how sensitive they are. |
-| C-04 | Security objectives | What must not happen to that data and those operations, and what the consequences would be. |
+| C-03 | Valuable data and operations | Which data categories and operations need protection, for whom and why the data is sensitive, and who is intended to receive it. Use an established classification if available. |
+| C-04 | Security objectives and business impact | What must not happen to the data or operations, which business processes and people would be affected, and the concrete consequences. Include the scale or duration at which harm becomes material when relevant to the assessment. |
 | C-05 | Actors | Who uses or affects the system, with which access and privileges, including administrators, support staff, and other services. |
 | C-06 | Identity and access | How people and services are identified and how access to each resource is decided. |
 | C-07 | Interactions and dependencies | The main flows, external services, and integrations. |
@@ -19,6 +19,18 @@ Use the separate [abuse patterns](abuse-cases.md) to explore misuse of that desc
 | C-11 | Business rules open to misuse | Approvals, limits, recovery processes, or exceptions that legitimate users could abuse. |
 | C-12 | Existing controls and obligations | Known controls, organization guidance, and legal or contractual obligations. |
 | C-13 | Operation and recovery | Where the system runs, how secrets are managed, what is logged, and how failures are recovered. |
+
+## Clarify sensitivity and business impact
+
+Use C-03 and C-04 to distinguish data sensitivity from the criticality of an operation. Public data can support a critical process; the absence of personal data does not establish low impact. A label such as "confidential" or a technical outcome such as "data loss" is insufficient when its meaning or consequences could change the assessment. Plain-language descriptions are sufficient; do not require a formal classification scheme or a quantified business impact analysis.
+
+Adapt questions to observed gaps, within the skill's three-question limit. These are alternative prompts, not a mandatory interview:
+
+- **Sensitivity:** "The design mentions uploaded documents without describing their contents. Their sensitivity affects the disclosure scenarios: which kinds of confidential or personal information may they contain?"
+- **Integrity and business misuse:** "The workflow allows changes to an approved payment. To assess the harm of redirecting it, what financial or operational consequences could an unauthorized payment have?"
+- **Availability:** "The service supports order processing, but its outage tolerance is unclear. To assess disruption, after how long would an outage cause significant business harm?"
+
+Select follow-ups only when they could change a scenario or decision: for example, affected recipients, one record versus bulk disclosure, recoverability of an incorrect action, or a time-critical business deadline. Ask for data categories and qualitative consequences, not actual sensitive records. Reuse supported answers; if answers are unknown, skipped, or prohibited by no-questions mode, retain the specific gaps and their effect on priority.
 
 ## Status
 

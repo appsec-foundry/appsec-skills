@@ -40,6 +40,45 @@ npx skills@1.7.2 add /path/to/appsec-skills --skill create-threat-model
 
 For manual installation, copy this entire `create-threat-model` directory, including `references/`, into your assistant's skill location. The assistant entry point is [SKILL.md](SKILL.md).
 
+### Load a development version into Codex or Claude Code
+
+From the root of this checkout, install or update your current working version:
+
+```bash
+make install-dev          # Codex and Claude Code
+make install-dev-codex    # Codex only
+make install-dev-claude   # Claude Code only
+```
+
+This requires Make and Python 3 and installs a snapshot named **create-threat-model-dev** under `~/.agents/skills/` for Codex or `~/.claude/skills/` for Claude Code. The regular `create-threat-model` installation remains intact. Without Make, run `python3 scripts/install-dev-skill.py both` (or select `codex` or `claude`). To install only for one project, use `python3 scripts/install-dev-skill.py both --project /path/to/project`.
+
+In a fresh session in your target project, invoke:
+
+```text
+Codex:       $create-threat-model-dev
+Claude Code: /create-threat-model-dev
+```
+
+Then describe the modeling task as usual. The opening displays the dev name and a version containing a fingerprint of the local source files (REQ-16). **After editing the source skill, rerun the same installation command** to refresh the snapshot; uncommitted changes are included. Make edits in this checkout, not the installed copy. The installer preserves unrelated installations and refuses to replace a dev copy with local edits or an unmanaged folder. It installs no packages and starts no model session. These paths apply to local Codex and Claude Code, not Claude web chat or Cowork.
+
+Anyone with a local checkout can use these targets; paths are resolved from that checkout and the current user's home directory. Run `make help` to list targets and `make test` for the local installer and test-starter checks without model calls.
+
+See the official [Codex local skill documentation](https://learn.chatgpt.com/docs/build-skills#where-codex-loads-local-skills) and [Claude Code skill documentation](https://code.claude.com/docs/en/skills#choose-where-skills-load).
+
+### Optional: try a fictional project
+
+From the root of this repository, run:
+
+```bash
+bash scripts/test-threat-model.sh
+```
+
+The starter creates a fresh temporary project, copies the current skill into it, adds a fictional customer-portal description, and opens an interactive Codex CLI session with the prompt already supplied. It requires Bash and an installed, configured Codex CLI; it uses your existing login and configuration. Each run copies your latest local changes. Results remain in the printed test directory; move them elsewhere if you need to keep them beyond temporary-directory cleanup.
+
+To use the app instead of the CLI, run `bash scripts/test-threat-model.sh --prepare-only`, open the printed folder, and send the text from `PROMPT.txt` in a fresh conversation.
+
+The example deliberately leaves audience, data sensitivity, and business impact unspecified. Check that the early dialogue clarifies these within the three-question limit (REQ-03, REQ-05–07, REQ-11, REQ-14), and that your answers inform the scenarios and priorities. In a fresh run, skip an answer or add "Do not ask questions" to the prompt and check that the uncertainty stays visible (REQ-04). This is a manual behavior test; the starter does not automatically evaluate the resulting model.
+
 ## What the conversation looks like
 
 Each invocation starts by showing the installed skill's name and version, for example `create-threat-model · Version 0.1.0`. This applies to creation, updates, and reviews, including requests without questions. The version comes from `metadata.version` in the installed [SKILL.md](SKILL.md); it identifies the skill, separately from the Skills CLI version in the installation command.
@@ -47,6 +86,10 @@ Each invocation starts by showing the installed skill's name and version, for ex
 The assistant briefly explains the scope and next steps, then reads the available sources. It shares a working system summary and compact diagram when enough context exists, so you can correct misunderstandings early. A focused update concentrates on the affected flows and boundaries.
 
 Questions target gaps whose answers could change system understanding, a relevant threat, its priority, or a response. Each explains why the missing information matters. Some arise during the initial reading; others emerge while examining scenarios. You can answer "unknown," skip questions, or stop the dialogue. Unresolved points stay visible with a next clarification step where possible; you do not need to complete a questionnaire before receiving a supported draft.
+
+When the sources leave material gaps, early questions cover **data sensitivity and business impact**: what information needs protection, who could be harmed by disclosure or unauthorized changes, and how misuse or disruption would affect the business process. For example, the assistant may ask what kinds of confidential information an upload contains or when an outage would become costly. Data categories and qualitative consequences are enough; no sensitive sample records or formal impact analysis are needed. Existing answers are reused, and the same three-question limit applies.
+
+The model connects technical outcomes to those consequences when prioritizing threats. Public data can still support a critical business operation. If you skip a material impact question or request no questions, the affected assessment remains provisional with the missing context visible.
 
 After delivering the draft or update, the assistant links the model and summarizes the central threats with scenario references, possible harm, and material uncertainty. For updates, it distinguishes newly identified threats from changed assessments of existing scenarios, or states that no new threats were identified in the examined scope. The closing then gives prioritized next steps and important open decisions tied to those scenarios.
 
@@ -56,13 +99,15 @@ The assistant briefly offers an optional review or decision round as part of the
 
 ## Internal or public models
 
-New models are **internal by default**. Request a public model explicitly, for example: "Create a public threat model using only information suitable for publication." Existing audience settings and project guidance are respected. The assistant asks only when conflicting audience information or an unclear reader group affects which details may be included, within the usual question limit.
+For a new model, the assistant explicitly asks in the first clarification round whether it is intended for **internal or public use**, unless your request or established project guidance already answers that question. The choice determines which details the document can contain; it is separate from whether the application is publicly reachable. The question counts toward the usual limit of three questions per round, alongside questions about data sensitivity and business impact.
+
+You can specify the audience directly, for example: "Create a public threat model using only information suitable for publication." Updates and reviews retain an established audience; the assistant asks again only if it is missing, contradictory, or may have changed. If you skip the question or request no questions, new models provisionally default to **internal**, with the unresolved audience visible and affected confidential details omitted.
 
 Internal models can describe confidential open security issues, missing controls, attack prerequisites, and architecture details needed to address risks. Those details must be suitable for the repository's readers; a private repository or an "internal" heading alone is not sufficient. Public models exclude confidential details while retaining a useful explanation of the risks and required responses.
 
 Each model has a prominent English notice immediately below its title: **INTERNAL — NOT FOR PUBLIC DISTRIBUTION** or **PUBLIC USE INTENDED — NOT A PUBLICATION APPROVAL**. Internal models identify the intended readers when known. If the readers or repository access are unresolved, the notice explicitly states **AUDIENCE OR REPOSITORY ACCESS UNCONFIRMED — CONFIDENTIAL DETAILS OMITTED**, and the affected details are left out. The [notice templates](references/model-guide.md#audience-notice) keep this distinction separate from draft/review status; a notice does not provide access control or authorize publication.
 
-Before first writing confidential findings, the assistant checks whether the repository is suitable using available project context and asks once if that remains unclear. It does not first save a confidential draft and then sanitize it.
+Before first writing confidential findings, the assistant checks whether the repository is suitable using available project context and asks once if that remains unclear, within the same question limit. Choosing "internal" alone does not establish that the repository's readers may receive those findings. It does not first save a confidential draft and then sanitize it.
 
 Neither version includes real secrets or unnecessary personal data. Before each write, the assistant checks the content, including diagrams, source links, appendices, and later decisions. If the destination is unsuitable for confidential details, it withholds them and explains the limitation. An unanswered clarification or a request without questions retains the internal default or established audience; unresolved access or disclosure questions remain visible and the affected confidential details are omitted. Updates retain the existing audience unless circumstances change; the skill does not silently convert a model's audience.
 

@@ -8,9 +8,9 @@ Keep each scenario's reasoning, recommendations, decisions, and open questions t
 
 | Section | Include |
 | --- | --- |
-| Audience notice | A prominent notice immediately below the title, before any overview. Internal by default for new models; identify the intended readers or the unresolved audience. Use the notices below. |
+| Audience notice | A prominent notice immediately below the title, before any overview. Reflect the established audience; use internal provisionally when unanswered and identify the unresolved audience. Use the notices below. |
 | At a glance | Purpose, scope, exclusions, draft/review status, known owner, and the few most important next actions linked to scenarios. Give each action a brief priority reason, proposed or decided response, known owner, and next check. |
-| System in brief | Valuable data and operations, their sensitivity and security objectives, actors, main interactions and trust boundaries, with a compact diagram. Integrate relevant constraints and assumptions into this explanation. |
+| System in brief | Valuable data and operations, data sensitivity, supported business processes, security objectives and consequences for the organization and affected people, actors, main interactions and trust boundaries, with a compact diagram. Integrate relevant constraints and assumptions into this explanation. |
 | Threats and recommended changes | Short scenario sections with stable IDs, reasoning, concrete recommendations, verification, and decisions together. |
 | Open decisions and review | Remaining decisions, actual review participation and scope, and reassessment triggers. Link to scenario details instead of repeating them. |
 | Appendix: sources and coverage | Source locations, revisions and status, detailed evidence, conflicts, coverage gaps, and the checklist items that are not clarified. Identify abuse-pattern sources and material unresolved or unexamined coverage without reproducing the catalog. Keep decision-relevant uncertainty beside the affected scenario as well. |
@@ -68,6 +68,14 @@ Organize the work around system understanding, plausible failures, responses, an
 Use STRIDE to examine impersonation, unauthorized modification, disputed actions, disclosure, disruption, and excess privilege at relevant interactions. Business abuse may use legitimate permissions: approval reuse after a material edit, manipulation of a recovery process, or an exception that bypasses a business restriction. Ground these mechanisms in actual requirements rather than importing examples as findings.
 
 Describe actors through access and capabilities. An authenticated customer who controls an uploaded record is more actionable than an unsupported attribution to a named adversary. For serious scenarios, explain the most harmful plausible outcome, prerequisites, affected parties, and reach. Use multi-step paths only when they clarify the attack.
+
+## Connect outcomes to impact
+
+Connect the technical outcome to the affected data or operation, the business process or people that depend on it, and the resulting harm. Use source-backed or attributed context from C-03 and C-04. For example, unauthorized changes to payment instructions may redirect funds and leave an invoice unpaid; "integrity loss" alone does not explain that consequence. Include relevant financial loss, operational disruption, harm to people, or contractual, legal, or reputational consequences only where supported; do not attach a generic list of impacts to every scenario.
+
+Explain the scale, duration, or recovery limits when they affect priority. Even public product data may be critical if incorrect prices drive binding orders. Conversely, the presence of personal data alone does not establish the severity of every scenario; consider its actual sensitivity, affected people, reach, and plausible misuse. Keep likelihood prerequisites and evidence confidence distinct from impact.
+
+Record shared business context once in the system summary and use it in scenario reasoning. If the consequences remain unknown, state which missing fact could change the assessment and keep that priority provisional. Do not turn an unanswered question into a low rating or invent monetary losses, outage tolerances, or stakeholder confirmation.
 
 ## Scenario records
 
@@ -147,7 +155,10 @@ An approver reviews the payment details and marks the request approved. Settleme
 
 Suppose a confidential design note establishes that the fictional `settlement-retry` worker does not recheck approval after a recipient change, and that the general payment-edit threat is suitable for public disclosure.
 
-- **No audience specified, authorized project repository:** Default to internal without an audience question. Add the internal notice with the established reader group. Name the worker, the missing check, and the attack prerequisites so the team can plan the correction. Cite the note only if the reference itself is suitable for those readers. Keep the response proposed until decided or implemented.
+- **New model, audience not established, authorized project repository:** Ask internal or public in the first clarification round. If the user chooses internal and the intended readers and destination suitability are established, add the internal notice with that reader group. Name the worker, the missing check, and the attack prerequisites so the team can plan the correction. Cite the note only if the reference itself is suitable for those readers. Keep the response proposed until decided or implemented.
+- **Audience already established by the request, project guidance, or existing model:** Use that audience without repeating the question unless there is a material conflict or possible change. An unchanged internal model update does not require a new audience choice.
+- **Audience question skipped:** Use internal provisionally for a new model, record the unresolved audience, omit the affected confidential finding, and use the unconfirmed-audience notice. Do not interpret the skip as an internal-use decision or repeat the question without new evidence.
+- **Internal chosen, repository readers unknown:** The answer establishes the intended audience category, not destination suitability. Clarify that remaining gap within the question limit; until resolved, omit the confidential finding and use the unconfirmed-audience/access notice.
 - **Public:** Add the public-use notice. Describe the risk that payment edits can invalidate an earlier approval and recommend rechecking the approved details. Omit the confidential worker name and implementation finding; state that implementation evidence is omitted for confidentiality and that the risk remains unresolved.
 - **No audience specified, repository access unknown, no questions requested:** Keep the internal default, omit the confidential finding before writing, and use the unconfirmed-audience/access notice. Do not claim an authorized reader group or approval to publish.
 - **Internal requested, destination public:** An internal heading does not make the confidential finding suitable for that repository. Withhold that detail and explain the destination mismatch; do not write it and rely on a later cleanup. If an abstraction cannot support a useful model, leave the affected write pending clarification.
