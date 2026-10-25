@@ -1,10 +1,26 @@
 {
   "schema_version": 1,
   "engine": "appsec-analyzer",
-  "interface_versions": [1],
-  "required_commands": ["version", "capabilities", "score"],
-  "required_capabilities": {"score": {"available": true, "model_calls": false, "scoring_version": 2}},
+  "interface_versions": [
+    1
+  ],
+  "required_commands": [
+    "version",
+    "capabilities",
+    "score"
+  ],
+  "required_capabilities": {
+    "score": {
+      "available": true,
+      "model_calls": false,
+      "scoring_version": 2
+    }
+  },
   "model_prerequisites": [],
-  "optional_tools": ["Git remote access only for an explicitly selected remote repository"],
-  "qualification": "offline-workflow; no model qualification implied"
+  "optional_tools": [
+    "Git for local Git sources and comparisons",
+    "HTTPS host API access only for explicitly selected Git URLs or authorized PR/MR retrieval"
+  ],
+  "qualification": "bundled internal runtime; optional Analyzer; remote transport/API checks verified offline, live host qualification pending",
+  "engine_required": false
 }
