@@ -1,11 +1,13 @@
 ---
 name: analyze-threats
-description: Analyze a feature, code change, pull or merge request, or design decision for threats, using an existing threat model where relevant. Works before code exists and as an optional development reviewer. AppSec Analyzer is optional.
+description: Analyze threats and misuse scenarios in features, code changes, pull/merge requests, and design decisions. Use for focused threat analysis, security reviews, and comparison with existing threat models or company threat catalogs. For creating or updating a maintained threat model, use create-threat-model when available. AppSec Analyzer is optional.
 ---
 
 # Analyze threats
 
 Analyze the selected subject in the calling assistant by default. Neither AppSec Analyzer nor another skill is required. The [requirements](requirements.md) define expected user-facing behavior. Use the optional [Analyzer workflow](references/compatibility.md) only when requested or already selected by the user; installation or availability alone does not select it.
+
+When the user explicitly requests creation or an update of a maintained threat model, use the available `create-threat-model` workflow for that task. Focused analysis findings do not substitute for the requested model. If that skill is unavailable, explain the boundary without installing it automatically or claiming that an analysis is a maintained model. An analysis-only request still follows this skill and may offer a model follow-up after delivery (REQ-01, REQ-12).
 
 ## Understand the request (REQ-01, REQ-02, REQ-14)
 
