@@ -75,6 +75,22 @@ For creation or an authorized update:
 
 For review, perform the same content checks without writes. Report findings with the affected model section, rationale, and proposed change.
 
+## Guide decisions
+
+After creating or updating the model, ask the team to decide on the most important open scenarios, at most three at a time, in priority order. In review or when the user asked for no questions, list the open decisions instead.
+
+For each scenario, name the decision needed and offer three answers:
+
+| Answer | Record |
+| --- | --- |
+| Implement | The measure, responsible person, and target date. |
+| Accept | Who accepts, the rationale, and the review date or trigger. |
+| Clarify first | What is missing; the scenario stays open. |
+
+Record answers as the matching treatment from the model guide with a focused patch under the write rules above. Record only explicit decisions with the details the team states; do not fill in a missing person or date. An acceptance without a named responsible person stays open, as do unanswered scenarios. After recording, offer the next scenarios; the team can stop at any time. A decision does not authorize implementing the measure, creating tickets, or changing code.
+
+## Finish
+
 Finish with the artifact locations or review observations, the scope actually examined, and material open decisions. Record only real review participation. A draft, passing format check, or empty threat list is not team approval or proof of sufficient coverage. Do not commit, push, publish, or implement proposed controls as part of this skill.
 
 ## Execution boundaries

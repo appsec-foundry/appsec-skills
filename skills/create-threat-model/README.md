@@ -45,6 +45,8 @@ For manual installation, copy this entire `create-threat-model` directory, inclu
 
 The result starts as a draft. It distinguishes current exposure from expected residual risk after effective treatment. Proposed controls and unresolved assumptions stay visible; they are not recorded as verified controls or accepted risks. The skill does not commit or publish the files.
 
+After writing, the skill asks for decisions on the most important open scenarios, at most three at a time: implement a measure, accept the risk, or clarify first. It records only explicit answers, with the responsible person and date you give; everything else stays open.
+
 ## Common requests
 
 **Create without questions**
@@ -69,6 +71,13 @@ Start with docs/requirements.md and include architecture reading of the code.
 ```
 
 The skill derives components, entry points, data stores, external connections, and authentication paths from code and configuration. Without this request, it offers architecture reading when the documents leave such points open and reads more code only after you agree. It shows where the code differs from the documents; it does not scan for vulnerabilities.
+
+**Record decisions later**
+
+```text
+Use create-threat-model to update threat-model.md with our decisions:
+T-001 implement, owner Finance Platform team, target 2026-12-15.
+```
 
 **Review an existing model**
 
