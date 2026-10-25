@@ -8,7 +8,8 @@ Keep each scenario's reasoning, recommendations, decisions, and open questions t
 
 | Section | Include |
 | --- | --- |
-| At a glance | Purpose, scope, exclusions, internal or public audience (internal by default for new models), draft/review status, known owner, and the few most important next actions linked to scenarios. Give each action a brief priority reason, proposed or decided response, known owner, and next check. |
+| Audience notice | A prominent notice immediately below the title, before any overview. Internal by default for new models; identify the intended readers or the unresolved audience. Use the notices below. |
+| At a glance | Purpose, scope, exclusions, draft/review status, known owner, and the few most important next actions linked to scenarios. Give each action a brief priority reason, proposed or decided response, known owner, and next check. |
 | System in brief | Valuable data and operations, their sensitivity and security objectives, actors, main interactions and trust boundaries, with a compact diagram. Integrate relevant constraints and assumptions into this explanation. |
 | Threats and recommended changes | Short scenario sections with stable IDs, reasoning, concrete recommendations, verification, and decisions together. |
 | Open decisions and review | Remaining decisions, actual review participation and scope, and reassessment triggers. Link to scenario details instead of repeating them. |
@@ -19,6 +20,46 @@ Use stable scenario IDs such as `T-001`. Add other IDs only when repeated cross-
 Aim for an opening that fits roughly one screen, usually highlighting three to five next actions rather than repeating the entire scenario list. Derive it from the scenario records, which hold the full reasoning and decision details. Preserve conditional priorities and unresolved owners. Do not imply that the overview is complete coverage or maintain a separate task list. In an existing model, reuse an equivalent summary and update only affected entries.
 
 Keep the main text focused on understanding and action. State shared caveats once, and repeat only conditions that materially change a scenario's meaning. Combine related open questions and link to their details. Keep source inventories and coverage accounting in the appendix of the same document; omit tool-by-tool activity logs and routine checks with no effect on the result. Moving text to an appendix is not a substitute for removing repetition. Add detail when it changes a decision or enables verification, not merely to fill a field; never omit a significant threat, uncertainty, or recorded decision to meet a length target.
+
+## Audience notice
+
+Use a visible Markdown blockquote with a bold uppercase heading immediately below the model's title. Keep these notices in English. Use established project classification labels when required, without inventing a classification scheme or weakening the handling instruction. Keep draft/review status in the overview; an audience notice neither restricts access nor grants permission to commit, share, or publish.
+
+For an internal model with an established audience, replace the reader placeholder with the actual group:
+
+```markdown
+# Threat Model
+
+> **INTERNAL — NOT FOR PUBLIC DISTRIBUTION**
+>
+> This document may contain confidential information about unresolved security issues.
+>
+> **Intended readers:** [Established reader group]
+> Store and share only where access is appropriate for these readers.
+```
+
+If the intended readers or the destination's suitability remain unresolved, use the following notice only after the content check confirms that the affected confidential details have been omitted. A new notice cannot make existing confidential content safe; leave an unsafe existing document's affected write pending clarification under the skill's audience rules.
+
+```markdown
+# Threat Model
+
+> **INTERNAL — NOT FOR PUBLIC DISTRIBUTION**
+>
+> **AUDIENCE OR REPOSITORY ACCESS UNCONFIRMED — CONFIDENTIAL DETAILS OMITTED**
+>
+> Resolve the intended readers and repository access before adding confidential details.
+```
+
+For a model intended for public use:
+
+```markdown
+# Threat Model
+
+> **PUBLIC USE INTENDED — NOT A PUBLICATION APPROVAL**
+>
+> This version is intended for public readers and must exclude confidential details.
+> This notice does not authorize publication.
+```
 
 ## Reasoning perspectives
 
@@ -102,8 +143,9 @@ An approver reviews the payment details and marks the request approved. Settleme
 
 Suppose a confidential design note establishes that the fictional `settlement-retry` worker does not recheck approval after a recipient change, and that the general payment-edit threat is suitable for public disclosure.
 
-- **No audience specified, authorized project repository:** Default to internal without an audience question. Name the worker, the missing check, and the attack prerequisites so the team can plan the correction. Cite the note only if the reference itself is suitable for those readers. Keep the response proposed until decided or implemented.
-- **Public:** Describe the risk that payment edits can invalidate an earlier approval and recommend rechecking the approved details. Omit the confidential worker name and implementation finding; state that implementation evidence is omitted for confidentiality and that the risk remains unresolved.
+- **No audience specified, authorized project repository:** Default to internal without an audience question. Add the internal notice with the established reader group. Name the worker, the missing check, and the attack prerequisites so the team can plan the correction. Cite the note only if the reference itself is suitable for those readers. Keep the response proposed until decided or implemented.
+- **Public:** Add the public-use notice. Describe the risk that payment edits can invalidate an earlier approval and recommend rechecking the approved details. Omit the confidential worker name and implementation finding; state that implementation evidence is omitted for confidentiality and that the risk remains unresolved.
+- **No audience specified, repository access unknown, no questions requested:** Keep the internal default, omit the confidential finding before writing, and use the unconfirmed-audience/access notice. Do not claim an authorized reader group or approval to publish.
 - **Internal requested, destination public:** An internal heading does not make the confidential finding suitable for that repository. Withhold that detail and explain the destination mismatch; do not write it and rely on a later cleanup. If an abstraction cannot support a useful model, leave the affected write pending clarification.
 
 Neither version includes an access token from a source URL or unrelated customer records. These examples illustrate content selection, not verified implementation behavior.
