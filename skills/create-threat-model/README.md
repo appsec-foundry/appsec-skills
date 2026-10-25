@@ -97,7 +97,11 @@ Replace the example ID, owner, and date with your team's decision.
 
 ## What to expect
 
-The assistant starts with the installed skill's name and version, reads the available sources, and shares a system summary and diagram when there is enough context. It asks up to three questions per round about gaps that could change the assessment. Early questions may cover sensitive data, the consequences of misuse or an outage, and who will read the model.
+The assistant starts with the installed skill's name and version and reads the available sources. Before the interview, it gives a short summary in your language: one sentence about who uses the system and why, a small diagram, then the important unknowns and source basis. The diagram uses clearly named boxes and aligned arrows, readable directly in the console. Optional connections appear on a separate labeled branch; technology names appear only where helpful. Planned features are not presented as already implemented. If there is not enough information for a sketch, it explains what is known and missing. You do not need to read diagram syntax or know security terminology to understand the summary.
+
+The dialogue uses your language and normally asks one short question at a time, with concrete answer choices where helpful. When your assistant supports an interactive question interface in the current mode, the skill uses it; otherwise, it asks in chat. It may group up to three simple, independent questions. It briefly names the remaining topics, uses the sources and your previous answers, and asks only about gaps that matter or confirmations it still needs. It clarifies relevant operating facts before proposing consequences that depend on them. Disabled features do not trigger a questionnaire about their configuration. You can correct any proposed answer in your own words.
+
+The assistant uses a checklist internally to keep the dialogue focused; you do not have to answer every checklist item. Questions about consequences concern what people could lose or be unable to do. You are not expected to determine whether an attack would succeed, and asking the assistant to examine a concern does not confirm that it is an actual weakness.
 
 You can answer “unknown,” skip questions, or stop the dialogue. Missing information stays visible in the draft. If there is too little context to describe a concrete system, the assistant explains what is missing instead of producing generic threats.
 
@@ -109,7 +113,7 @@ The assistant offers an optional review or decision round after delivery. A disc
 
 ## Internal or public models
 
-For a new model, the assistant asks whether it is for internal or public use unless your request or project guidance already says so. You can specify this in the initial prompt:
+When the model's intended readers are not yet established, the first interview question asks whether it is for internal or public use. You can also choose "Not decided yet." This applies to updates and reviews too when the existing model leaves its audience open. Local operation or made-up exercise data does not answer who should read the document. You can specify this in the initial prompt:
 
 ```text
 Create a public threat model using only information suitable for publication.
@@ -117,7 +121,7 @@ Create a public threat model using only information suitable for publication.
 
 Internal models can include confidential security findings only when the repository's readers are authorized to receive them. If that is unclear, the assistant asks before writing those details. Public models omit confidential details while explaining the risks and needed responses. Neither includes real secrets or unnecessary personal data.
 
-If you skip the audience question or request no questions, a new model is provisionally marked internal, with the uncertainty recorded and confidential details affected by it omitted. Updates retain the established audience unless circumstances change.
+If you skip the audience question or request no questions, a new model is provisionally marked internal, with the uncertainty recorded and confidential details affected by it omitted. That provisional label does not settle the audience for future updates. When your request, project guidance, or an existing model already establishes the audience, the assistant briefly states that choice and its basis instead of asking again. Updates retain the established audience unless circumstances change.
 
 The model carries a visible audience notice. That notice does not restrict access or approve publication, and the assistant's content checks are not a guarantee that every sensitive detail will be detected. See the [notice templates and examples](references/model-guide.md#audience-notice).
 
@@ -125,7 +129,7 @@ The model carries a visible audience notice. That notice does not restrict acces
 
 Use the recommendations to plan changes to requirements, design, or implementation. Each explains what to change, why it addresses the threat, and how to check the result. Applying those changes is a separate task.
 
-For example, consider [T-003: changing a payment destination after approval](references/model-guide.md#t-003-an-approval-survives-a-change-to-the-payment-destination):
+For example, consider [T-003: changing a payment destination after approval](references/model-guide.md#t-003-payment-details-can-change-after-approval):
 
 1. The design lets suppliers edit approved payment requests but does not say whether a recipient change cancels approval.
 2. The assistant asks what should happen. The team answers: “A recipient change must require renewed approval. We do not know whether the implementation does that.”
