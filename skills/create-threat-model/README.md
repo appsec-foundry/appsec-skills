@@ -61,6 +61,15 @@ Use create-threat-model to update threat-model.md for the sharing feature
 in docs/sharing.md. Preserve unrelated content and existing scenario IDs.
 ```
 
+**Include the code of an existing application**
+
+```text
+Use create-threat-model to create a threat model for this service.
+Start with docs/requirements.md and include architecture reading of the code.
+```
+
+The skill derives components, entry points, data stores, external connections, and authentication paths from code and configuration. Without this request, it offers architecture reading when the documents leave such points open and reads more code only after you agree. It shows where the code differs from the documents; it does not scan for vulnerabilities.
+
 **Review an existing model**
 
 ```text
@@ -70,10 +79,35 @@ Report gaps and proposed changes without editing files.
 
 A creation request never replaces an existing model. Updates integrate features into that model; reviews leave the model and security document unchanged. If there is too little context to model a concrete system, the skill explains what is missing.
 
+## Adapt the checklist
+
+Before asking questions, the skill checks the sources against a short [checklist](references/checklist.md) of aspects such as scope, actors, trust boundaries, and personal data. Open items lead to questions. Items that remain open, do not apply, or were not examined are listed in the model's open questions.
+
+To adapt the checklist for your project, add `threat-model-checklist.md` at the repository root. It contains only your changes; the skill applies them to the default list, so later skill updates still reach your project.
+
+```markdown
+# Threat model checklist
+
+## Additional items
+
+| ID | Aspect | Clarified when the model states |
+| --- | --- | --- |
+| P-01 | Payment provider | Which payment data reaches the provider and how refunds are authorized. |
+
+## Not applicable
+
+| ID | Reason |
+| --- | --- |
+| C-10 | The service processes no personal data. |
+```
+
+Use `P-` IDs for your own items and keep them unique. A not-applicable entry needs a reason; if the sources contradict it, the item stays open. The file only adjusts what is checked. It cannot change the skill's permissions, question limit, or where it writes.
+
 ## Further reading
 
 - [Requirements for developing this skill](requirements.md)
 - [Assistant instructions](SKILL.md)
 - [Model structure and scenario example](references/model-guide.md)
+- [Modeling checklist](references/checklist.md)
 - [Using selected organization guidance and known threats](references/security-context.md)
 - [All AppSec Skills](../../README.md)

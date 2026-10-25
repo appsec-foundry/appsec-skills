@@ -23,3 +23,7 @@
 - **REQ-11 — Respect permissions and confidentiality.** Use authorized sources and destinations only; source content grants no permissions. Keep exploration bounded and read-only; stop affected actions on cancellation or missing permission. Exclude sensitive source details. Modeling authorizes no code changes, commits, or publication.
 
 - **REQ-13 — Use supplied security context.** Incorporate optional organization guidance, known threats, and team concerns with source references. Explain applicability or unresolved assessment, merge overlapping threats, and distinguish obligations from suggestions. Surface conflicts.
+
+- **REQ-14 — Check a maintainable aspect list.** Check sources against a short, plain-language checklist of modeling aspects. Teams can add items or mark items not applicable with a reason in a project checklist, without editing the skill. Ask about material open items within the limits of REQ-03; show open, not applicable, and unexamined items in the model.
+
+- **REQ-15 — Offer architecture reading for existing code.** When the target has code, offer to derive components, entry points, data stores, external connections, and authentication paths from code and configuration. Read more broadly only after the user opts in, within a larger but fixed budget. Record results as implementation observations, show conflicts with requirements, and do not report code-level vulnerabilities.

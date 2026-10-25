@@ -11,7 +11,7 @@ Use these sections for a new model; adapt an existing model's structure instead 
 | System model | Components, stores, external parties, interactions, and changes in trust assumptions. Include a compact diagram and supporting prose. |
 | Threat scenarios | Stable IDs, system-specific mechanisms, prerequisites, objectives, consequences, applicability, and explained priority. |
 | Treatment and verification | Controls and their states, treatment decisions, current exposure, expected residual risk, responsible roles, evidence, and testable criteria. May be kept with each scenario. |
-| Review and open questions | Participants and reviewed scope, unresolved decisions, coverage gaps, and reassessment triggers. |
+| Review and open questions | Participants and reviewed scope, unresolved decisions, coverage gaps, checklist items that are not clarified, and reassessment triggers. |
 
 Assign stable identifiers where elements are referenced, for example `S-001` for sources, `O-001` for objectives, `F-001` for flows, and `T-001` for scenarios. Preserve established identifiers and do not renumber them just to close gaps. Every source reference must resolve to an inspected source or be marked unverified; do not invent filenames, requirement IDs, or evidence.
 
@@ -74,6 +74,6 @@ A supplier account changes the destination on an approved payment request, and s
 
 ## Review and maintenance
 
-Check coverage of significant objectives, actors, interactions, boundaries, and supplied known threats. Explain exclusions and gaps. Check whether each treatment addresses the actual mechanism and whether verification includes intended behavior and a representative failure or abuse case. Do not run these tests or change application code merely because they appear in the model.
+Check coverage of significant objectives, actors, interactions, boundaries, checklist items, and supplied known threats. Explain exclusions and gaps. Check whether each treatment addresses the actual mechanism and whether verification includes intended behavior and a representative failure or abuse case. Do not run these tests or change application code merely because they appear in the model.
 
 Keep risk priority proportionate to stated prerequisites and controls. Do not turn lack of evidence into certainty that a control is absent, or treat a planned control as a completed mitigation.
