@@ -2,7 +2,7 @@
 
 - **REQ-01 — Model from specifications.** Derive the model from intended behavior in requirements, design, and team knowledge. Work before code exists; use code only as supporting evidence.
 
-- **REQ-02 — Define the scope.** State the system, feature, or change covered, exclusions, and known owners. Keep conclusions within the examined scope.
+- **REQ-02 — Define the scope.** Model the application described by the repository, not the user’s local installation unless explicitly requested. State what is covered, excluded, and who owns it. Keep questions and conclusions within that scope.
 
 - **REQ-03 — Fill gaps through dialogue.** Read sources first, then ask about relevant gaps, contradictions, and overlooked concerns. Incorporate answers in short rounds of at most three questions. Users may skip or stop questions; unanswered points remain open. Before detailed scenario analysis, ask the user to confirm or correct the business purpose and supported processes, the sensitivity of relevant data, and the plausible worst-case consequences. Present source-derived context as a proposal where available. Reuse explicit confirmations already given for the same scope; for updates, revisit only affected context. Respect skipped questions and requests to proceed without questions, and keep unconfirmed context explicit.
 
