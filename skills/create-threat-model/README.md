@@ -41,14 +41,19 @@ New Markdown models use a **Mermaid flowchart by default**, with a short explana
 
 Before detailed scenario analysis, the assistant asks you to confirm or correct the business purpose, relevant data sensitivity, and plausible worst-case consequences. It proposes context from the sources and reuses answers you have already given for the same scope. Audience or deployment questions do not replace this step; clarification may take another short round of at most three questions. You can skip questions or request work without questions; unconfirmed context stays explicit. Updates revisit only affected context.
 
-The first model is a draft for the team to review. It separates proposed measures from implemented or verified controls and explains what remains unknown. Each scenario has a stable ID, such as `T-003`, for use in tickets and pull requests. You can edit the document in any Markdown editor.
+The first model is a draft for the team to review. It separates proposed measures from implemented or verified controls and explains what remains unknown. Open measure choices or missing owners do not postpone writing the draft. Before suggesting follow-up work, the assistant writes the requested model or update, checks its content and security-document link, and links the actual file. If writing is blocked or the system context is insufficient, it reports the incomplete result and the obstacle. A console summary or measures discussion alone does not fulfill a creation request. Each scenario has a stable ID, such as `T-003`, for use in tickets and pull requests. You can edit the document in any Markdown editor.
+
+Recommendations identify changes to requirements, application design, implementation, or maintained configuration where these address the cause. They explain what developers should change and how to check the result, alongside necessary deployment measures and operator responsibilities. If only an external boundary can provide the needed protection, the model explains why. For training applications, recommendations consider how to preserve intended exercises while protecting surrounding systems; missing evidence remains explicit. The same approach applies when discussing possible measures after delivery.
 
 | Request | Result |
 | --- | --- |
 | Create | Writes an initial model. Preserves an existing one and offers an update. |
 | Update | Revises affected sections, preserving unrelated content, manual additions, and scenario IDs. |
 | Review | Reports gaps and suggestions in the conversation without changing files or review status. |
+| Discuss measures | Uses the existing model to explain, compare, or propose measures. Makes recommendations without changing files or requiring treatment decisions. |
 | Export | Creates an explicitly requested OTM JSON or YAML copy of the existing model, when the required information is available. Leaves Markdown unchanged. |
+
+To discuss measures for an existing model, name the model or scenarios. The assistant reuses the recorded system context and earlier answers, without restarting the full intake. It asks only about material gaps or changes affecting the requested measures. Request an update explicitly if you also want changes recorded in the model.
 
 Modeling does not change application code, create tickets, commit files, or publish the model.
 
@@ -123,7 +128,13 @@ The assistant starts with the installed skill's name and version and reads the a
 
 The dialogue uses your language and normally asks you to confirm one short, source-backed proposal at a time. Selecting an answer such as "Yes," "No," or "Unknown" is enough; explanations and corrections are optional. A negative or unknown answer does not trigger a required text response. If there is too little context for a proposal, the point can stay open. A single answer should not confirm several independent claims. When an interactive question interface is available and permitted, the skill uses it; otherwise, a short answer or choice number in chat suffices. It may group up to three independent questions and reuses earlier answers to avoid unnecessary follow-ups.
 
-For repository models, questions address missing project-level expectations. Optional features remain conditional parts of the assessment when in scope, even if disabled in your installation. Progress updates and summaries state the main point plainly, without repeating background or listing technical details you do not need. Shorter wording preserves important conditions and uncertainties; it does not turn an assumption into a confirmed fact.
+For repository models, questions address missing project-level expectations. Optional features remain conditional parts of the assessment when in scope, even if disabled in your installation. Console messages use short paragraphs, consistent activity labels, and readable diagrams. Questions and choices stay together; answers do not trigger a repeated introduction or a full recap.
+
+Progress messages identify the current activity, a concrete intermediate result, and the next action or important open point. For example:
+
+> **Assessing scenarios** — The design separates customer and support access. I am checking which order operations each role may perform.
+
+Messages use your conversation language and appear at useful transitions and during longer work, without a status line for every file read. If an answer is needed, the assistant makes clear whether it can continue other work or is waiting for you. Missing sources and unfinished checks remain visible. There are no simulated progress bars or invented completion percentages; the skill guides assistant messages rather than installing a console interface. Shorter wording preserves important conditions and uncertainties; it does not turn an assumption into a confirmed fact.
 
 The assistant uses a checklist internally to keep the dialogue focused; you do not have to answer every checklist item. Questions about consequences concern what people could lose or be unable to do. You are not expected to determine whether an attack would succeed, and asking the assistant to examine a concern does not confirm that it is an actual weakness.
 
@@ -135,11 +146,19 @@ You can answer “unknown,” skip questions, or stop the dialogue. Missing info
 
 Source reading has fixed limits on files, text, tool calls, and exploration time. Larger projects may be only partly examined, even with architecture reading enabled. Name the service or feature you want to focus on; the model records important coverage gaps. The exact limits are in the [assistant workflow](SKILL.md#execution-boundaries).
 
-After creating, updating, or reviewing the model, the assistant starts its closing with a short **verdict**: what the result means for the examined use, whether measures or clarification are needed, and why. The judgment stays within the evidence; it is not a security approval. It then summarizes the central findings. Updates distinguish new threats from changed assessments of existing ones.
+After creating, updating, or reviewing the model, the assistant starts its closing with a short **verdict**: what the result means for the examined use, whether measures or clarification are needed, and why. The judgment stays within the evidence; it is not a security approval. It identifies whether the model was created, updated, reviewed without edits, or remains incomplete, and marks drafts and material limits. It then summarizes the central findings without repeating the progress history. Updates distinguish new threats from changed assessments of existing ones.
 
-The closing gives you **one to three concrete next steps**, with the recommended first action clearly marked. Each has a goal, an expected result, and a copyable request naming the appropriate known skill or a plain assistant task. Examples include reviewing the model for gaps, comparing measures, planning a specific check, or implementing an already agreed change as a separate task. A model review is distinguished from code review and runtime testing. If a fact must be checked first, the assistant explains which choice the result will inform. The closing uses your conversation language, even when the model is in English.
+The closing briefly recommends useful measures and gives you **one recommended next step**, with a goal, expected result, and a copyable request naming the appropriate known skill or a plain assistant task. It may add up to two further actions where useful. Examples include reviewing the model for gaps, comparing measures, planning a specific check, or implementing an already agreed change as a separate task. A model review is distinguished from code review and runtime testing. If a fact must be checked first, the assistant explains which choice the result will inform. The closing uses your conversation language, even when the model is in English.
 
-The assistant offers an optional review or discussion of possible measures after delivery. That discussion starts only when you request it. It explains concrete options and their trade-offs before asking you to decide. You can plan a response, accept a risk, or clarify a missing fact first. Acceptance requires an explicit decision by a responsible person, with a rationale and review date or trigger. To save decisions in the model, include an update request; a review stays read-only.
+The assistant finishes after delivery and the suggested next steps. It may end with a short invitation such as “Would you like to plan suitable measures together?” in your language. It does not automatically open measure-selection or risk-acceptance questions, even when the model contains open decisions. A suggested review or measures discussion starts only when you request it; answering the invitation is optional. With no questions requested, it suggests the continuation without asking. For example, a suggested review request may be:
+
+```text
+Use create-threat-model to review threat-model.md for missing threats,
+unsupported assumptions, and whether the recommended measures address
+the causes. Report observations without editing files.
+```
+
+Use the installed skill's actual name, such as `create-threat-model-dev` for the dev snapshot. Accepting an invitation to plan measures starts a discussion of proposals, their trade-offs, and a recommended approach. It does not require you to choose a treatment or supply owners and dates. A decision round starts only when you ask to choose treatments or make risk decisions. You can then plan a response, accept a risk, or clarify a missing fact first. Acceptance requires an explicit decision by a responsible person, with a rationale and review date or trigger. To save decisions in the model, include an update request; a review stays read-only.
 
 ## Internal or public models
 
