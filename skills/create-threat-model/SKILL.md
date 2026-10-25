@@ -111,7 +111,7 @@ For review, perform the same content checks without writes, including the model 
 
 ## Guide decisions
 
-After creating or updating the model, finish with the result and summarize important open decisions. Add a brief, non-question offer of an optional review or decision round, for example: "You can request a review of the model or a guided discussion of its open decisions." Do not launch follow-up questions, show decision choices, or wait for a reply unless the user explicitly requested that dialogue, either in the original task or afterward. Permission to ask factual questions during modeling does not request a post-delivery decision round. In no-questions mode, list open decisions without starting dialogue. A review request follows the read-only review workflow; it does not authorize recording decisions in the model.
+After creating or updating the model, use the outcome-focused closing described in [Finish](#finish). Include a brief, non-question offer of an optional review or decision round among the next steps, preferably with an example request naming the relevant scenarios. Do not launch follow-up questions, show decision choices, or wait for a reply unless the user explicitly requested that dialogue, either in the original task or afterward. Permission to ask factual questions during modeling does not request a post-delivery decision round. In no-questions mode, list open decisions without starting dialogue. A review request follows the read-only review workflow; it does not authorize recording decisions in the model.
 
 When a decision round is explicitly requested, ask about the most important open scenarios, at most three at a time, in priority order. For updates, limit this round and subsequent rounds to scenarios affected by the requested update, including new scenarios and changed shared boundaries. Use decisions already supplied; do not ask the team to decide them again unless their assumptions changed. If no decisions remain open in scope, finish without a decision round.
 
@@ -127,7 +127,15 @@ The proposed response may eliminate, mitigate, or transfer the risk, as appropri
 
 ## Finish
 
-Finish with the artifact locations or review observations, the scope actually examined, and material open decisions. Record only real review participation. A draft, passing format check, or empty threat list is not team approval or proof of sufficient coverage. Do not commit, push, publish, or implement proposed controls as part of this skill.
+After creation or an update, link the model and briefly state the scope actually examined. Center the closing on the model's results:
+
+- **Central threats:** Summarize the most important scenarios in scope with their stable IDs or links, concrete harm, and uncertainty that affects their priority or treatment. Derive these from the model; do not replace them with a list of editing activities or routine checks.
+- **New threats in an update:** Identify newly recorded scenarios separately from changed assessments of existing scenarios. A wording change or added evidence alone is not a new threat, and a newly identified threat need not have been introduced by the latest system change. If none were identified, say so within the examined scope. Avoid repeating a scenario's full summary in both groups.
+- **Next steps:** Give prioritized, concrete actions or decisions tied to the relevant scenarios, including what to clarify or verify and known responsible roles where useful. Preserve the distinction between proposed work, agreed plans, and completed verification; do not substitute generic categories such as "owners and risk treatment remain open."
+
+Where a skill would help carry out a next step, name it, explain its purpose, and provide a short example request using the actual scenario IDs. Use this skill for a model review, a decision round, or a later evidence-based update. Recommend other skills only when their capabilities and prerequisites are known from the available context; do not assume they are installed. Mention relevant installation, engine, or model-use prerequisites without making them dependencies of this skill. If no suitable skill is known, describe the task directly. Recommendations do not invoke skills, install tools, authorize model calls, or start follow-up work.
+
+For a review, return the observations, affected scenarios or sections, and recommended next steps without implying an update occurred. In every mode, state material coverage or evidence limits and record only real review participation. A draft, passing format check, or empty threat list is not team approval or proof of sufficient coverage. Do not commit, push, publish, or implement proposed controls as part of this skill.
 
 ## Execution boundaries
 

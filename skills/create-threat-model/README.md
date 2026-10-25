@@ -48,7 +48,11 @@ The assistant briefly explains the scope and next steps, then reads the availabl
 
 Questions target gaps whose answers could change system understanding, a relevant threat, its priority, or a response. Each explains why the missing information matters. Some arise during the initial reading; others emerge while examining scenarios. You can answer "unknown," skip questions, or stop the dialogue. Unresolved points stay visible with a next clarification step where possible; you do not need to complete a questionnaire before receiving a supported draft.
 
-After delivering the draft or update, the assistant summarizes important open decisions and briefly offers an optional review or decision round. It finishes without asking you to respond. Follow-up questions start only when you explicitly request that dialogue, either in your original request or afterward. Factual questions during modeling remain part of the workflow above.
+After delivering the draft or update, the assistant links the model and summarizes the central threats with scenario references, possible harm, and material uncertainty. For updates, it distinguishes newly identified threats from changed assessments of existing scenarios, or states that no new threats were identified in the examined scope. The closing then gives prioritized next steps and important open decisions tied to those scenarios.
+
+Where useful, the next steps name suitable skills, explain their purpose, and include example requests and relevant prerequisites. For example, an open treatment decision for T-003 could lead to: "Use create-threat-model to guide me through the treatment decision for T-003 in threat-model.md. Update the model with the decisions I explicitly make." A focused implementation review may call for another skill when its capabilities and prerequisites are known; a recommendation does not mean it is installed or has been run.
+
+The assistant briefly offers an optional review or decision round as part of the next steps and finishes without asking you to respond. Follow-up questions start only when you explicitly request that dialogue, either in your original request or afterward. Factual questions during modeling remain part of the workflow above.
 
 ## Internal or public models
 
