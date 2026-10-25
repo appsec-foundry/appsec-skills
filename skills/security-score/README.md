@@ -1,23 +1,69 @@
 # Security score
 
-Get a deterministic **0–100 score and A–F grade for repositories**, or **security relevance and findings for changes, diffs and PRs/MRs**. The bundled runtime is the default; Analyzer is an optional repository-scoring variant. Analysis makes no model calls.
+Get a fast, deterministic indication from bundled static checks. Repositories receive a **0–100 score and A–F grade**; changes receive **security relevance and findings**. Identical captured sources, rules and settings produce the same result. Analysis makes no model calls.
 
-Install the complete `security-score` directory with your assistant's skill mechanism. Internal scoring needs Python 3.10+ on Linux/macOS; local Git sources and comparisons also need Git. It requires no third-party Python packages or Analyzer installation.
+## Install
 
-## Start with a score
+Install with the [repository's Skills CLI prerequisites](../../README.md#quick-start-threat-modeling):
+
+```bash
+npx skills@1.7.2 add appsec-foundry/appsec-skills --skill security-score
+```
+
+For an unpublished checkout, replace `appsec-foundry/appsec-skills` with its local path. For manual installation, copy the complete `security-score` directory, including its scripts, catalog and references, into your assistant's skill location.
+
+Running the bundled checks needs Python 3.10+ on Linux/macOS; local Git sources and comparisons also need Git. No third-party Python packages or Analyzer installation are required. An installed Analyzer does not change the default.
+
+## Choose the assessment
+
+| Input | Default result |
+| --- | --- |
+| Local checkout or supported Git repository URL | Repository score and grade, such as `79/100 (C)` |
+| Staged/unstaged changes, commits, base/head comparisons or supplied diffs | Security relevance and finding changes, without a score or grade |
+| PR or MR with a supplied patch or authorized comparison | Security relevance for the selected change, without a score or grade |
 
 ```text
 Use security-score for this repository.
+Use security-score for the staged changes.
+Use security-score for PR https://github.com/owner/project/pull/42.
 ```
 
-Repository output is one line, such as `79/100 (C)`. Change output starts with `Security relevance: high`, `medium`, `low` or `unclear`, plus finding counts. Changes receive no score or grade. Add `--details` for the explanation, affected aspects, findings and coverage:
+Output is compact by default:
+
+```text
+79/100 (C)
+```
+
+For a change, for example:
+
+```text
+Security relevance: high · 0 introduced, 0 worsened findings
+```
+
+Add `--details` for reasons, affected aspects, findings, coverage and rule/scoring identity. Use `--json` or `--yaml` for the complete structured result.
+
+## Interpret the result
+
+Repository grades are **A: 90–100, B: 80–<90, C: 70–<80, D: 60–<70, E: 50–<60, F: 0–<50**. A score of 100 means no deductions from applicable checks; 0 is the lowest attainable result. The weakest assessed security area determines the headline, so unrelated passing checks cannot cancel serious findings. Insufficient coverage or failed processing withholds the score and grade.
+
+Change relevance describes review needs, independently of finding severity:
+
+| Relevance | Meaning |
+| --- | --- |
+| High | Recognized changes to security behavior, trust boundaries, dependency/build authority or other sensitive controls. Safe authentication additions and parameterization fixes can also be high. |
+| Medium | Recognized frontend/input/output changes or security-relevant documentation changes. |
+| Low | Positively identified ordinary documentation or supported non-functional changes, with complete processing and no security signal. |
+| Unclear | Available rules or context cannot classify the changed behavior. An empty finding list does not establish low relevance. |
+
+Findings distinguish introduced, worsened, resolved and relevant pre-existing observations. Incomplete comparisons retain unresolved findings. Relevance does not imply that a weakness exists, and a completed check does not approve a merge.
+
+## Select sources and coverage
 
 ```text
 Use security-score for this repository with --details.
-Use security-score for the staged changes.
 Use security-score between main and HEAD.
 Use security-score for this supplied patch.
-Use security-score for PR https://github.com/owner/project/pull/42.
+Use security-score for MR https://gitlab.com/group/project/-/merge_requests/42 with --details.
 Use security-score for https://gitlab.com/group/project.git with --details.
 ```
 
@@ -38,7 +84,9 @@ python3 /installed/security-score/scripts/score.py --patch /private/change.diff 
 python3 /installed/security-score/scripts/score.py https://github.com/owner/project.git
 ```
 
-`--unstaged` compares index and working files; `--worktree` compares HEAD and working files including untracked files. `--commit REV` compares a commit with its first parent. A change can be highly relevant without a detected weakness: adding authentication, changing a query safely, removing a protection, or updating a build dependency all deserve review. Unclassified business logic remains unclear; an empty finding list does not establish low relevance. Recognized documentation/comment/formatting-only changes can be low relevance. Patch fragments and unsupported input can leave coverage incomplete. Patches with permission changes, metadata-only entries or rename/copy metadata need a local Git comparison. The default time budget is 15 seconds, selectable with `--timeout` up to 120 seconds.
+`--unstaged` compares index and working files; `--worktree` compares HEAD and working files including untracked files. `--commit REV` compares a commit with its first parent. The CLI's `--pr`/`--mr` options identify a supplied patch or local base/head comparison; they do not fetch the change themselves. Patch fragments and unsupported input can leave coverage incomplete. Patches with permission changes, metadata-only entries or rename/copy metadata need a local Git comparison.
+
+The default time budget is 15 seconds, selectable with `--timeout` from 0.1 to 120 seconds. Source, file and output limits bound the work. An exceeded limit is reported as incomplete. The checks do not install dependencies, build or execute the examined project. See the [scoring guide](references/scoring.md#limits) for exact limits.
 
 ## Optional Analyzer variant
 
@@ -46,7 +94,13 @@ python3 /installed/security-score/scripts/score.py https://github.com/owner/proj
 Use security-score for this repository with --engine analyzer --details.
 ```
 
-This variant needs a separately installed compatible Analyzer. It supports repository scoring and rejects change selectors. Analyzer version 2 and internal version 1 use different scoring policies. Grades label each engine's own number; the numbers are not directly comparable. See [compatibility](references/compatibility.md) and the optional [dependency declaration](dependencies.json).
+For direct use:
+
+```sh
+python3 /installed/security-score/scripts/score.py /project --engine analyzer --details
+```
+
+This explicit variant needs a separately installed compatible Analyzer. It supports repository scoring and rejects change selectors. Analyzer scoring version 2 and internal scoring version 1 use different policies; their numbers are not directly comparable. A missing or incompatible Analyzer stops the selected variant without installing it or silently changing engines. See [compatibility](references/compatibility.md) and the optional [dependency declaration](dependencies.json).
 
 ## Understand and maintain the rules
 

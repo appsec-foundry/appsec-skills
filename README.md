@@ -7,12 +7,12 @@ Application security skills for coding assistants. Part of [AppSec Foundry](http
 | Skill | Purpose |
 | --- | --- |
 | [create-threat-model](skills/create-threat-model/README.md) | Create, update, or review a threat model from requirements, design documents, and team context. Works before code exists; no Analyzer required. |
-| [security-score](skills/security-score/README.md) | Score repositories from 0–100/A–F and assess security relevance of changes and PRs/MRs; Analyzer is optional. |
+| [security-score](skills/security-score/README.md) | Give repositories a deterministic 0–100/A–F score; assess changes and PRs/MRs by security relevance. Bundled checks are the default; Analyzer is optional. |
 | [repo-profile](skills/repo-profile/README.md) | Show size, languages and build manifests of a local repository via Analyzer, without model calls. |
 | [authnz-review](skills/authnz-review/README.md) | Run an independent Analyzer AuthN/AuthZ review with explicit Claude/model-use authorization. |
 | [analyze-threats](skills/analyze-threats/README.md) | Analyze features, changes, PRs/MRs, and design decisions against relevant threat-model context. Works independently; Analyzer is optional. |
 
-## Quick start
+## Quick start: threat modeling
 
 You need a coding assistant that supports skills. The installation command uses the [Skills CLI](https://github.com/vercel-labs/skills/tree/v1.7.2), which requires Node.js 22.20 or newer, npm, and Git.
 
@@ -34,6 +34,27 @@ and docs/architecture.md. Ask about material gaps before writing the draft.
 Replace the example paths with your documents. The assistant writes `threat-model.md` and links it from `SECURITY.md` or `security.md`. An existing model is preserved unless you request an update.
 
 The `npx` command installs the skill; modeling happens in your assistant. See the [skill guide](skills/create-threat-model/README.md) for updates, reviews, and working without questions.
+
+## Quick start: security scoring and change relevance
+
+Using the same installation prerequisites, install `security-score`:
+
+```bash
+npx skills@1.7.2 add appsec-foundry/appsec-skills --skill security-score
+```
+
+Then ask your assistant:
+
+```text
+Use security-score for this repository.
+Use security-score for https://github.com/owner/project.git with --details.
+Use security-score for the staged changes.
+Use security-score for PR https://github.com/owner/project/pull/42.
+```
+
+Local checkouts and supported Git URLs receive a **0–100 score and A–F grade**. Changes, diffs, commits and PRs/MRs receive **high, medium, low or unclear security relevance**, with findings tracked separately and no numeric grade. PR/MR assessment needs an authorized diff retrieval or a supplied patch/local comparison.
+
+The default runtime needs Python 3.10+ on Linux/macOS, plus Git for local Git sources and comparisons. It needs no Analyzer installation or third-party Python packages and makes no model calls. Output is compact by default; `--details` adds evidence, coverage and explanation. AppSec Analyzer is available only when explicitly selected with `--engine analyzer` for repository scoring. See the [skill guide](skills/security-score/README.md) for grades, examples, limits and rule maintenance.
 
 ## Repository layout
 
