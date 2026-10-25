@@ -202,10 +202,12 @@ Supply a fictional repository design with an approval workflow that permits chan
 
 These are manual behavioral examples; documentation checks alone do not verify live recommendations or the effectiveness of any proposed control.
 
-### Check readable scenarios and evidence placement (REQ-04, REQ-06, REQ-07, REQ-19)
+### Check readable structure, scenarios, and evidence placement (REQ-04, REQ-05, REQ-06, REQ-07, REQ-19)
 
 Use a fictional image-import scenario whose source notes describe a server download and a browser fallback after download failure. Supply links to those observations, but no runtime results. Request a model, or explicitly request a readability update to a dense existing model:
 
+- **Reading order:** Expect overview, system and protection needs, threat scenarios, open decisions, and an evidence/verification appendix. An overview table uses short entries and links to scenarios. The system section explains shared purpose, valuable data and operations, and boundaries without a long control inventory. Actual review participation, technical observations, detailed tests, and coverage belong in the appendix; draft status and consequential limits remain visible up front.
+- **One primary place:** Follow an overview entry to its scenario and an open decision back to that same scenario. Its reasoning and treatment record should appear there once. Reject copied recommendations, long table cells, or a decision section filled with source history. For a focused update to a team's existing layout, preserve unrelated headings and manual additions.
 - **Main text:** Expect a short explanation that both server and browser may contact destinations outside the exercise, why this matters, a proposed response covering both paths, and a concrete next action. The reader must reach the recommendation without first reading several paragraphs of file-by-file analysis. Actual destination reachability and consequence remain conditional.
 - **Evidence appendix:** Expect a descriptive link from the scenario to evidence explaining both paths, with the supplied source references and their limits. Detailed proposed tests belong separately from observed facts. Moving the browser-fallback trace must not remove the browser from the main recommendation or imply server-only restrictions are sufficient.
 - **Shared status and updates:** State shared limits once, while preserving material scenario-specific unknowns. During an authorized readability update, retain stable IDs, explicit decisions, source traceability, and unresolved conflicts; replace repetition rather than accumulating update history. A read-only review must propose this restructuring without changing the target model.

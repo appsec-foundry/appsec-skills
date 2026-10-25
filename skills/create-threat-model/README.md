@@ -32,10 +32,13 @@ New models are written in **English by default**. To use another language, ask e
 
 The assistant writes **`threat-model.md` at the project root** and links it from `SECURITY.md` or `security.md`, creating a short `SECURITY.md` if needed. The model contains:
 
-- The main concerns and prioritized next steps.
-- A system summary and diagram showing interactions and trust boundaries.
-- Threat scenarios explaining what could go wrong, the harm, recommended changes, and how to check them.
-- Open decisions, assumptions, and source references, with detailed coverage in an appendix.
+1. **Overview:** purpose, scope, draft/review status, main scenarios, provisional priorities, and next steps.
+2. **System and protection needs:** a small diagram, users, important data and operations, and boundaries that must hold.
+3. **Threat scenarios:** short labeled blocks explaining the attack, possible harm, conditions, existing protection, recommendations, and next check.
+4. **Open decisions:** pending choices and known responsible people or roles, linked to the scenarios.
+5. **Evidence and verification:** source references, technical observations, detailed tests, review participation, limitations, and coverage.
+
+The overview and decision list point to scenario details instead of repeating them. Compact tables help compare scenarios; individual scenarios use short blocks or small vertical tables. Important uncertainty stays beside the scenario. Existing team layouts are preserved during unrelated updates.
 
 New Markdown models use a **Mermaid flowchart by default**, with a short explanation of the system. If you prefer a text diagram or your intended viewer does not support Mermaid, the skill uses that alternative. Existing models keep their diagram format during unrelated updates. The opening console summary uses directly readable boxes and arrows.
 

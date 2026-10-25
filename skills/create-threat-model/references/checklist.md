@@ -82,7 +82,7 @@ An inference or proposal does not clarify an item; keep the item open and note t
 
 Checklist status describes whether the modeling information is available, not whether the user has confirmed the modeling basis or a control has passed a test. A source-backed clarified item may still need user confirmation under REQ-03. Missing effectiveness evidence alone does not make an otherwise fully described item open; record that verification gap with the affected scenario. For an open item, name the missing or conflicting fact instead of only saying "not verified." For example, unknown network reachability keeps the relevant boundary item open; an attributed description of that boundary can clarify it while its enforcement remains unverified.
 
-In the model's review and open questions section or coverage appendix, name the checklists used and list every item that is not clarified with its ID, status, and reason or missing fact. State that items not listed are clarified. Combine items sharing a question when useful, retaining their IDs and statuses; link to an existing scenario explanation instead of repeating it. Keep questions that affect the next decision visible in the main text.
+In the evidence and verification appendix, name the checklists used and list every item that is not clarified with its ID, status, and reason or missing fact. State that items not listed are clarified. Combine items sharing a question when useful, retaining their IDs and statuses; link to an existing scenario explanation instead of repeating it. Keep questions that affect the next decision visible with the relevant scenario; the open-decision list links there.
 
 ## Project checklist
 
