@@ -35,6 +35,8 @@ The assistant writes **`threat-model.md` at the project root** and links it from
 - Threat scenarios explaining what could go wrong, the harm, recommended changes, and how to check them.
 - Open decisions, assumptions, and source references, with detailed coverage in an appendix.
 
+New Markdown models use a **Mermaid flowchart by default**, with a short explanation of the system. If you prefer a text diagram or your intended viewer does not support Mermaid, the skill uses that alternative. Existing models keep their diagram format during unrelated updates. The opening console summary uses directly readable boxes and arrows.
+
 Before detailed scenario analysis, the assistant asks you to confirm or correct the business purpose, relevant data sensitivity, and plausible worst-case consequences. It proposes context from the sources and reuses answers you have already given for the same scope. Audience or deployment questions do not replace this step; clarification may take another short round of at most three questions. You can skip questions or request work without questions; unconfirmed context stays explicit. Updates revisit only affected context.
 
 The first model is a draft for the team to review. It separates proposed measures from implemented or verified controls and explains what remains unknown. Each scenario has a stable ID, such as `T-003`, for use in tickets and pull requests. You can edit the document in any Markdown editor.
@@ -44,8 +46,26 @@ The first model is a draft for the team to review. It separates proposed measure
 | Create | Writes an initial model. Preserves an existing one and offers an update. |
 | Update | Revises affected sections, preserving unrelated content, manual additions, and scenario IDs. |
 | Review | Reports gaps and suggestions in the conversation without changing files or review status. |
+| Export | Creates an explicitly requested OTM JSON or YAML copy of the existing model, when the required information is available. Leaves Markdown unchanged. |
 
 Modeling does not change application code, create tickets, commit files, or publish the model.
+
+## Optional JSON or YAML export
+
+Markdown remains the main document you maintain. On request, the skill can also produce **Open Threat Model (OTM) 0.2.0**, an existing exchange format from IriusRisk that supports JSON and YAML. For example:
+
+```text
+Use create-threat-model to export threat-model.md as OTM YAML.
+Keep the Markdown model unchanged and explain any export limitations.
+```
+
+Use “OTM JSON” for JSON, or explicitly request both. Default filenames are `threat-model.otm.yaml` and `threat-model.otm.json`. The assistant does not ask about formats during ordinary modeling or keep exports synchronized automatically. Regenerate an export when you need a new snapshot.
+
+OTM requires numerical assessments that a qualitative model may not contain, including likelihood, impact, and estimated risk reduction. The assistant uses documented assessments and explains missing inputs rather than assigning arbitrary numbers or changing the model to fit the format. A blocked export does not prevent delivery of separately requested Markdown work.
+
+Scenario IDs stay unchanged. Decisions, assumptions, sources, and other context are retained in descriptions and additional attributes where OTM has no dedicated field. Other tools may not understand or preserve those attributes. Schema validation alone does not establish compatibility with a particular importer; the assistant reports what it actually checked. Export requests do not upload the model to any service.
+
+See the [OTM export guide and compatibility limits](references/otm-export.md) for details.
 
 ## Common requests
 
@@ -111,7 +131,9 @@ You can answer “unknown,” skip questions, or stop the dialogue. Missing info
 
 Source reading has fixed limits on files, text, tool calls, and exploration time. Larger projects may be only partly examined, even with architecture reading enabled. Name the service or feature you want to focus on; the model records important coverage gaps. The exact limits are in the [assistant workflow](SKILL.md#execution-boundaries).
 
-After creating or updating the model, the assistant summarizes the central threats and recommends where to start. Usually one to three next steps explain the harm to reduce, a proposed measure, and how to check its effect. If a fact must be checked first, it explains which decision that check will support. Updates distinguish new threats from changed assessments of existing ones. A short example request helps you continue with the recommended next step; where useful, it names a suitable follow-up skill and any prerequisites.
+After creating, updating, or reviewing the model, the assistant starts its closing with a short **verdict**: what the result means for the examined use, whether measures or clarification are needed, and why. The judgment stays within the evidence; it is not a security approval. It then summarizes the central findings. Updates distinguish new threats from changed assessments of existing ones.
+
+The closing gives you **one to three concrete next steps**, with the recommended first action clearly marked. Each has a goal, an expected result, and a copyable request naming the appropriate known skill or a plain assistant task. Examples include reviewing the model for gaps, comparing measures, planning a specific check, or implementing an already agreed change as a separate task. A model review is distinguished from code review and runtime testing. If a fact must be checked first, the assistant explains which choice the result will inform. The closing uses your conversation language, even when the model is in English.
 
 The assistant offers an optional review or discussion of possible measures after delivery. That discussion starts only when you request it. It explains concrete options and their trade-offs before asking you to decide. You can plan a response, accept a risk, or clarify a missing fact first. Acceptance requires an explicit decision by a responsible person, with a rationale and review date or trigger. To save decisions in the model, include an update request; a review stays read-only.
 

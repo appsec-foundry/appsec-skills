@@ -8,6 +8,8 @@ Prefer concrete descriptions over specialist labels: "A customer can read anothe
 
 Keep each scenario's reasoning, recommendations, decisions, and open questions together so a person can extend them directly in Markdown. Preserve meaningful manual additions and the team's layout during updates. Do not require generated metadata, special delimiters, or a separate machine-readable copy to maintain the model.
 
+For an explicitly requested JSON or YAML export, use the [OTM export guide](otm-export.md). The export is derived from this model; its numerical requirements do not change the qualitative assessment or impose new fields on the Markdown document.
+
 | Section | Include |
 | --- | --- |
 | Audience notice | A prominent notice immediately below the title, before any overview. Reflect the established audience; use internal provisionally when unanswered and identify the unresolved audience. Use the notices below. |
@@ -22,6 +24,22 @@ Use stable scenario IDs such as `T-001`. Add other IDs only when repeated cross-
 Aim for an opening that fits roughly one screen, usually highlighting three to five next actions rather than repeating the entire scenario list. Derive it from the scenario records, which hold the full reasoning and decision details. Keep the overview consistent with recorded decisions, including after later decision patches: "Clarification agreed; outcome pending" differs from a proposed next step, implemented treatment, or accepted risk. Preserve conditional priorities and unresolved owners. Do not imply that the overview is complete coverage or maintain a separate task list. In an existing model, reuse an equivalent summary and update only affected entries.
 
 Keep the main text focused on understanding and action. State shared caveats once, and repeat only conditions that materially change a scenario's meaning. Combine related open questions and link to their details. Keep source inventories and coverage accounting in the appendix of the same document; omit tool-by-tool activity logs, unsuccessful guesses at source paths, and routine checks with no effect on the result. Retain inaccessible sources or discovery limits when they leave a material gap. Moving text to an appendix is not a substitute for removing repetition. Add detail when it changes a decision or enables verification, not merely to fill a field; never omit a significant threat, uncertainty, or recorded decision to meet a length target.
+
+## System diagram
+
+For a new `threat-model.md`, use a fenced `mermaid` flowchart as the default system diagram. Put it in the system summary with a short explanation of the main flow and important boundaries, so the surrounding text also makes sense without a renderer. Unknown viewer support does not require a format question or evidence of earlier Mermaid use in the repository. Use a fenced `text` diagram instead when requested by the user or project conventions, or when the intended viewer is known not to render Mermaid. Preserve an existing model's diagram format unless the requested update calls for changing it.
+
+Keep the diagram compact, with familiar component names and short, useful flow labels. Use subgraphs for source-supported trust boundaries and explain what changes across them. A drawn boundary is not evidence of effective isolation. Mark optional, planned and unverified connections explicitly; do not invent architecture to complete a diagram. Keep detailed evidence in the appendix. Use the model's document language for labels; the console sketch uses the conversation language and remains plain text.
+
+For example, if the sources describe a browser loading orders through an application, the main flow could be:
+
+```mermaid
+flowchart LR
+    browser["Customer browser"] -->|Request orders| app["Application"]
+    app -->|Read orders| orders["Order database"]
+```
+
+Derive the actual nodes, flows and boundaries from the project; this example does not establish authentication or database access controls. Prefer simple Mermaid syntax and quoted node labels. Check syntax and consistency with the prose; render with an existing permitted local tool when available. Do not install a renderer, send the diagram to an external rendering service, or claim a rendered check merely to produce the model.
 
 ## Audience notice
 
