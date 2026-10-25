@@ -46,6 +46,16 @@ Questions target gaps whose answers could change system understanding, a relevan
 
 After the draft, the conversation switches from factual clarification to treatment decisions. Reviews and requests without questions list open decisions instead.
 
+## Internal or public models
+
+New models are **internal by default**. Request a public model explicitly, for example: "Create a public threat model using only information suitable for publication." Existing audience settings and project guidance are respected. The assistant asks only when conflicting audience information or an unclear reader group affects which details may be included, within the usual question limit.
+
+Internal models can describe confidential open security issues, missing controls, attack prerequisites, and architecture details needed to address risks. Those details must be suitable for the repository's readers; a private repository or an "internal" heading alone is not sufficient. Public models exclude confidential details while retaining a useful explanation of the risks and required responses.
+
+Neither version includes real secrets or unnecessary personal data. Before each write, the assistant checks the content, including diagrams, source links, appendices, and later decisions. If the destination is unsuitable for confidential details, it withholds them and explains the limitation. An unanswered clarification or a request without questions retains the internal default or established audience; unresolved access or disclosure questions remain visible and the affected confidential details are omitted. Updates retain the existing audience unless circumstances change; the skill does not silently convert a model's audience.
+
+These are assistant workflow checks, not an automated guarantee that every sensitive detail will be detected. The [audience example](references/model-guide.md#audience-example) shows how the same issue can be documented for different readers.
+
 ## What you get
 
 - `threat-model.md` at the target repository root: a short opening with the main concerns and next actions, a system summary with a diagram, and concise threat scenarios explaining recommended changes, checks, and decisions. The overview highlights the most important actions rather than listing every scenario. Sources and detailed checklist coverage follow in an appendix in the same document; uncertainty affecting a decision stays beside the relevant scenario.

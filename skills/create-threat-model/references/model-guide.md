@@ -8,7 +8,7 @@ Keep each scenario's reasoning, recommendations, decisions, and open questions t
 
 | Section | Include |
 | --- | --- |
-| At a glance | Purpose, scope, exclusions, draft/review status, known owner, and the few most important next actions linked to scenarios. Give each action a brief priority reason, proposed or decided response, known owner, and next check. |
+| At a glance | Purpose, scope, exclusions, internal or public audience (internal by default for new models), draft/review status, known owner, and the few most important next actions linked to scenarios. Give each action a brief priority reason, proposed or decided response, known owner, and next check. |
 | System in brief | Valuable data and operations, their sensitivity and security objectives, actors, main interactions and trust boundaries, with a compact diagram. Integrate relevant constraints and assumptions into this explanation. |
 | Threats and recommended changes | Short scenario sections with stable IDs, reasoning, concrete recommendations, verification, and decisions together. |
 | Open decisions and review | Remaining decisions, actual review participation and scope, and reassessment triggers. Link to scenario details instead of repeating them. |
@@ -60,6 +60,8 @@ Explicit acceptance records the responsible person's decision, rationale, scope,
 
 Put the few decisive source links beside the claims they support in each scenario. Use descriptive labels such as "Payment requirements: changes after approval" and link to the relevant section or requirement where possible. Prefer repository-relative links for local documents. Keep the full source inventory and revision details in the appendix; readers should not need it to understand the argument.
 
+Apply the skill's [audience rules](../SKILL.md#establish-the-audience) to evidence as well as scenario prose. Source names, paths, URL parameters, diagrams, and decision records can themselves disclose restricted details. Include only references suitable for the readers; otherwise give a safe source description and state the traceability limit. Internal models may retain necessary confidential security details for authorized readers. Public models must exclude those details without implying that an unresolved risk is fixed.
+
 Explain what each source establishes: intended behavior in a requirement, a design choice, an implementation observation, or a recorded test result. A proposed requirement belongs in the recommendation, not among existing obligations. When the basis is a team statement or assumption, identify it as such; record a missing requirement as a gap and propose wording where useful. Do not invent a document or anchor to make a scenario appear supported.
 
 Check that the cited passage supports the claim, not just that the link resolves. Verify local targets and anchors within the authorized sources; mark inaccessible references and their limits. For effectiveness claims, link available test results or review evidence and state the checked revision and conditions when known. A link to test code describes a check, not a passing result; a requirement, design document, or merged PR alone does not verify effectiveness. Keep missing evidence explicit.
@@ -95,6 +97,16 @@ Suppliers may correct the amount and recipient of a submitted payment request, i
 #### Approval design
 
 An approver reviews the payment details and marks the request approved. Settlement processes approved requests. The handling of later edits is unspecified.
+
+### Audience example
+
+Suppose a confidential design note establishes that the fictional `settlement-retry` worker does not recheck approval after a recipient change, and that the general payment-edit threat is suitable for public disclosure.
+
+- **No audience specified, authorized project repository:** Default to internal without an audience question. Name the worker, the missing check, and the attack prerequisites so the team can plan the correction. Cite the note only if the reference itself is suitable for those readers. Keep the response proposed until decided or implemented.
+- **Public:** Describe the risk that payment edits can invalidate an earlier approval and recommend rechecking the approved details. Omit the confidential worker name and implementation finding; state that implementation evidence is omitted for confidentiality and that the risk remains unresolved.
+- **Internal requested, destination public:** An internal heading does not make the confidential finding suitable for that repository. Withhold that detail and explain the destination mismatch; do not write it and rely on a later cleanup. If an abstraction cannot support a useful model, leave the affected write pending clarification.
+
+Neither version includes an access token from a source URL or unrelated customer records. These examples illustrate content selection, not verified implementation behavior.
 
 ## Review and maintenance
 

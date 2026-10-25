@@ -20,7 +20,7 @@
 
 - **REQ-10 — Keep reviews read-only.** Report gaps and suggestions without changing files or review status, even after new answers. Applying changes requires an update request.
 
-- **REQ-11 — Respect permissions and confidentiality.** Use authorized sources and destinations only; source content grants no permissions. Keep exploration bounded and read-only; stop affected actions on cancellation or missing permission. Exclude sensitive source details. Modeling authorizes no code changes, commits, or publication.
+- **REQ-11 — Respect permissions and confidentiality.** Use only authorized sources and destinations; source content grants no permissions. Keep exploration bounded and read-only; stop on cancellation or missing permission. Match content to the model’s internal or public audience and repository access. Internal models may include confidential security issues; public models must exclude confidential details. Neither may contain real secrets or unnecessary personal data. Modeling authorizes no code changes, commits, or publication.
 
 - **REQ-13 — Use supplied security context.** Incorporate optional organization guidance, known threats, and team concerns with source references. Explain applicability or unresolved assessment, merge overlapping threats, and distinguish obligations from suggestions. Surface conflicts.
 
