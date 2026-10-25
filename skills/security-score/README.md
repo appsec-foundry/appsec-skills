@@ -46,6 +46,8 @@ Add `--details` for reasons, affected aspects, findings, coverage and rule/scori
 
 Repository grades are **A: 90–100, B: 80–<90, C: 70–<80, D: 60–<70, E: 50–<60, F: 0–<50**. A score of 100 means no deductions from applicable checks; 0 is the lowest attainable result. The weakest assessed security area determines the headline, so unrelated passing checks cannot cancel serious findings. Insufficient coverage or failed processing withholds the score and grade.
 
+Within each area, subtract `number of findings × points per severity` from 100, then apply the strictest severity cap and a floor of 0. For example, two high findings deduct `2 × 25 = 50` points: the area scores 50 (below the high cap of 59). If another area scores 100, the overall score is still 50 (E). `--details` shows each rule's count, points, deduction, cap and the overall calculation. The editable weights and caps are at the top of [rules.json](rules.json); see the [worked examples and adjustment guide](references/scoring.md#adjust-the-calculation).
+
 Change relevance describes review needs, independently of finding severity:
 
 | Relevance | Meaning |
@@ -84,6 +86,15 @@ python3 /installed/security-score/scripts/score.py --patch /private/change.diff 
 python3 /installed/security-score/scripts/score.py https://github.com/owner/project.git
 ```
 
+For private repositories, select an environment variable that already holds a GitHub or GitLab API token with read access. For example, with a token available in `GIT_TOKEN`:
+
+```sh
+python3 /installed/security-score/scripts/score.py https://github.com/owner/private-project.git --token-env GIT_TOKEN --details
+python3 /installed/security-score/scripts/score.py https://gitlab.com/group/private-project.git --token-env GIT_TOKEN --json
+```
+
+Use the token for the selected host. The script reads through its API; it does not automatically use Git credential helpers or SSH agents. Pass the variable's name to `--token-env`, not its value. Host settings that the token cannot read remain unknown.
+
 `--unstaged` compares index and working files; `--worktree` compares HEAD and working files including untracked files. `--commit REV` compares a commit with its first parent. The CLI's `--pr`/`--mr` options identify a supplied patch or local base/head comparison; they do not fetch the change themselves. Patch fragments and unsupported input can leave coverage incomplete. Patches with permission changes, metadata-only entries or rename/copy metadata need a local Git comparison.
 
 The default time budget is 15 seconds, selectable with `--timeout` from 0.1 to 120 seconds. Source, file and output limits bound the work. An exceeded limit is reported as incomplete. The checks do not install dependencies, build or execute the examined project. See the [scoring guide](references/scoring.md#limits) for exact limits.
@@ -100,7 +111,7 @@ For direct use:
 python3 /installed/security-score/scripts/score.py /project --engine analyzer --details
 ```
 
-This explicit variant needs a separately installed compatible Analyzer. It supports repository scoring and rejects change selectors. Analyzer scoring version 2 and internal scoring version 1 use different policies; their numbers are not directly comparable. A missing or incompatible Analyzer stops the selected variant without installing it or silently changing engines. See [compatibility](references/compatibility.md) and the optional [dependency declaration](dependencies.json).
+This explicit variant needs a separately installed compatible Analyzer. It supports repository scoring and rejects change selectors. Analyzer scoring version 2 and internal scoring version 2 use different policies despite sharing a version number; their numbers are not directly comparable. A missing or incompatible Analyzer stops the selected variant without installing it or silently changing engines. See [compatibility](references/compatibility.md) and the optional [dependency declaration](dependencies.json).
 
 ## Understand and maintain the rules
 

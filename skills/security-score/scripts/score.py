@@ -248,8 +248,23 @@ def render(result, details=False):
             f"  Next: {finding['next_action']}",
         ]
     for area in result["areas"]:
+        lines.append(f"Calculation {area['area']}:")
+        for entry in area["breakdown"]:
+            lines.append(
+                f"  {entry['rule']} ({entry['severity']}): "
+                f"{entry['instances']} x {entry['points_per_instance']} = {entry['deduction']} points"
+            )
         lines.append(
-            f"Calculation {area['area']}: deduction={area['deduction']}; cap={area['severity_cap']}"
+            f"  100 - {area['deduction']} = {100 - area['deduction']}; "
+            f"cap={area['severity_cap']}; floor=0; "
+            f"score={area['score'] if area['score'] is not None else 'withheld'}"
+        )
+    if result["score"] is not None:
+        scores = ", ".join(
+            str(area["score"]) for area in result["areas"] if area["score"] is not None
+        )
+        lines.append(
+            f"Overall: lowest assessed area = min({scores}) = {result['score']}"
         )
     architecture = result.get("architecture", {})
     for key in ("frontend", "persistence"):

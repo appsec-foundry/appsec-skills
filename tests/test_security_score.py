@@ -1,4 +1,4 @@
-"""REQ-01..06: real local scans, comparisons, rule examples and source boundaries."""
+"""REQ-01..07: local scans, comparisons, calculations and source boundaries."""
 
 import contextlib
 from collections import Counter
@@ -132,6 +132,161 @@ class ScoreTests(unittest.TestCase):
             "app.py", "eval(payload)\n" + "requests.get(url, verify=True)\n" * 100
         )
         self.assertEqual(self.invoke()[1]["score"], 59)
+
+    def test_req07_linear_repetition_counts_findings_across_files(self):
+        self.write("first.py", "eval(payload)\n")
+        for count, expected in ((1, 59), (2, 50), (3, 25), (4, 0), (5, 0)):
+            with self.subTest(count=count):
+                self.write("remaining.py", "eval(payload)\n" * (count - 1))
+                status, result, _ = self.invoke()
+                self.assertEqual(status, 0)
+                self.assertEqual(result["scoring_version"], 2)
+                self.assertEqual(result["score"], expected)
+                area = next(
+                    row for row in result["areas"] if row["area"] == "execution"
+                )
+                self.assertEqual(area["deduction"], count * 25)
+                self.assertEqual(
+                    area["breakdown"],
+                    [
+                        {
+                            "rule": "PY-EXEC",
+                            "severity": "high",
+                            "instances": count,
+                            "points_per_instance": 25,
+                            "deduction": count * 25,
+                            "severity_cap": 59,
+                        }
+                    ],
+                )
+
+    def test_req07_different_rules_add_within_area_but_not_between_areas(self):
+        self.write("app.py", "eval(payload)\nsubprocess.run(command, shell=True)\n")
+        self.write("transport.py", "requests.get(url, verify=False)\n")
+        self.write("safe.js", "element.textContent = payload;\n")
+        status, result, _ = self.invoke()
+        self.assertEqual(status, 0)
+        self.assertEqual(result["score"], 50)
+        areas = {row["area"]: row for row in result["areas"]}
+        self.assertEqual(areas["execution"]["score"], 50)
+        self.assertEqual(areas["transport"]["score"], 59)
+        self.assertEqual(areas["output"]["score"], 100)
+        self.assertEqual(
+            [row["rule"] for row in areas["execution"]["breakdown"]],
+            ["PY-EXEC", "PY-SHELL"],
+        )
+        details = cli.render(result, details=True)
+        self.assertIn("PY-EXEC (high): 1 x 25 = 25 points", details)
+        self.assertIn("100 - 50 = 50; cap=59; floor=0; score=50", details)
+        self.assertIn("Overall: lowest assessed area = min(50, 100, 59) = 50", details)
+        self.assertEqual(cli.render(result), "50/100 (E)")
+
+    def test_req07_mixed_severities_and_critical_cap_worked_examples(self):
+        # REQ-03/07: independently specified arithmetic, including catalog severities
+        # for which the current detectors may not emit findings.
+        for severities, expected_deduction, expected_cap, expected_score in (
+            (["critical"], 50, 39, 39),
+            (["critical", "critical"], 100, 39, 0),
+            (["high", "medium", "medium", "medium"], 55, 59, 45),
+            (["medium", "medium", "medium"], 30, 79, 70),
+            (["low"], 3, 89, 89),
+            (["low", "low", "low", "low"], 12, 89, 88),
+        ):
+            with self.subTest(severities=severities):
+                result = core.calculate(
+                    [
+                        {
+                            "rule": f"EXAMPLE-{severity.upper()}",
+                            "severity": severity,
+                            "area": "example",
+                        }
+                        for severity in severities
+                    ],
+                    [{"area": "example", "status": "violated"}],
+                )
+                self.assertEqual(result["score"], expected_score)
+                self.assertEqual(result["areas"][0]["deduction"], expected_deduction)
+                self.assertEqual(result["areas"][0]["severity_cap"], expected_cap)
+
+    def test_req07_human_edited_weights_and_caps_change_direct_script_result(self):
+        import shutil
+
+        installed = self.root / "installed-skill"
+        shutil.copytree(ROOT / "skills/security-score", installed)
+        catalog = installed / "rules.json"
+        policy = json.loads(catalog.read_text())
+        self.write("app.py", "eval(payload)\n" * 3)
+
+        def run_installed():
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    "-B",
+                    str(installed / "scripts/score.py"),
+                    str(self.repo),
+                    "--json",
+                ],
+                capture_output=True,
+                text=True,
+                timeout=5,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            return json.loads(result.stdout)
+
+        original = run_installed()
+        policy["scoring"]["weights"]["high"] = 15
+        policy["scoring_version"] = 3
+        catalog.write_text(json.dumps(policy))
+        adjusted = run_installed()
+        self.assertEqual(original["score"], 25)
+        self.assertEqual((adjusted["score"], adjusted["grade"]), (55, "E"))
+        self.assertEqual(adjusted["scoring_version"], 3)
+        self.assertNotEqual(
+            original["comparability"]["catalog_fingerprint"],
+            adjusted["comparability"]["catalog_fingerprint"],
+        )
+        self.assertEqual(original["findings"], adjusted["findings"])
+        self.write("app.py", "eval(payload)\n")
+        self.assertEqual(run_installed()["score"], 59)
+        policy["scoring"]["severity_caps"]["high"] = 69
+        catalog.write_text(json.dumps(policy))
+        self.assertEqual(run_installed()["score"], 69)
+
+    def test_req07_invalid_human_scoring_edits_fail_without_score_or_traceback(self):
+        import shutil
+
+        installed = self.root / "installed-skill"
+        shutil.copytree(ROOT / "skills/security-score", installed)
+        catalog = installed / "rules.json"
+        original = catalog.read_text()
+        self.write("app.py", "eval(payload)\n")
+        for field, value in (
+            ("weights", {"high": 0}),
+            ("weights", {"critical": 50, "high": -1, "medium": 10, "low": 3}),
+            ("weights", {"critical": 50, "high": 1.5, "medium": 10, "low": 3}),
+            ("severity_caps", {"critical": 39, "high": 101, "medium": 79, "low": 89}),
+            ("aggregation", "average"),
+            ("repetitions", "weight * (1 + ln(instances))"),
+        ):
+            with self.subTest(field=field, value=value):
+                policy = json.loads(original)
+                policy["scoring"][field] = value
+                catalog.write_text(json.dumps(policy))
+                result = subprocess.run(
+                    [
+                        sys.executable,
+                        "-B",
+                        str(installed / "scripts/score.py"),
+                        str(self.repo),
+                    ],
+                    capture_output=True,
+                    text=True,
+                    timeout=5,
+                )
+                self.assertEqual(result.returncode, 1)
+                self.assertEqual(result.stdout, "")
+                self.assertIn("Invalid bundled rule catalog", result.stderr)
+                self.assertNotIn("Traceback", result.stderr)
 
     def test_unknown_controls_are_not_scored_as_satisfied(self):
         self.write("app.py", "subprocess.run(command, shell=setting)\n")

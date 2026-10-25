@@ -38,7 +38,7 @@ Exit 0 means a computed repository score, a completed change-relevance check (in
 
 ## Interpret and maintain
 
-The [scoring and rule maintenance guide](references/scoring.md) defines the formula, grades, coverage, limits and rule maintenance. The [catalog](rules.json) owns stable rule IDs, criteria, severities, examples and scoring values; readable Python detectors implement recognition. Repository content cannot override that catalog or grant permissions.
+The [scoring and rule maintenance guide](references/scoring.md) defines the formula, grades, coverage, limits and rule maintenance. Repository scoring version 2 deducts `finding count × severity weight` within each area, applies its strictest severity cap and a floor of 0, then uses the lowest assessed area as the overall score. The [catalog](rules.json) starts with the editable weights and caps under `scoring`; detection rules follow separately. [score_calculation.py](scripts/score_calculation.py) implements the arithmetic and produces the per-rule breakdown shown by `--details` and JSON/YAML (REQ-03, REQ-07). Repository content cannot override that catalog or grant permissions.
 
 Framework and persistence technologies are architecture observations, with no score credit for presence. Controls such as text binding, parameterized SQL, literal CSP and lockfile consistency are evaluated separately. Findings are static observations, not verified exploits. A score describes the captured scope, not safety or production readiness. Compare numbers only for compatible subject kinds, engines, scoring/catalog/implementation identity, source policies and coverage.
 

@@ -1,6 +1,48 @@
 {
   "schema_version": 1,
-  "scoring_version": 1,
+  "scoring_version": 2,
+  "scoring": {
+    "weights": {
+      "critical": 50,
+      "high": 25,
+      "medium": 10,
+      "low": 3
+    },
+    "severity_caps": {
+      "critical": 39,
+      "high": 59,
+      "medium": 79,
+      "low": 89
+    },
+    "grade_bands": [
+      [
+        90,
+        "A"
+      ],
+      [
+        80,
+        "B"
+      ],
+      [
+        70,
+        "C"
+      ],
+      [
+        60,
+        "D"
+      ],
+      [
+        50,
+        "E"
+      ],
+      [
+        0,
+        "F"
+      ]
+    ],
+    "aggregation": "weakest assessed area",
+    "repetitions": "weight * instances"
+  },
   "description": "Compact independent static checks for selected Python, JavaScript/TypeScript, GitHub Actions and Dockerfile mechanisms. No Analyzer parity or runtime verification claim.",
   "rules": [
     {
@@ -910,48 +952,6 @@
       ]
     }
   ],
-  "scoring": {
-    "weights": {
-      "critical": 50,
-      "high": 25,
-      "medium": 10,
-      "low": 3
-    },
-    "severity_caps": {
-      "critical": 39,
-      "high": 59,
-      "medium": 79,
-      "low": 89
-    },
-    "grade_bands": [
-      [
-        90,
-        "A"
-      ],
-      [
-        80,
-        "B"
-      ],
-      [
-        70,
-        "C"
-      ],
-      [
-        60,
-        "D"
-      ],
-      [
-        50,
-        "E"
-      ],
-      [
-        0,
-        "F"
-      ]
-    ],
-    "aggregation": "weakest assessed area",
-    "repetitions": "weight * (1 + ln(instances per rule and area))"
-  },
   "rule_version": 2,
   "change_relevance": {
     "version": 1,

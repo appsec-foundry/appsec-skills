@@ -11,3 +11,5 @@
 - **REQ-05 — Stay fast and bounded.** Focus on the selected scope within documented execution limits. Show progress during longer runs and clearly report incomplete, failed, or cancelled work.
 
 - **REQ-06 — Keep Analyzer optional.** Select AppSec Analyzer only through an explicit parameter. Internal scoring remains the default, including when Analyzer is installed. Explain its prerequisites, supported scope, and separate scoring policy.
+
+- **REQ-07 — Human-maintainable calculation.** Make repository score calculations understandable and manually reproducible. Keep scoring values centrally documented and editable without changing detection rules. Detailed output shows finding counts, applied values, deductions, limits, and aggregation into the overall score.

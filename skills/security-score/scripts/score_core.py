@@ -5,21 +5,24 @@ from __future__ import annotations
 import ast
 from collections import Counter, defaultdict
 import hashlib
-import json
-import math
 from pathlib import Path
 import re
 import textwrap
 
+from score_calculation import (
+    CATALOG_BYTES,
+    POLICY,
+    VERSION,
+    WEIGHTS,
+    calculate as calculate,
+    grade as grade,
+    validate_scoring,
+)
+
 
 ROOT = Path(__file__).resolve().parent.parent
-CATALOG_BYTES = (ROOT / "rules.json").read_bytes()
-POLICY = json.loads(CATALOG_BYTES)
-VERSION = POLICY["scoring_version"]
 RULE_VERSION = POLICY["rule_version"]
 RULES = POLICY["rules"]
-WEIGHTS = POLICY["scoring"]["weights"]
-CAPS = POLICY["scoring"]["severity_caps"]
 
 
 def validate_policy():
@@ -57,26 +60,7 @@ def validate_policy():
         or not RULES
     ):
         raise ValueError("Invalid rule catalog version or rule list.")
-    if set(WEIGHTS) != {"critical", "high", "medium", "low"} or set(CAPS) != set(
-        WEIGHTS
-    ):
-        raise ValueError("Invalid scoring severity policy.")
-    if any(
-        type(value) not in {int, float} or not math.isfinite(value) or value <= 0
-        for value in WEIGHTS.values()
-    ):
-        raise ValueError("Weights must be finite positive numbers.")
-    if any(type(value) is not int or not 0 <= value <= 100 for value in CAPS.values()):
-        raise ValueError("Severity caps must be integers in 0–100.")
-    if POLICY["scoring"]["grade_bands"] != [
-        [90, "A"],
-        [80, "B"],
-        [70, "C"],
-        [60, "D"],
-        [50, "E"],
-        [0, "F"],
-    ]:
-        raise ValueError("Grade bands must match REQ-03.")
+    validate_scoring()
     identifiers = set()
     for rule in RULES:
         if (
@@ -140,6 +124,7 @@ IMPLEMENTATION_HASH = hashlib.sha256(
         (ROOT / "scripts" / name).read_bytes()
         for name in (
             "score_core.py",
+            "score_calculation.py",
             "score_sources.py",
             "score_remote.py",
             "score_architecture.py",
@@ -162,21 +147,6 @@ SOURCE_EXTENSIONS = JS_EXTENSIONS | {
 
 class ScanLimit(ValueError):
     pass
-
-
-def grade(score):
-    if score is None:
-        return None
-    if (
-        type(score) not in {int, float}
-        or not math.isfinite(score)
-        or not 0 <= score <= 100
-    ):
-        raise ValueError("score outside 0–100")
-    for minimum, letter in POLICY["scoring"]["grade_bands"]:
-        if score >= minimum:
-            return letter
-    raise ValueError("score outside 0–100")
 
 
 def supported(path):
@@ -665,59 +635,3 @@ def compare(before, after):
                 remaining[identity] -= 1
                 output.append({**finding, "change": "resolved", "side": "baseline"})
     return output
-
-
-def calculate(findings, checks, *, complete=True, require_source=False):
-    statuses = Counter(row["status"] for row in checks)
-    selected = findings
-    areas = sorted(
-        {row["area"] for row in checks if row["status"] != "not_applicable"}
-        | {f["area"] for f in selected}
-    )
-    assessed = {
-        row["area"] for row in checks if row["status"] in {"satisfied", "violated"}
-    } | {f["area"] for f in selected}
-    rows = []
-    for area in areas:
-        groups = Counter(
-            (f["rule"], f["severity"]) for f in selected if f["area"] == area
-        )
-        deduction = sum(
-            WEIGHTS[severity] * (1 + math.log(count))
-            for (_, severity), count in groups.items()
-        )
-        cap = min([100, *(CAPS[severity] for _, severity in groups)])
-        score = max(0, min(cap, round(100 - deduction)))
-        rows.append(
-            {
-                "area": area,
-                "score": score if area in assessed else None,
-                "deduction": round(deduction, 2),
-                "severity_cap": cap,
-            }
-        )
-    known = sum(
-        row["status"] in {"satisfied", "violated"}
-        and (not require_source or row["area"] != "repository-host")
-        for row in checks
-    )
-    verdict = "incomplete" if not complete else "scored" if known else "undetermined"
-    score = (
-        min((row["score"] for row in rows if row["score"] is not None), default=None)
-        if verdict == "scored"
-        else None
-    )
-    if verdict != "scored":
-        for row in rows:
-            row["score"] = None
-    return {
-        "verdict": verdict,
-        "score": score,
-        "grade": grade(score),
-        "areas": rows,
-        "coverage": {
-            "check_outcomes": dict(sorted(statuses.items())),
-            "scored_findings": len(selected),
-            "basis": "Recognized operations only; aliases and wider application controls may be uncovered.",
-        },
-    }
