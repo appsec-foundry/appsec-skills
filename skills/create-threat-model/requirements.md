@@ -12,7 +12,7 @@
 
 - **REQ-06 — Derive traceable threats.** Tie each scenario to a requirement, design fact, or explicit assumption; explain actor, attack, prerequisites, and harm. Cover significant objectives and interactions, including business misuse and relevant privacy concerns, or explain gaps.
 
-- **REQ-07 — Guide decisions.** Prioritize threats by plausible harm and prerequisites, separately from evidence confidence. Record controls and their status, remaining risk, proposed responses, known owners, and verification criteria. Recommend concrete improvements to requirements, design, or implementation at the appropriate level. Identify what should change and why it addresses the threat, and define how its effectiveness can be checked. Explain material trade-offs when alternatives exist. After writing, ask for decisions on the most important open scenarios, at most three at a time. Risk acceptance requires an explicit, documented decision by a responsible person.
+- **REQ-07 — Guide decisions.** Prioritize threats by plausible harm and prerequisites, separately from evidence confidence. Record controls and their status, remaining risk, proposed responses, known owners, and verification criteria. Recommend concrete improvements to requirements, design, or implementation at the appropriate level. Identify what should change and why it addresses the threat, and define how its effectiveness can be checked. Explain material trade-offs when alternatives exist. After creating or updating the model, summarize important open decisions and offer an optional review or decision round. Start follow-up questions only when the user explicitly requests that dialogue, with at most three questions per round. Risk acceptance requires an explicit, documented decision by a responsible person.
 
 - **REQ-08 — Keep one maintainable model.** Write directly editable `threat-model.md` at the repository root with stable scenario IDs. Link it from `SECURITY.md` or `security.md`, preserving disclosure instructions; create that document if absent.
 
@@ -29,3 +29,7 @@
 - **REQ-15 — Offer architecture reading for existing code.** When the target has code, offer to derive components, entry points, data stores, external connections, and authentication paths from code and configuration. Read more broadly only after the user opts in, within a larger but fixed budget. Record results as implementation observations, show conflicts with requirements, and do not report code-level vulnerabilities.
 
 - **REQ-16 — Show the skill version.** At the start of each invocation, display the installed skill’s name and version.
+
+- **REQ-17 — Default model language.** Create new threat models in English unless the user explicitly requests another language. Preserve an existing model’s language during updates unless translation is requested. The conversation may use the user’s language.
+
+- **REQ-18 — Check maintainable abuse patterns.** Check the system against a small set of reusable abuse patterns. Teams can add or refine patterns and explain exclusions in project documents that remain intact across skill updates. Assess applicability from project evidence, merge overlapping scenarios, and show material unresolved or unexamined coverage. Ask only about material gaps within REQ-03.

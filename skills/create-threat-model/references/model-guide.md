@@ -13,13 +13,13 @@ Keep each scenario's reasoning, recommendations, decisions, and open questions t
 | System in brief | Valuable data and operations, their sensitivity and security objectives, actors, main interactions and trust boundaries, with a compact diagram. Integrate relevant constraints and assumptions into this explanation. |
 | Threats and recommended changes | Short scenario sections with stable IDs, reasoning, concrete recommendations, verification, and decisions together. |
 | Open decisions and review | Remaining decisions, actual review participation and scope, and reassessment triggers. Link to scenario details instead of repeating them. |
-| Appendix: sources and coverage | Source locations, revisions and status, detailed evidence, conflicts, coverage gaps, and the checklist items that are not clarified. Keep decision-relevant uncertainty beside the affected scenario as well. |
+| Appendix: sources and coverage | Source locations, revisions and status, detailed evidence, conflicts, coverage gaps, and the checklist items that are not clarified. Identify abuse-pattern sources and material unresolved or unexamined coverage without reproducing the catalog. Keep decision-relevant uncertainty beside the affected scenario as well. |
 
 Use stable scenario IDs such as `T-001`. Add other IDs only when repeated cross-references benefit from them; named source links and plain-language references are often sufficient. Preserve established identifiers and do not renumber them just to close gaps. Every source reference must resolve to an inspected source or be marked unverified; do not invent filenames, requirement IDs, or evidence.
 
-Aim for an opening that fits roughly one screen, usually highlighting three to five next actions rather than repeating the entire scenario list. Derive it from the scenario records, which hold the full reasoning and decision details. Preserve conditional priorities and unresolved owners. Do not imply that the overview is complete coverage or maintain a separate task list. In an existing model, reuse an equivalent summary and update only affected entries.
+Aim for an opening that fits roughly one screen, usually highlighting three to five next actions rather than repeating the entire scenario list. Derive it from the scenario records, which hold the full reasoning and decision details. Keep the overview consistent with recorded decisions, including after later decision patches: "Clarification agreed; outcome pending" differs from a proposed next step, implemented treatment, or accepted risk. Preserve conditional priorities and unresolved owners. Do not imply that the overview is complete coverage or maintain a separate task list. In an existing model, reuse an equivalent summary and update only affected entries.
 
-Keep the main text focused on understanding and action. State shared caveats once, and repeat only conditions that materially change a scenario's meaning. Combine related open questions and link to their details. Keep source inventories and coverage accounting in the appendix of the same document; omit tool-by-tool activity logs and routine checks with no effect on the result. Moving text to an appendix is not a substitute for removing repetition. Add detail when it changes a decision or enables verification, not merely to fill a field; never omit a significant threat, uncertainty, or recorded decision to meet a length target.
+Keep the main text focused on understanding and action. State shared caveats once, and repeat only conditions that materially change a scenario's meaning. Combine related open questions and link to their details. Keep source inventories and coverage accounting in the appendix of the same document; omit tool-by-tool activity logs, unsuccessful guesses at source paths, and routine checks with no effect on the result. Retain inaccessible sources or discovery limits when they leave a material gap. Moving text to an appendix is not a substitute for removing repetition. Add detail when it changes a decision or enables verification, not merely to fill a field; never omit a significant threat, uncertainty, or recorded decision to meet a length target.
 
 ## Audience notice
 
@@ -80,7 +80,7 @@ A scenario should answer:
 - Which controls address the mechanism, what is their actual state, and what remains?
 - What decision is needed, who is responsible, and how could the response be verified?
 
-Use these questions to check content, not as mandatory output fields. A descriptive scenario heading and a few short paragraphs covering risk, recommendation, verification, and decision will usually suffice. Combine actor, mechanism, prerequisites, harm, and priority in the explanation. Keep detailed evidence in the appendix with a direct reference when needed. Readers should not have to decode chains of IDs to understand a scenario.
+Use these questions to check content, not as mandatory output fields. A descriptive scenario heading and a few short paragraphs covering risk, recommendation, verification, and decision will usually suffice. Combine actor, mechanism, prerequisites, harm, and priority in the explanation. Separate proposed checks, residual risk, and recorded decisions into short paragraphs when combining them would obscure their status. Keep detailed evidence in the appendix with a direct reference when needed. Readers should not have to decode chains of IDs to understand a scenario.
 
 Keep these dimensions distinct in meaning; they need not be separate labeled fields:
 
@@ -91,7 +91,9 @@ Keep these dimensions distinct in meaning; they need not be separate labeled fie
 | Treatment | Proposed or explicitly decided elimination, mitigation, transfer, or acceptance. Transfer still identifies retained control and residual-risk responsibilities. |
 | Confidence | Strength and limitations of the source support, independent of the risk priority. |
 
-An applicable scenario can have effective treatment and remain in the model. A proposed response is not a decision. A stakeholder's report that a control exists does not establish that it works. Verification criteria describe future checks until results and conditions are recorded.
+An applicable scenario can have effective treatment and remain in the model. A proposed response is not a decision. A stakeholder's report that a control exists does not establish that it works. Verification criteria describe future checks until results and conditions are recorded. Phrase unperformed checks as instructions or expected outcomes, such as "Check that an edited request requires renewed approval," rather than as observed success. Label supplied results separately with their evidence and checked conditions.
+
+When a scenario requires a use explicitly excluded by the supported scope, briefly explain that dependency and the change that would require reassessment. Do not give it a current treatment decision or a full mitigation plan solely for that excluded use. Preserve existing scenario IDs and relevant decisions. If the prerequisite is unknown or contradicted, keep applicability unresolved rather than treating it as excluded.
 
 Distinguish current exposure, based on available evidence, from expected residual risk conditional on effective treatment. Proposed or planned controls do not establish current risk reduction. If applicability or effectiveness is unresolved, keep that uncertainty explicit.
 
@@ -125,9 +127,11 @@ This fictional example illustrates a compact scenario, not a default threat or a
 
 **Recommended change.** Add this requirement: "Changing the amount or recipient invalidates the existing approval. Settlement requires approval of the changed payment details." In the design, bind approval to the reviewed version and have settlement use those details. During implementation, prevent concurrent edits from changing them between the approval check and payment; the transaction and external-payment boundaries still need clarification. If corrections are needed, prefer this approach. Making approved requests immutable is an alternative, but requires suppliers and approvers to process replacement requests.
 
-**How to check.** An unchanged, authorized request can settle. Changing its amount or recipient requires renewed approval, including when editing and settlement occur concurrently. These checks have not been performed. Even if effective, the response does not prevent a compromised approver from approving an unwanted recipient; recovery needs separate treatment.
+**Proposed checks — not performed.** Check that an unchanged, authorized request can settle and that changing its amount or recipient requires renewed approval, including when editing and settlement occur concurrently.
 
-**Decision — open.** First clarify which post-approval corrections are permitted. The response is proposed; owner and target date are unset. No risk acceptance is recorded.
+**Residual risk.** Even if effective, the response does not prevent a compromised approver from approving an unwanted recipient; recovery needs separate treatment.
+
+**Decision — open.** The requirements permit changes to the amount and recipient after approval. First clarify what should happen to the existing approval when either changes. The response is proposed; owner and target date are unset. No risk acceptance is recorded.
 
 ### Fictional source excerpts for the example
 
@@ -152,9 +156,9 @@ Neither version includes an access token from a source URL or unrelated customer
 
 ## Review and maintenance
 
-Check coverage of significant objectives, actors, interactions, boundaries, checklist items, and supplied known threats. Explain exclusions and gaps. Check whether each treatment addresses the actual mechanism and whether verification includes intended behavior and a representative failure or abuse case. Check that recommendations identify the appropriate level, affected element, concrete change, rationale, and verification criteria, with material trade-offs where relevant. In updates, reassess recommendations affected by changed sources or decisions. Do not run these tests or change application code merely because they appear in the model.
+Check coverage of significant objectives, actors, interactions, boundaries, checklist items, abuse patterns, and supplied known threats. Explain material exclusions and gaps; distinguish a source-backed exclusion from an unknown prerequisite or effective treatment. Check whether each treatment addresses the actual mechanism and whether verification includes intended behavior and a representative failure or abuse case. Check that recommendations identify the appropriate level, affected element, concrete change, rationale, and verification criteria, with material trade-offs where relevant. In updates, reassess recommendations affected by changed sources or decisions. Do not run these tests or change application code merely because they appear in the model.
 
-Check readability and traceability together: can a team member identify the main concerns and next actions from the opening, understand each scenario without chasing IDs, and follow its key links to passages that support the claims? Remove duplicated explanations and repeated default status text, keeping material conditions and decisions intact. Do not force existing human-written models into this layout during an unrelated update.
+Check readability and traceability together: can a team member identify the main concerns and next actions from the opening, distinguish proposed checks from completed verification, and follow each scenario's key links to supporting passages? Check that summary decisions match the scenario records. Remove duplicated explanations and repeated default status text, keeping material conditions and decisions intact. Prefer everyday wording; explain technical terms where they are needed to understand an attack or response. Do not force existing human-written models into this layout during an unrelated update.
 
 Keep risk priority proportionate to stated prerequisites and controls. Do not turn lack of evidence into certainty that a control is absent, or treat a planned control as a completed mitigation.
 

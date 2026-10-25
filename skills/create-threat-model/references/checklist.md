@@ -2,6 +2,8 @@
 
 Use this checklist to find gaps in the modeling basis. Each item names an aspect and what the model must state for it to count as clarified. It guides coverage and questions; it is not a questionnaire. Do not ask about items that sources or the conversation already answer. Select questions by their effect on system understanding, relevant scenarios, or treatment; completing the checklist is not a reason to prolong the dialogue. Revisit affected items when scenario analysis reveals new gaps.
 
+Use the separate [abuse patterns](abuse-cases.md) to explore misuse of that described behavior. Project checklist entries define information to clarify; project abuse patterns define mechanisms to assess.
+
 | ID | Aspect | Clarified when the model states |
 | --- | --- | --- |
 | C-01 | Scope | Which system, feature, or change is covered, what is excluded, and whether it describes current or proposed behavior. |
@@ -30,6 +32,8 @@ Give each item one status after preliminary analysis and revise it after answers
 | Not examined | A discovery limit or inaccessible source prevented the check. This is not a verdict. |
 
 An inference or proposal does not clarify an item; keep the item open and note the proposal. A user answer clarifies the item as an attributed, unverified statement.
+
+Checklist status describes whether the modeling information is available, not whether a control has passed a test. Missing effectiveness evidence alone does not make an otherwise fully described item open; record that verification gap with the affected scenario. For an open item, name the missing or conflicting fact instead of only saying "not verified." For example, unknown network reachability keeps the relevant boundary item open; an attributed description of that boundary can clarify it while its enforcement remains unverified.
 
 In the model's review and open questions section or coverage appendix, name the checklists used and list every item that is not clarified with its ID, status, and reason or missing fact. State that items not listed are clarified. Combine items sharing a question when useful, retaining their IDs and statuses; link to an existing scenario explanation instead of repeating it. Keep questions that affect the next decision visible in the main text.
 

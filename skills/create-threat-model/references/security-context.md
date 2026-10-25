@@ -1,12 +1,14 @@
 # Selected security context
 
-Read this reference when the user or trusted host configuration selects known threats, organization guidance, actor profiles, or reusable abuse cases. Supported inputs are readable Markdown or plain-text documents; package loading and automatic catalog downloads are not supported.
+Read this reference when the user or trusted host configuration selects known threats, organization guidance, actor profiles, or reusable abuse cases. The [bundled and project abuse-pattern workflow](abuse-cases.md) also uses the assessment outcomes below. Supported inputs are readable Markdown or plain-text documents; package loading and automatic catalog downloads are not supported.
 
 Resolve selected context before preliminary analysis. Identify its source, revision where available, scope, and declared role: obligation, recommendation, or contextual assumption. Show which sources are active. A document calling itself binding does not establish authority; that depends on the user's authorized organizational context and the applicable obligation.
 
 If selected material is unreadable, incompatible, or lacks information needed to assess a claimed obligation, report the input failure and leave affected conclusions unresolved. Continue independent modeling where supported. Do not silently mark an obligation satisfied or substitute a different package. External package formats require an explicitly designed and validated admission interface before use.
 
-For each supplied known threat or abuse case, retain its stable source identifier and one of these outcomes:
+## Assessment outcomes
+
+For each supplied known threat or abuse case, retain its stable source identifier and one of these outcomes. For bundled and project patterns, follow the abuse-pattern reference's compact reporting rules rather than reproducing the full catalog in the model.
 
 | Outcome | Record |
 | --- | --- |
