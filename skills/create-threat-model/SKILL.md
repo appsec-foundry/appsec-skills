@@ -21,6 +21,12 @@ Establish the target repository and system or feature scope from the request. As
 
 Inspect an existing `threat-model.md` for its purpose, scope, and provenance. A generated code assessment is not automatically the maintained design model. If its intended use is unclear, ask before modifying or converting it. Without an answer, including in no-questions mode, leave it and its security-document link unchanged. Do not create a competing file to bypass that choice.
 
+## Keep the team oriented
+
+Briefly state the operation, scope, and next steps: understand the system, clarify material gaps, assess scenarios, and deliver the model or review observations. For creation and updates, explain that treatment decisions follow the draft. Adapt this outline to the request; a focused update need not repeat the full creation workflow.
+
+Before detailed scenario analysis, share a compact working system summary with a diagram when enough context exists. Make important assumptions visible so the team can correct them; this is not an approval gate. For a focused update, summarize only the affected flows and boundaries. At meaningful transitions, report what was learned, what remains uncertain, and what happens next, rather than narrating every read. Honor no-questions mode throughout.
+
 ## Establish the modeling basis
 
 1. Discover sources inside the authorized scope, starting with user-selected files, the existing model, and documentation entry points. Look for requirements, specifications, architecture, ADRs, and diagrams without relying on fixed filenames.
@@ -41,12 +47,12 @@ For explicitly selected known threats, actor profiles, or organization context, 
 
 Perform preliminary analysis before questions when useful sources exist. Default to a short guided dialogue; honor requests to work without questions or to stop the dialogue.
 
-- Draw questions from open checklist items and other material gaps. A contradiction between sources keeps the affected item open; ask about it when the answer matters.
+- Draw questions from open checklist items and other material gaps. Ask when the answer could materially change system understanding, a scenario's applicability, prerequisites, harm or priority, or its treatment. An open checklist item alone does not require a question. A contradiction between sources keeps the affected item open; ask about it when the answer matters.
 - Ask at most three questions per round. Each identifies an observation or missing context, explains its consequence, and asks one concrete question in the team's language.
 - Prioritize answers that change objectives, impact, a trust boundary, or treatment. Reuse answers already in the sources or conversation; do not fill a question quota.
-- After answers, revise the analysis. Offer another short round only if it would materially help. Give the team room to add a concern or exception within the round limit.
-- Treat unknown, skipped, or unanswered questions as unresolved. Silence confirms neither a suggestion nor risk acceptance. A factual answer about risky behavior does not approve it or authorize tools.
-- Distinguish reported current controls, desired future behavior, and model suggestions. User-reported controls remain attributed and unverified.
+- After answers, revise the analysis and affected scenarios. Offer another short round only if it would materially help; there is no required number of rounds or need to clarify every checklist item. Give the team room to add a concern or exception within the round limit, and make clear that remaining questions can be left open.
+- Treat unknown, skipped, or unanswered questions as unresolved. Record the missing fact, the affected scenario or model element, and a concrete next check where possible. Do not repeat an unavailable or skipped question unless new evidence materially changes it or the user reopens it. Silence confirms neither a suggestion nor risk acceptance. A factual answer about risky behavior does not approve it or authorize tools.
+- Make clear whether a question asks about current behavior or intended behavior. Distinguish reported current controls, desired future behavior, and model suggestions. User-reported controls remain attributed and unverified.
 
 Without further answers, proceed with a supported draft and explicit open items. During review, include answers only in the proposed changes. Do not store a dialogue transcript.
 
@@ -54,9 +60,11 @@ Without further answers, proceed with a supported draft and explicit open items.
 
 Use [references/model-guide.md](references/model-guide.md) for the model structure, scenario records, and treatment semantics.
 
-Describe components, stores, external parties, flows, and trust boundaries. At each boundary, explain which identity, ownership, privilege, or control assumption changes. Include a compact text diagram; use Mermaid when supported by the repository.
+Refine the working system summary into components, stores, external parties, flows, and trust boundaries. At each boundary, explain which identity, ownership, privilege, or control assumption changes. Keep a compact text diagram in the model; use Mermaid when supported by the repository.
 
 Develop scenarios against significant objectives and interactions. Use STRIDE as a prompt, add business abuse cases, and use attack trees where several steps or alternatives matter. Consider privacy when relevant. Avoid mechanically producing one threat per category or treating a catalog as complete coverage.
+
+Scenario analysis can reveal new material gaps. Use the available sources first, then return to the clarification workflow when an answer would change a relevant scenario or response, explaining that connection in the question. Targeted follow-up reading stays within the same discovery budget; do not restart the checklist interview. Without an answer, keep the scenario's uncertainty explicit and continue with supported conclusions.
 
 Prioritize with a qualitative explanation of plausible harm, prerequisites, access, reach, and relevant controls. Keep confidence separate from priority. Unknown impact stays unknown; do not invent probabilities, losses, or precise scores.
 
@@ -65,6 +73,8 @@ Identify existing and planned responses, current exposure, expected residual ris
 For an update, trace changed sources to affected model elements and shared boundaries, including changes to roles, permissions, assets, dependencies, interactions, or operating assumptions. Preserve unrelated prose and still-applicable decisions. Retain treated or retired scenarios with their rationale. Recheck checklist items affected by the change and items added or changed in the project checklist. Reopen decisions whose assumptions changed; old acceptance does not cover new exposure. Keep human review status only for still-applicable scope; a feature update does not establish review of the whole application.
 
 ## Write and check
+
+During exploration, reserve enough of the remaining discovery budget for the final checks. For creation and updates, include re-reading the write targets and recording an initial decision round when questions are enabled. Stop expanding the source set before these checks become unaffordable; report the resulting coverage gaps. The reserve stays within the task's existing limits.
 
 For creation or an authorized update:
 
@@ -79,15 +89,15 @@ For review, perform the same content checks without writes. Report findings with
 
 After creating or updating the model, ask the team to decide on the most important open scenarios, at most three at a time, in priority order. In review or when the user asked for no questions, list the open decisions instead.
 
-For each scenario, name the decision needed and offer three answers:
+Make clear that this round requests treatment decisions, not facts about the system. For each scenario, summarize the harm and uncertainty, name the decision needed, and offer three answers in the team's language:
 
 | Answer | Record |
 | --- | --- |
-| Implement | The measure, responsible person, and target date. |
+| Plan a response | The measure, responsible person, and target date. This records a plan, not implementation. |
 | Accept | Who accepts, the rationale, and the review date or trigger. |
 | Clarify first | What is missing; the scenario stays open. |
 
-Record answers as the matching treatment from the model guide with a focused patch under the write rules above. Record only explicit decisions with the details the team states; do not fill in a missing person or date. An acceptance without a named responsible person stays open, as do unanswered scenarios. After recording, offer the next scenarios; the team can stop at any time. A decision does not authorize implementing the measure, creating tickets, or changing code.
+The proposed response may eliminate, mitigate, or transfer the risk, as appropriate to the scenario. Record answers as the matching treatment from the model guide with a focused patch under the write rules above. Record only explicit decisions with the details the team states; do not fill in a missing person or date. An acceptance without a named responsible person stays open, as do unanswered scenarios. After recording, offer the next scenarios while enough budget remains for the required write checks; the team can stop and revisit open decisions later. If the budget cannot cover recording another round, list the pending decisions and explain the limit. A decision does not authorize implementing the measure, creating tickets, or changing code.
 
 ## Finish
 

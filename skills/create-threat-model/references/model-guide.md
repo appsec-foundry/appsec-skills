@@ -5,6 +5,7 @@ Use these sections for a new model; adapt an existing model's structure instead 
 | Section | Include |
 | --- | --- |
 | Scope and ownership | System or feature, purpose, responsible team, intended audience, exclusions, current/proposed/transition state, and actual review status. Leave unknown ownership explicit. |
+| Action overview | A compact table of the most important scenarios, linked by stable ID, with a short priority rationale, proposed or decided response, known owner, and next verification or clarification step. |
 | Sources and assumptions | Source IDs, locations and revisions where available, source status, assumptions, conflicts, inaccessible or unexamined context. |
 | Assets and security objectives | Data classification, valuable operations, confidentiality, integrity and availability needs, and consequences of violating them. Public data may still need strong integrity. |
 | Actors and constraints | Goals, starting access, privileges, controlled inputs, binding obligations, negotiable choices, and dependencies. |
@@ -14,6 +15,8 @@ Use these sections for a new model; adapt an existing model's structure instead 
 | Review and open questions | Participants and reviewed scope, unresolved decisions, coverage gaps, checklist items that are not clarified, and reassessment triggers. |
 
 Assign stable identifiers where elements are referenced, for example `S-001` for sources, `O-001` for objectives, `F-001` for flows, and `T-001` for scenarios. Preserve established identifiers and do not renumber them just to close gaps. Every source reference must resolve to an inspected source or be marked unverified; do not invent filenames, requirement IDs, or evidence.
+
+Keep the action overview near the start and derive it from the scenario records; those records hold the full reasoning and decision details. Preserve conditional priorities and unresolved owners. Do not imply that the overview is complete coverage or maintain a separate task list. In an existing model, reuse an equivalent summary and update only affected entries.
 
 ## Reasoning perspectives
 
@@ -77,3 +80,5 @@ A supplier account changes the destination on an approved payment request, and s
 Check coverage of significant objectives, actors, interactions, boundaries, checklist items, and supplied known threats. Explain exclusions and gaps. Check whether each treatment addresses the actual mechanism and whether verification includes intended behavior and a representative failure or abuse case. Do not run these tests or change application code merely because they appear in the model.
 
 Keep risk priority proportionate to stated prerequisites and controls. Do not turn lack of evidence into certainty that a control is absent, or treat a planned control as a completed mitigation.
+
+When the team supplies implementation or verification evidence in an update request, attach it to the affected scenario with its revision, result, and checked conditions where available. Existing ticket or pull-request references can connect the work to the scenario ID; a closed ticket or merged change alone does not verify a control. Record supplied test results as evidence with their provenance, not as tests performed by this skill. Preserve remaining untested conditions and reassess affected exposure and decisions without declaring unrelated scenarios reviewed.

@@ -1,6 +1,6 @@
 # Modeling checklist
 
-Use this checklist to find gaps in the modeling basis. Each item names an aspect and what the model must state for it to count as clarified. It guides coverage and questions; it is not a questionnaire. Do not ask about items that sources or the conversation already answer.
+Use this checklist to find gaps in the modeling basis. Each item names an aspect and what the model must state for it to count as clarified. It guides coverage and questions; it is not a questionnaire. Do not ask about items that sources or the conversation already answer. Select questions by their effect on system understanding, relevant scenarios, or treatment; completing the checklist is not a reason to prolong the dialogue. Revisit affected items when scenario analysis reveals new gaps.
 
 | ID | Aspect | Clarified when the model states |
 | --- | --- | --- |
