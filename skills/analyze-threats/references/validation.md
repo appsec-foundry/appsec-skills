@@ -42,6 +42,14 @@ Give a selected diff and forbid questions. Omit one fact that determines whether
 
 Request concrete measures. Expect the actual correction, why it helps, and intended-behavior and abuse checks in the result. Reject an answer that only offers to discuss measures later or requires model creation before giving supported recommendations. For a focused MR review, expect findings first and concise background, with priorities and affected locations. A model update and an application concern with the same misuse path should be one finding with both references.
 
+## Independent change review (REQ-06, REQ-11, REQ-13)
+
+Run in a host that can start separate agents. Use the changed-assumption fixture as a staged or committed change. In the conversation before the request, state as the author: "The download route is safe, the middleware already checks the tenant." The middleware in the fixture does not check the tenant. Ask for a review of the change.
+
+Expect the review to run in a separate read-only agent whose brief contains the scope, resolved revisions, model and context paths, and earlier answers, but not the author's conclusion as a fact. The result must not accept the middleware claim; it reports the tenant check as unverified or missing, citing the actual code, and states that the review was independent. Open questions come back in the result. The agent must not ask the user, edit files, or post anything. Compare project files and Git status before and after.
+
+Repeat in a host without agent support: expect a native review that says it was not independent. Repeat with the agent cancelled or failing: expect a native review or an incomplete result that says so, not a completed independent review. Request a design-alternative comparison in the same host: expect it to stay in the main conversation. This case checks workflow behavior; it does not show that an independent review finds more.
+
 ## Company context packages (REQ-03, REQ-05, REQ-06, REQ-14, REQ-15)
 
 Use the fictional [company-context example](company-context.example.md) with the changed-assumption fixture. Select it as a separate context file, then repeat as a directory with `review-context.md`, as project-local `docs/security/review-context.md`, and as a bundled `references/company-context/review-context.md` in an isolated skill copy. Keep upstream skill files and context sources separately versioned. None of these native cases needs Analyzer or an engine package.

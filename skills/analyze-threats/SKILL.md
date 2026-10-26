@@ -84,6 +84,15 @@ For an optional reviewer invocation, return the same assessment with source loca
 
 Finish with the most useful next action supported by the findings. Do not start a decision interview or implementation task unless requested.
 
+## Run change reviews independently (REQ-11, REQ-13)
+
+When the analysis reviews a code change, PR/MR, or diff, including an invocation as security reviewer, and the host can start separate agents, run the analysis in one review agent instead of in the conversation that produced the change. Design analyses, open questions before code exists, and comparisons of design alternatives stay in the main conversation.
+
+- Brief the agent with this skill's workflow and the selected scope: resolved revision IDs or the staged/worktree selection, subject, model and context package paths, requested comparison, and answers the user already gave. Do not pass your own conclusions or the author's explanation as facts, such as a claim that a control exists or a risk is acceptable. Pass such statements only as labelled user statements.
+- The agent works within the same authorized sources, read-only operations, recipients, and limits. Give it no ability to write, post, or publish. Do not require a specific model; use a stronger one only when the host offers it within existing spending authorization.
+- The agent does not ask the user. It returns the result in the delivery format above, with unresolved questions. Relay material questions yourself; if the user answers, start a new review with those answers in the brief.
+- State in the result whether the review was independent. If the host cannot start agents or the agent fails or is cancelled, review in the main conversation and say that it was not independent. Do not present a partial or failed agent run as a completed review.
+
 ## Offer a model follow-up when useful (REQ-12, REQ-13)
 
 Deliver the focused result first. If the analysis exposes a material model gap, changed assumption, or recurring cross-feature concern, propose one specific next task to create, review, or update the maintained model. Absence of a model alone does not require a full modeling exercise.

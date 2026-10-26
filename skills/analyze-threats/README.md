@@ -83,6 +83,8 @@ Return prioritized findings, source locations, reviewed scope, and open question
 Do not ask questions; mark conclusions that need more context as unresolved.
 ```
 
+Where your assistant can start separate agents, a change review runs in a review agent that sees the selected scope and sources, not the conversation in which the change was written. Statements from that conversation, such as "the middleware already checks the tenant", reach it only as unverified user statements. The result says whether the review was independent. Without agent support, the review runs in your current conversation and says so. Design questions and comparisons always stay in the current conversation. The agent does not ask you questions itself; open points come back in the result.
+
 This is optional. A calling review workflow can use the result, but must preserve its scope, uncertainty, and incomplete status. The skill does not supply a CI service or an enforced merge gate. It uses the host's permissions and execution limits.
 
 For an automated integration, configure the calling host to enforce read-only tools, the selected source scope, finite execution limits, and cancellation. Skill instructions do not provide that enforcement themselves.
