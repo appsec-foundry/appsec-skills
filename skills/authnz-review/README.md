@@ -1,9 +1,18 @@
 # Authentication and authorization review
 
-Run a focused review through a compatible independently installed AppSec Analyzer and authenticated Claude CLI. Install the complete `authnz-review` directory using your assistant's skill mechanism. Analyzer installation, Claude login, and model-use authorization are separate prerequisites; this skill installs nothing.
+Review a local Git repository's authentication and authorization through AppSec Analyzer and Claude CLI.
+
+## Install
+
+Install the complete `authnz-review` directory using your assistant's skill installation mechanism. You also need a compatible AppSec Analyzer and an authenticated Claude CLI.
+
+## Usage
 
 ```text
-Use authnz-review for this Git repository. Use Claude CLI with a USD 2 ceiling and show the structured result.
+Use authnz-review for this Git repository.
+Use Claude CLI with a USD 2 ceiling and show the structured result.
 ```
 
-See [dependencies](dependencies.json), the [workflow](SKILL.md), and [legacy option compatibility](references/compatibility.md). The engine owns scanners, model calls, validation and exports. Installing this standalone skill does not replace the existing Advisor plugin skill or establish live-model/platform qualification.
+The review needs explicit authorization to send the selected source through Claude CLI and spend up to your budget. Installing the skill grants neither and installs no prerequisites. A completed analysis does not prove that an attack would succeed at runtime.
+
+See [dependencies](dependencies.json), the [workflow](SKILL.md), and [legacy option compatibility](references/compatibility.md).

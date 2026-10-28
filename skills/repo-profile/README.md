@@ -1,13 +1,17 @@
 # Repo profile
 
-Show what is in a repository before scanning it: working-tree size, language split, build manifests and tracked versus untracked content, using an independently installed AppSec Analyzer. This skill makes no model calls, reads no file contents and is not a security check.
+Show a local repository's size, languages, build manifests, and tracked versus untracked content. The skill reads directory entries, not file contents, and makes no model calls. It does not assess security.
 
-Install the complete `repo-profile` directory using your assistant's supported skill installation mechanism. Install/select Analyzer separately through its trusted distribution; this skill never runs an installer. [Dependencies](dependencies.json) require interface 1 and the `repo_profile` capability. See the [workflow](SKILL.md) and [compatibility notes](references/compatibility.md).
+## Install
 
-Ask your assistant:
+Copy the complete `repo-profile` directory into your assistant's skill location, or use its supported installation mechanism. Install AppSec Analyzer separately; this skill requires interface 1 with the `repo_profile` capability.
+
+## Usage
 
 ```text
 Use repo-profile for the current repository.
 ```
 
-You can also request `--repo /absolute/path` or `--json`. A host plugin can bind the workflow to its bundled tested engine. The standalone skill does not depend on Advisor or a sibling checkout.
+Use `--repo /absolute/path` to select another local directory or `--json` for structured output. Git URLs are not supported.
+
+See [dependencies](dependencies.json), the [workflow](SKILL.md), and [compatibility](references/compatibility.md).
