@@ -25,6 +25,8 @@ Aim for an opening that fits roughly one screen: purpose, main concern, draft/re
 
 Keep each detail in one primary place: shared purpose and protection needs in the system section; scenario reasoning, controls, recommendations, and decisions with the scenario; supporting observations and tests in the appendix. The overview and open-decision list are short entry points, not second copies. Use narrow tables for comparison and labeled blocks for individual scenarios; do not place paragraphs in table cells. State shared caveats once, repeating only conditions that change a scenario's meaning. Omit activity logs, unsuccessful source guesses, and routine checks with no effect on the result. Retain inaccessible sources or discovery limits when they leave a material gap. Moving text to the appendix does not replace deleting repetition; never drop a significant threat, uncertainty, or decision to meet a length target.
 
+Make the overview's next action reflect the recorded decision: "Implement the agreed version binding; set a delivery date" differs from "Choose a version-binding rule." In the open-decision list, name the unresolved choice or missing fact and who can resolve it when known. Prefer "Which recipients may receive application documents? — Product team" to "Improve email security." Keep implementation tasks with their scenarios; do not present an already agreed measure as an open choice.
+
 ## System diagram
 
 For a new `threat-model.md`, use a fenced `mermaid` flowchart as the default system diagram. Put it in the system summary with a short explanation of the main flow and important boundaries, so the surrounding text also makes sense without a renderer. Unknown viewer support does not require a format question or evidence of earlier Mermaid use in the repository. Use a fenced `text` diagram instead when requested by the user or project conventions, or when the intended viewer is known not to render Mermaid. Preserve an existing model's diagram format unless the requested update calls for changing it.
@@ -43,7 +45,7 @@ Derive the actual nodes, flows and boundaries from the project; this example doe
 
 ## Audience notice
 
-Use a visible Markdown blockquote with a bold uppercase heading immediately below the model's title. Keep these notices in English. Use established project classification labels when required, without inventing a classification scheme or weakening the handling instruction. Keep draft/review status in the overview; an audience notice neither restricts access nor grants permission to commit, share, or publish.
+Use a visible Markdown blockquote with a bold uppercase heading immediately below the model's title. The examples below are English templates; write the notice in the model's selected language (REQ-17), preserving its meaning. Use established project classification labels when required, without inventing a classification scheme or weakening the handling instruction. Keep draft/review status in the overview; an audience notice neither restricts access nor grants permission to commit, share, or publish.
 
 For an internal model with an established audience, replace the reader placeholder with the actual group:
 
@@ -98,6 +100,16 @@ Explain the scale, duration, or recovery limits when they affect priority. Even 
 Record shared business context once in the system summary and use it in scenario reasoning. Distinguish source-derived proposals from explicit user statements or confirmations of purpose, data sensitivity, and worst-case consequences. If confirmation was skipped or questions were disabled, identify the unconfirmed aspects without inventing approval. If the consequences remain unknown, state which missing fact could change the assessment and keep that priority provisional. Do not turn an unanswered question into a low rating or invent monetary losses, outage tolerances, or stakeholder confirmation.
 
 A request to investigate an outcome is not evidence that it can occur or would cause material loss. Keep the concern, attack prerequisites, and consequences separate. For example, "assess access to another team's documents" does not establish unauthorized access, and "documents must stay within their team" is an objective, not evidence that authorization works. For repository models, assess impact for the application's intended uses; do not generalize one person's disposable data or local configuration to the whole application. Keep consequences of optional features and supported operating modes conditional. Apply the checklist's [answer interpretation](checklist.md#plan-the-interview) when carrying interview answers into priorities and model updates.
+
+## Explain priorities
+
+Use the team's existing qualitative scale when available; otherwise explain high, medium, low, or unresolved through harm and prerequisites (REQ-07). High calls for a supported serious consequence and a plausible path; medium describes a material but more limited consequence or a materially constrained path; low needs evidence that the remaining consequence is limited. These are reasoning anchors, not numerical thresholds. Missing evidence alone never lowers risk.
+
+When the available information cannot distinguish those levels, leave priority unresolved and name the fact that would settle it. "High if authorization fails" describes an attack prerequisite, not the severity of the resulting harm. A provisional rating needs a stated impact assumption as well as prerequisites. Keep evidence confidence separate.
+
+For example, disclosure of confirmed confidential income records across customer accounts supports a different assessment from disclosure of documents whose contents and sensitivity are unknown. In the latter case, identify the confidentiality concern and unresolved sensitivity rather than assigning a high rating merely because a download check is unspecified.
+
+Separate risk priority from the order of useful work. Even with unresolved impact, defining the approval-to-document-version rule can be the first recommended design task because later implementation and tests depend on it. Explain that dependency without presenting the task order as a confirmed risk ranking. Preserve unrelated ratings in focused updates.
 
 ## Scenario records
 

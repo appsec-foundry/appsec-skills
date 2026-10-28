@@ -24,7 +24,7 @@ Ask about material gaps before writing the draft.
 
 Replace the paths with your documents. Without documents, describe what the system does, who uses it, what data it handles, and what needs protection.
 
-New models use **English** unless you request another language. Updates keep the model's language; the conversation can use yours.
+New models, including their audience notices, use **English** unless you request another language. Updates keep the model's language; the conversation can use yours.
 
 ## What you get
 
@@ -36,6 +36,8 @@ The assistant writes **`threat-model.md` at the project root** and links it from
 - Open decisions, source references, and important gaps in the evidence.
 
 Scenarios have stable IDs such as `T-003` for tickets and pull requests. You can edit the model in any Markdown editor. Proposed controls remain distinct from implemented or verified ones. The closing summary highlights the main threats and recommended next steps.
+
+Priorities explain possible harm and attack prerequisites. If the impact is too unclear to support a rating, it stays unresolved. The model can still recommend which design decision to address first, and distinguishes open choices from measures already agreed.
 
 | Request | Result |
 | --- | --- |
@@ -49,13 +51,13 @@ Modeling does not change application code, create tickets, commit files, or publ
 
 ## How it works
 
-The assistant reads the sources, sketches its understanding of the system, and asks about important gaps in rounds of up to three questions. Before assessing scenarios, it asks you to confirm the system's purpose, data sensitivity, and plausible worst-case consequences. It reuses earlier answers; updates revisit affected context only.
+The assistant reads the sources, sketches its understanding of the system, and asks about important gaps in short rounds. Related, independently answerable questions are grouped, up to three per round; questions that depend on an earlier answer come later. Before assessing scenarios, it asks you to confirm the system's purpose, data sensitivity, and plausible worst-case consequences. It reuses earlier answers; updates revisit affected context only.
 
 You can answer “unknown,” skip questions, or request no questions. Unconfirmed assumptions stay visible. If there is too little context to describe a concrete system, the assistant explains what is missing.
 
 A repository model covers the application and its supported configurations. Optional features remain conditional parts of that scope even if disabled locally. To assess a particular installation, request that scope explicitly.
 
-Reading has fixed limits, so large projects may be only partly examined. Name the service or feature to focus on; the model records coverage gaps. Broader architecture reading requires your opt-in and identifies components, entry points, data stores, external connections, and authentication paths. It does not scan for code vulnerabilities. See the [workflow limits](SKILL.md#execution-boundaries).
+Reading has fixed limits, so large projects may be only partly examined. Name the service or feature to focus on; the model records coverage gaps. For projects with code, the assistant offers broader architecture reading once, even when documentation is sufficient. This reading requires your opt-in and identifies components, entry points, data stores, external connections, and authentication paths. It does not scan for code vulnerabilities. See the [workflow limits](SKILL.md#execution-boundaries).
 
 ## Common requests
 
@@ -95,7 +97,7 @@ Explain the options and trade-offs and recommend where to start.
 Update the model with the decisions I explicitly make.
 ```
 
-Use your actual scenario IDs. Discussion alone does not record decisions or edit the model; include an update request to save them. Accepting a risk requires an explicit decision by a responsible person, with a rationale and review date or trigger.
+Use your actual scenario IDs. Discussion alone does not record decisions or edit the model; include an update request to save them. When you request a decision round, the assistant presents the concrete alternatives for the scenario; missing owners or dates remain open. Accepting a risk requires an explicit decision by a responsible person, with a rationale and review date or trigger.
 
 ## Internal or public models
 
