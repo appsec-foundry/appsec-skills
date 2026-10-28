@@ -7,6 +7,7 @@ Application security skills for coding assistants. Part of [AppSec Foundry](http
 | Skill | Purpose | Needs AppSec Analyzer? |
 | --- | --- | --- |
 | [create-threat-model](skills/create-threat-model/README.md) | Create, update, or review a threat model, including before code exists. | No |
+| [update-threat-model](skills/update-threat-model/README.md) | Focused updates to an existing threat model; requires create-threat-model. | No |
 | [analyze-threats](skills/analyze-threats/README.md) | Examine features, changes, PRs/MRs, or design decisions for threats. | Optional |
 | [security-score](skills/security-score/README.md) | Score repositories from 0–100/A–F or assess the security relevance of changes. | Optional |
 | [repo-profile](skills/repo-profile/README.md) | Show repository size, languages, and build manifests. | Yes |
@@ -51,7 +52,7 @@ Bundled checks need Python 3.10+ on Linux/macOS and Git for local Git sources an
 
 ## Installation and development
 
-Each `skills/<name>/` directory contains a usage guide (`README.md`), assistant instructions (`SKILL.md`), and supporting files. For manual installation, copy the complete directory into your assistant's skill location. Analyzer integrations list their prerequisites in `dependencies.json`; no skill installs those prerequisites automatically.
+Each `skills/<name>/` directory contains a usage guide (`README.md`), assistant instructions (`SKILL.md`), and supporting files. For manual installation, copy the complete directory into your assistant's skill location. Install both `update-threat-model` and `create-threat-model` when using the dedicated update entry point. Analyzer integrations list their prerequisites in `dependencies.json`; no skill installs those prerequisites automatically.
 
 For company use, see [Create Threat Model distribution and updates](skills/create-threat-model/README.md#company-distribution-and-customization) or [Analyze Threats company context](skills/analyze-threats/README.md#company-context).
 
