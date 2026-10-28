@@ -37,6 +37,8 @@ The assistant writes **`threat-model.md` at the project root** and links it from
 
 Scenarios have stable IDs such as `T-003` for tickets and pull requests. You can edit the model in any Markdown editor. Proposed controls remain distinct from implemented or verified ones. The closing summary highlights the main threats and recommended next steps.
 
+After creating or updating the model, the assistant can ask whether to add a short reminder in your existing `AGENTS.md` or `CLAUDE.md` to consult relevant model sections before security-relevant changes and flag needed model updates. Only the file you explicitly approve is changed. Existing reminders are preserved without duplicates; missing instruction files are not created. The question is skipped when you request no questions, and an unanswered offer leaves agent instructions unchanged. The model is delivered before this optional step.
+
 Priorities explain possible harm and attack prerequisites. If the impact is too unclear to support a rating, it stays unresolved. The model can still recommend which design decision to address first, and distinguishes open choices from measures already agreed.
 
 | Request | Result |

@@ -224,7 +224,7 @@ For creation or an authorized update, follow the steps below. For review, perfor
 
 ### 1. Re-read the write targets
 
-Restrict edits to the selected model and security document, plus exports explicitly requested under the [export guide](references/otm-export.md). An export-only request leaves the model and security document unchanged.
+Restrict edits to the selected model and security document, plus exports explicitly requested under the [export guide](references/otm-export.md) and an agent-instruction reference explicitly approved under [Optional agent integration](#optional-agent-integration). An export-only request leaves the model, security document, and agent instructions unchanged.
 
 Re-read write targets immediately before editing. Reconcile any intervening changes with the current text before applying a focused patch; never replace them with a stale full document. If the remaining discovery budget cannot cover these checks, do not edit. Report the limitation.
 
@@ -281,11 +281,31 @@ After creation, update, or review, give a concise handoff in the user's language
 
 A suitable known skill and a copyable example request can help with the next task. Use a skill only when its capabilities and prerequisites are known; do not discover or install one merely to fill the handoff. Name material installation or model-use prerequisites. Otherwise offer direct help. Do not bundle review, implementation, and approval in one continuation.
 
-Finish after delivery unless further dialogue was explicitly requested. At most one optional invitation to review the model or plan measures is appropriate; in no-questions mode, phrase it as a suggested task. An invitation is not permission to start a question tool, select treatments, or edit files. If the user requested a measures discussion or treatment decisions, continue using [the decisions guide](references/decisions.md) after delivering any requested draft. A request to plan measures alone does not authorize recording decisions.
+Finish after delivery unless further dialogue was explicitly requested or the optional agent-integration question below applies. At most one optional invitation is appropriate: use the agent-integration question when applicable; otherwise an invitation to review the model or plan measures may be useful. In no-questions mode, phrase any next task as a suggestion. A review or planning invitation is not permission to start a question tool, select treatments, or edit files. If the user requested a measures discussion or treatment decisions, continue using [the decisions guide](references/decisions.md) after delivering any requested draft. A request to plan measures alone does not authorize recording decisions.
 
 For export-only tasks, link files actually produced and state their OTM version, source model, validation performed, and material mapping or importer limits. If blocked, explain the missing input or check and any partial result without reopening the modeling interview. Follow the [export guide](references/otm-export.md).
 
 A draft, successful format check, or empty threat list is not team approval or proof of coverage. Record only actual review participation. Do not commit, push, publish, or implement proposed controls.
+
+### Optional agent integration
+
+After completing and handing off a created or updated model, offer once to reference it in the project's active agent instructions (REQ-08). This optional follow-up never blocks delivery. Do not offer it during review or export-only work, in no-questions mode, after a decline in the current conversation, or when a suitable reference already exists in the active instructions. Reuse explicit approval that already identifies the destination and this change.
+
+Use existing root `AGENTS.md` and `CLAUDE.md` as candidates; their presence alone does not establish which is used. If the active file is known, ask whether to add the reference there. Otherwise combine approval and destination selection in one interactive question in the user's language:
+
+> Should I add a reminder to consult the threat model to your agent instructions?
+
+- Add to `AGENTS.md`.
+- Add to `CLAUDE.md`.
+- Do not add it.
+
+Offer only existing candidate files, or an existing instruction file explicitly identified by the user. If no candidate exists, skip the offer. Use the host's permitted question interface and the [ask-and-wait rules](references/checklist.md#ask-and-wait); ordinary chat is the fallback. State that the reminder asks future agents to consult relevant model sections before security-relevant changes and flag needed model updates. Wait for an explicit selection; silence, a preselected option, or permission to create the model does not authorize this edit. Without an answer, leave agent instructions unchanged and keep the model's delivery complete.
+
+After approval, re-read the selected file under the existing path and write checks. Add one short reminder with a relative link, matching the file's language and preserving its other instructions. For example:
+
+> Before security-relevant changes, read the relevant sections of [threat-model.md](threat-model.md). Consider their assumptions, threats, and decisions, and flag any needed model updates.
+
+Do not copy model content or source instructions into this reminder, authorize automatic model updates or implementation of proposed measures, create missing instruction files, or edit both files without explicit approval for both. Reuse an equivalent existing reminder instead of adding a duplicate. Check the actual diff and link, then report which file was updated.
 
 ## Execution boundaries
 
