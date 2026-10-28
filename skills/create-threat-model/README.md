@@ -51,13 +51,17 @@ Modeling does not change application code, create tickets, commit files, or publ
 
 ## How it works
 
-The assistant reads the sources, sketches its understanding of the system, and asks about important gaps in short rounds. Related, independently answerable questions are grouped, up to three per round; questions that depend on an earlier answer come later. Before assessing scenarios, it asks you to confirm the system's purpose, data sensitivity, and plausible worst-case consequences. It reuses earlier answers; updates revisit affected context only.
+1. **Read and summarize.** The assistant reads your sources and sketches its understanding of the system.
+2. **Clarify gaps.** It asks up to three related, independently answerable questions per round. Questions that depend on an earlier answer come later.
+3. **Confirm the context.** Before assessing scenarios, it asks you to confirm the system's purpose, data sensitivity, and plausible worst-case consequences. It reuses earlier answers; updates revisit affected context only.
 
 You can answer “unknown,” skip questions, or request no questions. Unconfirmed assumptions stay visible. If there is too little context to describe a concrete system, the assistant explains what is missing.
 
 A repository model covers the application and its supported configurations. Optional features remain conditional parts of that scope even if disabled locally. To assess a particular installation, request that scope explicitly.
 
-Reading has fixed limits, so large projects may be only partly examined. Name the service or feature to focus on; the model records coverage gaps. For projects with code, the assistant offers broader architecture reading once, even when documentation is sufficient. This reading requires your opt-in and identifies components, entry points, data stores, external connections, and authentication paths. It does not scan for code vulnerabilities. See the [workflow limits](SKILL.md#execution-boundaries).
+Reading has fixed limits, so large projects may be only partly examined. Name the service or feature to focus on; the model records coverage gaps. See the [reading limits](SKILL.md#discovery-budget).
+
+For projects with code, the assistant offers broader architecture reading once, even when documentation is sufficient. With your opt-in, it reads code and configuration to identify components, entry points, data stores, external connections, and authentication paths. It does not scan for code vulnerabilities.
 
 ## Common requests
 
