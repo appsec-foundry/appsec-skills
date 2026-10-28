@@ -200,6 +200,8 @@ Use an existing fictional model with an established audience, confirmed system c
 
 These are manual behavior checks. Static validation does not establish that a real model produces useful recommendations or respects the transition in practice.
 
+For the dedicated update entry point, use the [Update Threat Model behavior checks](tests/manual/update-threat-model.md). They provide a fictional fixture and observable criteria for selective updates, changed acceptance assumptions, missing dependencies, read-only review, unsupported paths, security-document creation, and version display.
+
 ### Check delivery before optional planning (REQ-04, REQ-07, REQ-08, REQ-10, REQ-11)
 
 Use the fictional customer portal with sufficient system context, an established audience and suitable destination, and authorization to create a model. Leave treatment choices, owners, dates, and control effectiveness unresolved:

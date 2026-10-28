@@ -13,7 +13,7 @@ npx skills@1.7.2 add appsec-foundry/appsec-skills --skill create-threat-model
 npx skills@1.7.2 add appsec-foundry/appsec-skills --skill update-threat-model
 ```
 
-For an unpublished checkout, replace `appsec-foundry/appsec-skills` with the checkout path. For manual installation, copy both complete skill directories into your assistant's skill location. If the dependency is unavailable, the assistant explains what is missing without installing anything automatically.
+For an unpublished checkout, replace `appsec-foundry/appsec-skills` with the checkout path. Install or update both skills from the same collection revision where possible; using the same checkout for both commands provides a consistent source. For manual installation, copy both complete skill directories into your assistant's skill location, including `create-threat-model`'s `requirements.md` and `references/`. Equal version labels alone do not guarantee compatibility. If required guidance is missing or conflicting, the assistant explains the problem and leaves the model unchanged without installing anything automatically.
 
 ## Use
 
@@ -37,6 +37,8 @@ Do not ask questions; record unresolved assumptions in the model.
 ```
 
 The assistant reads the existing model and change sources, asks only about material gaps, updates affected sections, and checks the resulting document and its security-document link. Questions use your language; the model keeps its existing language. Unknowns remain visible, and a planned measure is not recorded as verified.
+
+The supported model location is `<repo>/threat-model.md`. A model at another location is left unchanged; the assistant does not move or duplicate it. An update may also add a missing model link to the repository's `SECURITY.md` or `security.md`, preserving existing disclosure instructions. If neither security document exists, it creates a minimal root `SECURITY.md` with the link.
 
 If no maintained model exists, use [create-threat-model](../create-threat-model/README.md) first. An update request does not create a replacement model or authorize code changes, commits, publication, or risk acceptance. Read-only review requests remain read-only.
 
