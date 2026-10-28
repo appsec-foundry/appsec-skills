@@ -1,6 +1,8 @@
 # Create Threat Model
 
-Create a threat model from requirements, design documents, and team knowledge—even before code exists. Update it when the design changes, review it, or discuss measures for specific threats. No security expertise is required.
+Create a threat model from requirements, design documents, and team knowledge, even before code exists. The model describes what could go wrong, what harm it could cause, and what to change. No security expertise is required.
+
+This skill also supports reviews, updates, and discussions of protective measures. For an existing model, [update-threat-model](../update-threat-model/README.md) provides a shortcut to the same update workflow; it requires this skill to be installed.
 
 ## Quick start
 
@@ -19,12 +21,11 @@ Then ask your assistant:
 ```text
 Use create-threat-model to create a threat model for this project.
 Start with docs/requirements.md and docs/architecture.md.
-Ask about material gaps before writing the draft.
 ```
 
 Replace the paths with your documents. Without documents, describe what the system does, who uses it, what data it handles, and what needs protection.
 
-New models, including their audience notices, use **English** unless you request another language. Updates keep the model's language; the conversation can use yours.
+New models use **English** unless you request another language. Updates keep the model's language; the conversation can use yours.
 
 ## What you get
 
@@ -37,9 +38,19 @@ The assistant writes **`threat-model.md` at the project root** and links it from
 
 Scenarios have stable IDs such as `T-003` for tickets and pull requests. You can edit the model in any Markdown editor. Proposed controls remain distinct from implemented or verified ones. The closing summary highlights the main threats and recommended next steps.
 
-After creating or updating the model, the assistant can ask whether to add a short reminder in your existing `AGENTS.md` or `CLAUDE.md` to consult relevant model sections before security-relevant changes and flag needed model updates. Only the file you explicitly approve is changed. Existing reminders are preserved without duplicates; missing instruction files are not created. The question is skipped when you request no questions, and an unanswered offer leaves agent instructions unchanged. The model is delivered before this optional step.
+A shortened example from a fictional payment system:
 
-Priorities explain possible harm and attack prerequisites. If the impact is too unclear to support a rating, it stays unresolved. The model can still recommend which design decision to address first, and distinguishes open choices from measures already agreed.
+> **T-003 — Payment details can change after approval**
+>
+> **Threat:** A supplier could change the recipient after approval and redirect the money if the original approval remains valid. Whether edits cancel approval is unknown.
+>
+> **Recommended change:** Require approval again when the amount or recipient changes.
+>
+> **Proposed check:** An unchanged approved payment succeeds; changing its recipient blocks payment until renewed approval. These checks have not run.
+
+See the [full scenario and its evidence](references/model-guide.md#t-003-payment-details-can-change-after-approval). Priorities reflect possible harm and the conditions needed for an attack; missing information stays visible.
+
+After delivery, the assistant may offer to add a reminder to consult the model in an existing `AGENTS.md` or `CLAUDE.md`. It edits that file only with your explicit approval. See [optional agent integration](SKILL.md#optional-agent-integration) for details.
 
 | Request | Result |
 | --- | --- |
@@ -53,21 +64,34 @@ Modeling does not change application code, create tickets, commit files, or publ
 
 ## How it works
 
-1. **Read and summarize.** The assistant reads your sources and sketches its understanding of the system.
-2. **Clarify gaps.** It asks up to three related, independently answerable questions per round. Questions that depend on an earlier answer come later.
-3. **Confirm the context.** Before assessing scenarios, it asks you to confirm the system's purpose, data sensitivity, and plausible worst-case consequences. It reuses earlier answers; updates revisit affected context only.
+1. **Read and summarize.** The assistant reads requirements, design documents, and other supplied sources, then sketches the system and its main data flows. It can read selected code to answer specific architecture questions.
+2. **Clarify the context.** It asks about important gaps, who may read the model, and the system's purpose, sensitive data, and possible harm. You can correct its understanding in short rounds of up to three questions.
+3. **Identify threats.** It examines how actors could misuse the system's operations or cross permission boundaries, taking existing protections into account. Each scenario is tied to a source or an explicit assumption.
+4. **Recommend changes.** It prioritizes scenarios by possible harm and attack conditions, proposes measures, and describes how to check them. Proposed measures stay distinct from agreed decisions and verified controls.
+5. **Write and check.** It writes `threat-model.md`, checks the document and its security-document link, and summarizes the main threats, open decisions, and next steps.
 
 You can answer “unknown,” skip questions, or request no questions. Unconfirmed assumptions stay visible. If there is too little context to describe a concrete system, the assistant explains what is missing.
 
-Questions use concrete application examples. Where the sources support an answer, you can confirm or reject it; otherwise a short description is enough. Later rounds explain which assessment depends on the missing information. Once context confirmation is complete or skipped, the assistant proceeds to the draft when further questions would not materially change the assessment; it does not ask you to fill every checklist entry. Required permissions remain separate.
+The model covers the application and its supported configurations, including optional features. To assess a particular installation, request that scope explicitly. Later, use [update-threat-model](../update-threat-model/README.md) to revise the affected parts when requirements, design, or control evidence changes.
 
-A repository model covers the application and its supported configurations. Optional features remain conditional parts of that scope even if disabled locally. To assess a particular installation, request that scope explicitly.
+### When code is available
 
-Reading has fixed limits, so large projects may be only partly examined. Name the service or feature to focus on; the model records coverage gaps. See the [reading limits](SKILL.md#discovery-budget).
+The assistant can read selected code and configuration to resolve specific architecture questions. It also offers broader architecture reading once, even when documentation is sufficient. **Broader reading requires your opt-in**, which you can include in the initial request.
 
-For projects with code, the assistant offers broader architecture reading once, even when documentation is sufficient. With your opt-in, it reads code and configuration to identify components, entry points, data stores, external connections, and authentication paths. It does not scan for code vulnerabilities.
+That reading identifies components, entry points, data stores, external connections, authentication and authorization paths, and deployment configuration. Code observations support the model; conflicts with requirements remain visible. This is not a code vulnerability scan, and the assistant does not run the application or tests.
+
+Reading has [fixed limits](SKILL.md#discovery-budget), so large projects may be only partly examined. Name the service or feature to focus on; the model records coverage gaps.
 
 ## Common requests
+
+**Create without existing documents**
+
+```text
+Use create-threat-model for a service where suppliers submit invoices
+and finance staff approve payments. It stores invoices and bank details
+and sends approved payments to a payment provider.
+Ask me about missing details before writing the model.
+```
 
 **Create without questions**
 
@@ -80,14 +104,15 @@ Do not ask questions; record assumptions and unresolved decisions in the draft.
 
 ```text
 Use create-threat-model to update threat-model.md for the sharing feature
-in docs/sharing.md. Preserve unrelated content and existing scenario IDs.
+in docs/sharing.md.
 ```
 
 **Include architecture reading from code**
 
 ```text
 Use create-threat-model to create a threat model for this service.
-Start with docs/requirements.md and include architecture reading of the code.
+Start with docs/requirements.md. Read the code and configuration too
+to understand the architecture and permission checks.
 ```
 
 **Review an existing model**
@@ -105,7 +130,7 @@ Explain the options and trade-offs and recommend where to start.
 Update the model with the decisions I explicitly make.
 ```
 
-Use your actual scenario IDs. Discussion alone does not record decisions or edit the model; include an update request to save them. When you request a decision round, the assistant presents the concrete alternatives for the scenario; missing owners or dates remain open. Accepting a risk requires an explicit decision by a responsible person, with a rationale and review date or trigger.
+Use your actual scenario IDs. Include an update request to save decisions; discussion alone does not edit the model. Accepting a risk requires an explicit decision by a responsible person, with a rationale and review date or trigger.
 
 ## Internal or public models
 
@@ -121,15 +146,14 @@ If you skip the audience question, a new model is provisionally marked internal.
 
 ## Use the model during development
 
-For example, [T-003 concerns payment details changing after approval](references/model-guide.md#t-003-payment-details-can-change-after-approval). The team might require renewed approval whenever the recipient changes, while leaving implementation status unverified. The model recommends binding approval to the reviewed details and checking changed recipients and concurrent edits.
-
-After implementation, supply evidence for a focused update:
+After implementing a measure, supply evidence for a focused update. For the payment example above:
 
 ```text
-Use create-threat-model to update T-003 using docs/payment-change.md
-and docs/payment-test-results.md. Record the evidence and remaining gaps,
-preserving unrelated scenarios and decisions.
+Use update-threat-model to reassess T-003 using docs/payment-change.md
+and docs/payment-test-results.md.
 ```
+
+This example requires [both skills to be installed](../update-threat-model/README.md#install). You can also make the same request with `create-threat-model` alone.
 
 A link to test code or a merged PR alone does not establish that a control works.
 
@@ -201,7 +225,7 @@ For manual installation, copy the complete `create-threat-model` directory, incl
 
 ## Company distribution and customization
 
-You can keep this skill alongside other skills in your company's `skills/` repository and change `SKILL.md` or its references. Record the imported upstream commit and commit company changes separately. Later updates need to merge upstream changes with your version; replacing the directory would discard your edits.
+You can distribute a customized copy from your company's skills repository. Track the upstream commit and keep company changes separate so later updates can be merged without losing them.
 
 Keep company requirements and known threats in separate context files where possible. Select them explicitly when invoking the skill; this skill does not automatically load a company context directory.
 
