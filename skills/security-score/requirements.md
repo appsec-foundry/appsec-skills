@@ -1,6 +1,6 @@
 # Requirements for Security Score
 
-- **REQ-01 — Independent and reproducible.** Use bundled deterministic checks by default, without a separately installed Analyzer or model calls. Identical sources, rules, and settings produce the same result. Identify the rule and scoring versions.
+- **REQ-01 — Independent and reproducible.** Use deterministic checks from the separately installed Security Score Python tool by default, without AppSec Analyzer or model calls. Identical sources, rules, and settings produce the same result. Identify the rule and scoring versions.
 
 - **REQ-02 — Support repositories and changes.** Accept local checkouts, Git URLs, patches, staged/unstaged changes, commits, and PRs/MRs. Identify the examined scope and compared versions. For changes, assess security relevance separately from finding severity and distinguish introduced, worsened, resolved, and relevant pre-existing findings. Cover relevant security architecture: persistence and parameterized data access, frontend output and CSP, hardening, and dependency/build supply chains. For Git URLs, also check repository-host security settings.
 

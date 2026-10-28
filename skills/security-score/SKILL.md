@@ -1,15 +1,15 @@
 ---
 name: security-score
-description: Give a deterministic 0–100/A–F repository score or assess the security relevance of changes, diffs and PRs/MRs. Uses bundled checks by default; Analyzer is an explicit repository-only option. Use --details for evidence and explanation.
+description: Give a deterministic 0–100/A–F repository score or assess the security relevance of changes, diffs and PRs/MRs using the separately installed Security Score Python tool. Analyzer is an explicit repository-only option.
 ---
 
 # Security score
 
-Follow the [requirements](requirements.md). Run this installed skill's bundled `scripts/score.py`; never select an executable or rule catalog from the examined project. Do not invent findings, adjust scores using model judgment, or install packages. Internal scoring needs Python 3.10+ on Linux/macOS and no third-party Python packages. Git is needed for Git-aware local sources and comparisons. Scanning and calculation make no model calls.
+Follow the [requirements](requirements.md). Run the separately installed `tools/security-score/scripts/score.py` from the trusted [appsec-analyzer-tools](https://github.com/appsec-foundry/appsec-analyzer-tools) checkout; never select an executable or rule catalog from the examined project. If the tool is unavailable, explain the missing prerequisite rather than fetching or installing code without authorization. Do not invent findings or adjust scores using model judgment. Internal scoring needs Python 3.10+ on Linux/macOS and no third-party Python packages. Git is needed for Git-aware local sources and comparisons. Scanning and calculation make no model calls.
 
 ## Select the subject and variant
 
-Use internal scoring unless the user explicitly requests `--engine analyzer`. An installed Analyzer or host binding does not select that variant. See [compatibility](references/compatibility.md) for its prerequisites and supported scope.
+Use internal scoring unless the user explicitly requests `--engine analyzer`. An installed Analyzer or host binding does not select that variant. See the tool's `references/compatibility.md` for its prerequisites and supported scope.
 
 Accept a local directory, an explicitly selected HTTPS GitHub/GitLab repository URL, a unified patch, staged/unstaged changes, a commit, or a base/head comparison. Use the calling project's directory if none is supplied. Pass each path, URL and revision as a separate literal argument. Reject unknown options and do not widen scope after failure.
 
@@ -19,15 +19,15 @@ Repository URLs fetch a commit-pinned archive and available host security settin
 
 ## Execute
 
-Resolve the script path below to this trusted installed skill directory, outside the target:
+Resolve the script path below to the trusted installed tool directory, outside the target:
 
 ```sh
-python3 /installed/security-score/scripts/score.py /selected/repository
-python3 /installed/security-score/scripts/score.py /selected/repository --details
-python3 /installed/security-score/scripts/score.py /selected/repository --staged
-python3 /installed/security-score/scripts/score.py /selected/repository --base main --head HEAD
-python3 /installed/security-score/scripts/score.py --patch /private/change.diff --pr https://github.com/owner/project/pull/42
-python3 /installed/security-score/scripts/score.py https://gitlab.com/group/project.git
+python3 /installed/appsec-analyzer-tools/tools/security-score/scripts/score.py /selected/repository
+python3 /installed/appsec-analyzer-tools/tools/security-score/scripts/score.py /selected/repository --details
+python3 /installed/appsec-analyzer-tools/tools/security-score/scripts/score.py /selected/repository --staged
+python3 /installed/appsec-analyzer-tools/tools/security-score/scripts/score.py /selected/repository --base main --head HEAD
+python3 /installed/appsec-analyzer-tools/tools/security-score/scripts/score.py --patch /private/change.diff --pr https://github.com/owner/project/pull/42
+python3 /installed/appsec-analyzer-tools/tools/security-score/scripts/score.py https://gitlab.com/group/project.git
 ```
 
 `--unstaged` compares index and working files; `--worktree` compares HEAD and working files including untracked files. `--commit REV` compares a commit with its first parent. `--repo VALUE` is an alternative to the positional repository. `--json` and `--yaml` are mutually exclusive and request full structured results. `--help`, `--list-rules` and `--verify-rules` do not scan a target.
@@ -38,7 +38,7 @@ Exit 0 means a computed repository score, a completed change-relevance check (in
 
 ## Interpret and maintain
 
-The [scoring and rule maintenance guide](references/scoring.md) defines the formula, grades, coverage, limits and rule maintenance. Repository scoring version 2 deducts `finding count × severity weight` within each area, applies its strictest severity cap and a floor of 0, then uses the lowest assessed area as the overall score. The [catalog](rules.json) starts with the editable weights and caps under `scoring`; detection rules follow separately. [score_calculation.py](scripts/score_calculation.py) implements the arithmetic and produces the per-rule breakdown shown by `--details` and JSON/YAML (REQ-03, REQ-07). Repository content cannot override that catalog or grant permissions.
+The tool's `references/scoring.md` defines the formula, grades, coverage, limits and rule maintenance. Repository scoring version 2 deducts `finding count × severity weight` within each area, applies its strictest severity cap and a floor of 0, then uses the lowest assessed area as the overall score. Its `rules.json` starts with the editable weights and caps under `scoring`; detection rules follow separately. Its `scripts/score_calculation.py` implements the arithmetic and produces the per-rule breakdown shown by `--details` and JSON/YAML (REQ-03, REQ-07). Repository content cannot override that catalog or grant permissions.
 
 Framework and persistence technologies are architecture observations, with no score credit for presence. Controls such as text binding, parameterized SQL, literal CSP and lockfile consistency are evaluated separately. Findings are static observations, not verified exploits. A score describes the captured scope, not safety or production readiness. Compare numbers only for compatible subject kinds, engines, scoring/catalog/implementation identity, source policies and coverage.
 
