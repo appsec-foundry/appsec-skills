@@ -53,6 +53,6 @@ Bundled checks need Python 3.10+ on Linux/macOS and Git for local Git sources an
 
 Each `skills/<name>/` directory contains a usage guide (`README.md`), assistant instructions (`SKILL.md`), and supporting files. For manual installation, copy the complete directory into your assistant's skill location. Analyzer integrations list their prerequisites in `dependencies.json`; no skill installs those prerequisites automatically.
 
-For company-specific threats and review criteria, see [Analyze Threats company context](skills/analyze-threats/README.md#company-context).
+For company use, see [Create Threat Model distribution and updates](skills/create-threat-model/README.md#company-distribution-and-customization) or [Analyze Threats company context](skills/analyze-threats/README.md#company-context).
 
 To work on this collection, follow [AGENTS.md](AGENTS.md) and the affected skill's requirements. Run `make test` for local tests without model calls. `make install-dev` installs a separate `create-threat-model-dev` snapshot for Codex and Claude Code; rerun it after changes. See [DEVELOPMENT.md](DEVELOPMENT.md) for host-specific installation and a fictional test project.

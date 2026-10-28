@@ -189,6 +189,14 @@ npx skills@1.7.2 add /path/to/appsec-skills --skill create-threat-model
 
 For manual installation, copy the complete `create-threat-model` directory, including `references/`, into your assistant's skill location.
 
+## Company distribution and customization
+
+You can keep this skill alongside other skills in your company's `skills/` repository and change `SKILL.md` or its references. Record the imported upstream commit and commit company changes separately. Later updates need to merge upstream changes with your version; replacing the directory would discard your edits.
+
+Keep company requirements and known threats in separate context files where possible. Select them explicitly when invoking the skill; this skill does not automatically load a company context directory.
+
+See the [technical distribution guide](references/company-distribution.md) for importing the skill, making company changes, installing from your repository, and merging upstream updates.
+
 ## Further reading
 
 - [Model structure and scenario example](references/model-guide.md)
