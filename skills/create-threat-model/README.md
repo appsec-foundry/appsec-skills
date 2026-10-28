@@ -57,6 +57,8 @@ Modeling does not change application code, create tickets, commit files, or publ
 
 You can answer “unknown,” skip questions, or request no questions. Unconfirmed assumptions stay visible. If there is too little context to describe a concrete system, the assistant explains what is missing.
 
+Questions use concrete application examples. Where the sources support an answer, you can confirm or reject it; otherwise a short description is enough. Later rounds explain which assessment depends on the missing information. Once context confirmation is complete or skipped, the assistant proceeds to the draft when further questions would not materially change the assessment; it does not ask you to fill every checklist entry. Required permissions remain separate.
+
 A repository model covers the application and its supported configurations. Optional features remain conditional parts of that scope even if disabled locally. To assess a particular installation, request that scope explicitly.
 
 Reading has fixed limits, so large projects may be only partly examined. Name the service or feature to focus on; the model records coverage gaps. See the [reading limits](SKILL.md#discovery-budget).

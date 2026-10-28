@@ -172,7 +172,7 @@ Place a prominent notice immediately below the document title, before the overvi
 
 ### Check the destination before writing
 
-Before the first write containing confidential findings, establish that the destination's readers may receive them from available authorized context. If this is unclear, ask once: "May everyone who can read this repository see confidential security findings, or should I leave out those details?" Count this within the same three-question limit and reuse any answer that already establishes destination suitability. Choosing "internal," a private repository, or an "internal" notice alone does not establish suitability.
+Before the first write containing confidential findings, establish that the destination's readers may receive them from available authorized context. If this is unclear, ask once: "May everyone who can read this repository also see confidential security findings?" Offer "Yes," "No," and "Unknown." Explain that a negative or unknown answer means omitting those details under the fallback rules below. Count this within the same three-question limit and reuse any answer that already establishes destination suitability. Choosing "internal," a private repository, or an "internal" notice alone does not establish suitability.
 
 This check does not authorize external access or changes to repository permissions.
 
