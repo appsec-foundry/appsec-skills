@@ -50,7 +50,7 @@ A shortened example from a fictional payment system:
 
 See the [full scenario and its evidence](references/model-guide.md#t-003-payment-details-can-change-after-approval). Priorities reflect possible harm and the conditions needed for an attack; missing information stays visible.
 
-After delivery, the assistant may offer to add a reminder to consult the model in an existing `AGENTS.md` or `CLAUDE.md`. It edits that file only with your explicit approval. See [optional agent integration](SKILL.md#optional-agent-integration) for details.
+After delivery, the assistant may offer to add a reminder to consult the model in an existing `AGENTS.md` or `CLAUDE.md`. It edits that file only with your explicit approval. See [optional agent integration](references/delivery.md#optional-agent-integration) for details.
 
 | Request | Result |
 | --- | --- |
@@ -142,7 +142,7 @@ Create a public threat model using only information suitable for publication.
 
 Internal models may include confidential findings only when the repository's readers may receive them. Public models omit confidential details. Neither includes real secrets or unnecessary personal data.
 
-If you skip the audience question, a new model is provisionally marked internal. Disclosure questions remain recorded as unresolved; affected confidential details are omitted. The audience notice does not restrict file access or authorize publication. See the [audience notices](references/model-guide.md#audience-notice).
+If you skip the audience question, a new model is provisionally marked internal. Disclosure questions remain recorded as unresolved; affected confidential details are omitted. The audience notice does not restrict file access or authorize publication. See the [audience notices](references/audience.md#audience-notice).
 
 ## Use the model during development
 

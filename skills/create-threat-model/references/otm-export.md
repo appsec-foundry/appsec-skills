@@ -4,12 +4,20 @@ Read this guide only when the user requests a structured export. Markdown stays 
 
 Use the versioned upstream [specification](https://github.com/iriusrisk/OpenThreatModel/blob/0.2.0/README.md) and [JSON Schema](https://raw.githubusercontent.com/iriusrisk/OpenThreatModel/0.2.0/otm_schema.json) through authorized readers. Do not silently switch to `main`: the release and main schemas have different validation behavior despite identifying the same OTM version. Use an available local copy when its provenance matches the pinned version. Source links do not grant network permission; if the schema cannot be accessed or checked, explain the validation obstacle instead of claiming a validated export. Do not install packages or contact an importer as part of export.
 
+## Decide what the request covers
+
+For an export-only request, reuse the established scope and audience. Clarify only material export gaps; do not reopen the modeling interview or reassess threats.
+
+- If no maintained model exists, explain that an export needs one. Create it only when creation is also requested.
+- For creation or update plus export, complete the normal modeling workflow first.
+- A review alone produces no export files. An explicit additional export request authorizes those derivative files, not changes to the reviewed model.
+
 ## Select the output and preserve the source
 
 - Honor the requested syntax. If the user requests OTM without specifying syntax, use YAML and state that choice; this is not a reason for an extra interview question. An explicit JSON or YAML export request uses OTM and names the format to the user.
 - Default to `<repo>/threat-model.otm.json` or `<repo>/threat-model.otm.yaml`. Write both only when requested. Honor another authorized local destination. Preserve unrelated or manually edited files; inspect any existing export before replacing it. If its provenance or intervening edits are unclear, clarify before overwriting it.
 - An export-only task reads the model and necessary local evidence but does not rewrite `threat-model.md`, add metadata to it, change the security document, or reassess threats. When creation or update is also requested, finish that Markdown work first, then export the resulting state.
-- Apply the same audience and destination rules as for the model, including descriptions, attributes, source paths, and export diagnostics. Do not restore confidential details omitted from a public model. A public export of an internal model needs content suitable for public readers; disclose any omissions without exposing the omitted text. No export request authorizes an upload, publication, or importer execution.
+- Apply the same [audience and destination rules](audience.md) and [content check](delivery.md#2-check-audience-and-content) as for the model, including descriptions, attributes, source paths, and export diagnostics. Do not restore confidential details omitted from a public model. A public export of an internal model needs content suitable for public readers; disclose any omissions without exposing the omitted text. No export request authorizes an upload, publication, or importer execution.
 - In `project.attributes`, record string values for `appsec.sourceModel` (relative path), `appsec.sourceSha256` (hash of the exact source file bytes), `appsec.audience`, and `appsec.exportLimitations`. Include referenced model appendices' paths and hashes in `appsec.sourceReferences` if they are separate files. These are local attribute conventions, not standardized OTM fields. Hash the source after any authorized model update and recheck before finalizing the export; a changed source requires regeneration.
 
 ## Check feasibility before writing
@@ -62,4 +70,4 @@ Also check the specification and source semantics. The released 0.2.0 schema doe
 
 Do not deliver a finished export if a required validation check cannot be completed or fails. Describe the particular obstacle and preserve existing files. Schema validity is only one check; it is not evidence that a third-party tool imports the file correctly. State “OTM 0.2.0; schema and reference checks passed; importer compatibility not tested” only when those checks actually ran. Name additional-attribute limitations. An importer check requires a separately authorized task and appropriate destination; do not upload a model merely to complete validation.
 
-Link the completed export, identify its source snapshot, and briefly explain any material limitations. Keep the ordinary Markdown workflow free of export prompts and metadata. Future model updates do not silently refresh exports; regenerate them only when requested.
+Link the files actually produced and state their OTM version, source model, validation performed, and material mapping or importer limits. If blocked, explain the missing input or check and any partial result without reopening the modeling interview. Keep the ordinary Markdown workflow free of export prompts and metadata. Future model updates do not silently refresh exports; regenerate them only when requested.

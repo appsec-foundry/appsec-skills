@@ -66,6 +66,8 @@ Keep the skill's `name` as `create-threat-model` if you want the same invocation
 
 Keep instructions, examples, README, and expected behavior consistent. For a changed workflow, use a small fictional project to check the intended behavior before distribution. README links to repository-level files may need company equivalents or explicit upstream URLs.
 
+Autonomous integrations must enforce cumulative time, call, retry, and delegation budgets outside the model, validate and authorize tool arguments, and test cancellation and denied actions before deployment. This skill provides no such enforcement.
+
 ## Supply company context
 
 The current skill reads explicitly selected Markdown or plain-text sources. Placing files under `context/` or copying them into the skill does not automatically select them. For example, with a local company checkout at `/work/company-skills`:
