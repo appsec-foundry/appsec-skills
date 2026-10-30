@@ -213,6 +213,10 @@ The skill supports **Open Threat Model (OTM) 0.2.0** in JSON and YAML. Default f
 
 OTM needs numerical assessments that a qualitative model may lack. The assistant explains missing inputs instead of inventing numbers. IDs and context are retained, but other tools may not preserve additional attributes. Schema validation does not establish importer compatibility. See the [export guide](references/otm-export.md).
 
+## Recommended model
+
+Use a provider's current top-tier model at high reasoning effort. The skill cannot check or enforce this, so select the model before you start.
+
 ## Install from a local checkout
 
 From your project, replace the path with your checkout:
