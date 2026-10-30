@@ -69,7 +69,7 @@ For a repository request, model intended behavior, supported uses, components, d
 ## Establish the modeling basis
 
 1. **Discover** sources inside the authorized scope, starting with user-selected files, the existing model, and documentation entry points. Look for requirements, specifications, architecture, ADRs, and diagrams without relying on fixed filenames.
-2. **Read** requirements and confirmed business context, then design, then existing models and selected security context. Read available architecture before asking the team to describe it. Use code or configuration only to answer a specific remaining structural question.
+2. **Read** requirements and confirmed business context, then design, then the existing model and selected security context. Read available architecture before asking the team to describe it. Use code or configuration only to answer a specific remaining structural question. Hold back [other threat model documents](#other-threat-model-documents) until the user agrees.
 3. **Record** source identities, revisions where available, scope, and status. Distinguish current behavior, proposed behavior, implementation observations, and inference. Reading order does not settle conflicting sources: keep a conflict visible and the affected checklist item open.
 4. **Extract** the system context below. Technical architecture alone does not establish sensitivity or business impact. Label requirements inferred from architecture or team context as proposals.
 5. **Check** the basis against the [modeling checklist](references/checklist.md), including any project checklist, and give each item a status.
@@ -86,6 +86,15 @@ A user description can be enough. At minimum, sources or answers must support a 
 Record inspected sources and gaps, including unreadable files and discovery limits. Say "not found in the inspected scope," not "does not exist." Do not scan unrelated projects to fill gaps.
 
 No external catalog or profile is required for ordinary modeling. For explicitly selected known threats, actor profiles, or organization context, read the [security context guide](references/security-context.md).
+
+### Other threat model documents
+
+Use another threat model document only with the user's explicit agreement. This covers any document in the inspected scope that presents itself as a threat model or threat assessment of this system. It excludes the model being created or updated, its exports, project checklists and abuse patterns, and files the user already selected.
+
+- Identify each one from its path, title, date, and status. Do not use its content in the summary, questions, or scenarios yet.
+- Ask once, in the first clarification round, which of them to use, naming each one.
+- Without a clear yes, including in no-questions mode, leave it unused and name it in the appendix as found but unused.
+- An agreed document is a source like any other. It does not become the maintained model, and its findings stay unverified until checked.
 
 ### Optional architecture reading
 
@@ -123,7 +132,7 @@ Then proceed to clarification without asking for approval. Repeat the sketch onl
 
 ## Clarify material gaps
 
-Select questions and interpret answers with the [interview guide](references/interview.md) (REQ-03, REQ-14, REQ-19). Name the remaining topics briefly. Ask at most three independently answerable questions per round, counting audience, scope, destination, and reading-permission questions. Ask dependent questions sequentially. Do not fill a quota or turn the checklist into a questionnaire.
+Select questions and interpret answers with the [interview guide](references/interview.md) (REQ-03, REQ-14, REQ-19). Name the remaining topics briefly. Ask at most three independently answerable questions per round, counting audience, scope, destination, document-use, and reading-permission questions. Ask dependent questions sequentially. Do not fill a quota or turn the checklist into a questionnaire.
 
 ### Confirm the context
 

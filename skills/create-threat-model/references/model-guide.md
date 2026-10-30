@@ -22,7 +22,7 @@ This is a content guide, not a form or schema. Adapt an existing model's structu
 - Use short prose and descriptive headings. Use narrow tables for comparisons and labeled blocks for scenarios; do not put paragraphs in table cells.
 - Keep each detail in one primary place: shared purpose and protection needs in the system section; reasoning, controls, recommendations, and decisions with the scenario; supporting observations and tests in the appendix. The overview and open-decision list are entry points, not copies.
 - State shared caveats once. Repeat only conditions that change a scenario's meaning.
-- Omit activity logs, failed source guesses, and routine checks with no effect on the result. Keep inaccessible sources or discovery limits that leave a material gap.
+- Omit activity logs, failed source guesses, and routine checks with no effect on the result. Keep inaccessible sources or discovery limits that leave a material gap, and threat model documents found but left unused.
 - Moving text to the appendix does not replace deleting repetition. Never drop a significant threat, uncertainty, or decision to meet a length target.
 
 ### Identifiers

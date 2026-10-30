@@ -16,6 +16,8 @@ Work from the [coverage record](checklist.md#coverage-record) and apply its [ans
 
 If a structural gap requires a [reading decision](../SKILL.md#optional-architecture-reading), ask about the reading itself: "The documentation leaves data flows unclear. May I read more of the source code to trace them?" Choices: "Yes, include more code" and "Continue with current sources." If needed, explain once that this reads files without running the application.
 
+If [other threat model documents](../SKILL.md#other-threat-model-documents) were found, ask about them directly: "I found `docs/threat-assessment-2023.md` from 2023. Should I use it as a source?" Choices: "Yes, use it" and "No, leave it out." With several documents, let the user choose per document.
+
 ## Check each question
 
 Before sending a question, check:

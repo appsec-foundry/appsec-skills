@@ -64,7 +64,7 @@ Modeling does not change application code, create tickets, commit files, or publ
 
 ## How it works
 
-1. **Read and summarize.** The assistant reads requirements, design documents, and other supplied sources, then sketches the system and its main data flows. It can read selected code to answer specific architecture questions.
+1. **Read and summarize.** The assistant reads requirements, design documents, and other supplied sources, then sketches the system and its main data flows. It can read selected code to answer specific architecture questions. If it finds other threat model documents, it asks whether to use them.
 2. **Clarify the context.** It asks about important gaps, who may read the model, and the system's purpose, sensitive data, and possible harm. You can correct its understanding in short rounds of up to three questions.
 3. **Identify threats.** It examines how actors could misuse the system's operations or cross permission boundaries, taking existing protections into account. Each scenario is tied to a source or an explicit assumption.
 4. **Recommend changes.** It prioritizes scenarios by possible harm and attack conditions, proposes measures, and describes how to check them. Proposed measures stay distinct from agreed decisions and verified controls.

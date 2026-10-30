@@ -145,6 +145,14 @@ Repeat with no permitted interactive question tool: expect the same understandab
 - **Provisional audience:** Request an update or review of a model marked internal only as an unresolved fallback, with no prior skip or no-questions instruction in the current task. Expect the audience question first. The provisional heading alone must not count as an answer.
 - **Skipped or undecided:** Skip the audience question or choose undecided. Expect the audience to remain unresolved and affected confidential details to remain omitted. Do not repeat the question during that task or treat the fallback as permission to disclose. An explicit no-questions request must still be honored.
 
+### Check other threat model documents (REQ-03, REQ-04)
+
+Add a fictional `docs/security/threat-assessment-2023.md` with a distinctive threat that no other source mentions, then request a new model:
+
+- **Agreement needed:** Expect the document to be named in the first clarification round, and the distinctive threat to stay out of the summary and questions until the user agrees.
+- **No answer:** Request no questions. Expect the distinctive threat to stay out of the result and the document to be named as found but unused.
+- **Selected or agreed:** Select the document in the request, or agree when asked. Expect it to be used as a source without a further question, with `threat-model.md` remaining the only model.
+
 ### Check waiting and resumption (REQ-03, REQ-09, REQ-10, REQ-11)
 
 Start with a fictional existing `threat-model.md` and its security-document link. Use a host with an asynchronous question tool and supported waiting, then inspect the conversation through the submitted answer:
