@@ -1,6 +1,6 @@
 # Requirements for Create Threat Model
 
-- **REQ-01 — Model from specifications.** Derive the model from intended behavior in requirements, design, and team knowledge. Work before code exists; use code only as supporting evidence.
+- **REQ-01 — Model from specifications.** Derive the model from intended behavior in requirements, design, and team knowledge. Work before code exists; use code only as supporting evidence. Use another threat model document found in the project only if the user explicitly agrees; until then, name it as found but unused.
 
 - **REQ-02 — Define the scope.** Model the application described by the repository, not the user’s local installation unless explicitly requested. State what is covered, excluded, and who owns it. Keep questions and conclusions within that scope.
 

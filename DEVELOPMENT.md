@@ -145,7 +145,7 @@ Repeat with no permitted interactive question tool: expect the same understandab
 - **Provisional audience:** Request an update or review of a model marked internal only as an unresolved fallback, with no prior skip or no-questions instruction in the current task. Expect the audience question first. The provisional heading alone must not count as an answer.
 - **Skipped or undecided:** Skip the audience question or choose undecided. Expect the audience to remain unresolved and affected confidential details to remain omitted. Do not repeat the question during that task or treat the fallback as permission to disclose. An explicit no-questions request must still be honored.
 
-### Check other threat model documents (REQ-03, REQ-04)
+### Check other threat model documents (REQ-01, REQ-03, REQ-04)
 
 Add a fictional `docs/security/threat-assessment-2023.md` with a distinctive threat that no other source mentions, then request a new model:
 

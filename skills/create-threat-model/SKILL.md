@@ -89,7 +89,7 @@ No external catalog or profile is required for ordinary modeling. For explicitly
 
 ### Other threat model documents
 
-Use another threat model document only with the user's explicit agreement. This covers any document in the inspected scope that presents itself as a threat model or threat assessment of this system. It excludes the model being created or updated, its exports, project checklists and abuse patterns, and files the user already selected.
+Use another threat model document only with the user's explicit agreement (REQ-01). This covers any document in the inspected scope that presents itself as a threat model or threat assessment of this system. It excludes the model being created or updated, its exports, project checklists and abuse patterns, and files the user already selected.
 
 - Identify each one from its path, title, date, and status. Do not use its content in the summary, questions, or scenarios yet.
 - Ask once, in the first clarification round, which of them to use, naming each one.
