@@ -4,7 +4,7 @@ Show a local repository's size, languages, build manifests, and tracked versus u
 
 ## Install
 
-Copy the complete `repo-profile` directory into your assistant's skill location, or use its supported installation mechanism. Install AppSec Analyzer separately; this skill requires interface 1 with the `repo_profile` capability.
+Copy the complete `repo-profile` directory into your assistant's skill location, or use its supported installation mechanism. Install a [compatible AppSec Analyzer](dependencies.json) separately.
 
 ## Usage
 

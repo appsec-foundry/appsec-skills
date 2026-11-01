@@ -64,23 +64,21 @@ Modeling does not change application code, create tickets, commit files, or publ
 
 ## How it works
 
-1. **Read and summarize.** The assistant reads requirements, design documents, and other supplied sources, then sketches the system and its main data flows. It can read selected code to answer specific architecture questions. If it finds other threat model documents, it asks whether to use them.
-2. **Clarify the context.** It asks about important gaps, who may read the model, and the system's purpose, sensitive data, and possible harm. You can correct its understanding in short rounds of up to three questions.
-3. **Identify threats.** It examines how actors could misuse the system's operations or cross permission boundaries, taking existing protections into account. Each scenario is tied to a source or an explicit assumption.
-4. **Recommend changes.** It prioritizes scenarios by possible harm and attack conditions, proposes measures, and describes how to check them. Proposed measures stay distinct from agreed decisions and verified controls.
-5. **Write and check.** It writes `threat-model.md`, checks the document and its security-document link, and summarizes the main threats, open decisions, and next steps.
+1. **Understand the system.** The assistant reads your documents and asks about gaps that could affect the model, such as who uses the system and what needs protection.
+2. **Assess what could go wrong.** It describes concrete threats, considers existing protections, and recommends changes and ways to check them.
+3. **Write the model.** It saves `threat-model.md` and summarizes the main threats, open questions, and next steps.
 
-You can answer “unknown,” skip questions, or request no questions. Unconfirmed assumptions stay visible. If there is too little context to describe a concrete system, the assistant explains what is missing.
+You can skip questions or request no questions. Unknowns and assumptions remain visible; if essential context is missing, the assistant explains what it needs.
 
-The model covers the application and its supported configurations, including optional features. To assess a particular installation, request that scope explicitly. Later, use [update-threat-model](../update-threat-model/README.md) to revise the affected parts when requirements, design, or control evidence changes.
+The model covers the application as designed, including optional features. To focus on a particular deployment, say so in your request.
 
 ### When code is available
 
-The assistant can read selected code and configuration to resolve specific architecture questions. It also offers broader architecture reading once, even when documentation is sufficient. **Broader reading requires your opt-in**, which you can include in the initial request.
+The assistant can read selected code and configuration to clarify architecture questions. It also offers to read more broadly to understand the architecture. **Broader reading requires your opt-in**, which you can include in the initial request.
 
-That reading identifies components, entry points, data stores, external connections, authentication and authorization paths, and deployment configuration. Code observations support the model; conflicts with requirements remain visible. This is not a code vulnerability scan, and the assistant does not run the application or tests.
+Code helps explain how the system is built; it does not replace requirements or resolve conflicting evidence. This is not a code vulnerability scan, and the assistant does not run the application or tests.
 
-Reading has [fixed limits](SKILL.md#discovery-budget), so large projects may be only partly examined. Name the service or feature to focus on; the model records coverage gaps.
+For large projects, name the service or feature to focus on. Reading has [fixed limits](SKILL.md#discovery-budget), and the model records coverage gaps.
 
 ## Common requests
 
@@ -144,63 +142,18 @@ Internal models may include confidential findings only when the repository's rea
 
 If you skip the audience question, a new model is provisionally marked internal. Disclosure questions remain recorded as unresolved; affected confidential details are omitted. The audience notice does not restrict file access or authorize publication. See the [audience notices](references/audience.md#audience-notice).
 
-## Use the model during development
+## Keep the model current
 
-After implementing a measure, supply evidence for a focused update. For the payment example above:
+Use [update-threat-model](../update-threat-model/README.md) or request an update through this skill when requirements, design, or evidence about controls changes. Supply the change documents and any verification results; a merged PR or test code alone does not establish that a control works.
 
-```text
-Use update-threat-model to reassess T-003 using docs/payment-change.md
-and docs/payment-test-results.md.
-```
+## Add project context
 
-This example requires [both skills to be installed](../update-threat-model/README.md#install). You can also make the same request with `create-threat-model` alone.
+The skill uses a checklist to find missing context and common abuse patterns to explore what could go wrong. You can adapt both without editing the skill:
 
-A link to test code or a merged PR alone does not establish that a control works.
+- **Checklist:** Add project-specific questions or explain exclusions in `threat-model-checklist.md` at the project root. See the [project checklist format](references/checklist.md#project-checklist).
+- **Abuse patterns:** Add cases such as splitting purchases to bypass approval limits in `threat-model-abuse-cases.md` at the project root. See the [customization format](references/abuse-cases.md#project-customizations).
 
-## Adapt the checklist
-
-The [modeling checklist](references/checklist.md) helps find missing context. Add project-specific items or exclusions in `threat-model-checklist.md` at the project root:
-
-```markdown
-# Threat model checklist
-
-## Additional items
-
-| ID | Aspect | Clarified when the model states |
-| --- | --- | --- |
-| P-01 | Payment provider | Which payment data reaches the provider and how refunds are authorized. |
-
-## Not applicable
-
-| ID | Reason |
-| --- | --- |
-| C-10 | The service processes no personal data. |
-```
-
-Use unique `P-` IDs for additions and reasons for exclusions. Contradicted exclusions stay open. “Clarified” means the information is available, not that a control has been tested. Project files survive skill updates.
-
-## Add project abuse patterns
-
-The skill checks [reusable abuse patterns](references/abuse-cases.md), such as bypassing approvals or repeating one-time actions, against your system and its controls.
-
-Add project patterns in `threat-model-abuse-cases.md` at the project root:
-
-```markdown
-# Project abuse patterns
-
-## Additions
-
-### PAC-01 — Split requests to bypass an approval threshold
-
-- Applies when: Approval limits apply to an employee's total requested amount.
-- Abuse and harm: An employee splits one purchase to avoid approval and spend beyond their authority.
-- Project basis: Payment policy requires approval of the total purchase, including related requests.
-- Examine: How related requests are identified and the aggregate limit is enforced.
-```
-
-Use your actual policy and stable `PAC-` IDs. To refine or exclude default `AC-` patterns, see the [customization format](references/abuse-cases.md#project-customizations). Then request an update against the revised file.
-
-You can also name organization guidance or known threats in your request. The skill records their sources and applicability; see [supported security context](references/security-context.md).
+These files survive skill updates. After changing them, request a model update. You can also name company guidance or known threats in your request; see [supported security context](references/security-context.md).
 
 ## Optional JSON or YAML export
 
@@ -209,13 +162,7 @@ Use create-threat-model to export threat-model.md as OTM YAML.
 Keep the Markdown model unchanged and explain any export limitations.
 ```
 
-The skill supports **Open Threat Model (OTM) 0.2.0** in JSON and YAML. Default filenames are `threat-model.otm.json` and `threat-model.otm.yaml`. Exports are snapshots; regenerate them after model changes.
-
-OTM needs numerical assessments that a qualitative model may lack. The assistant explains missing inputs instead of inventing numbers. IDs and context are retained, but other tools may not preserve additional attributes. Schema validation does not establish importer compatibility. See the [export guide](references/otm-export.md).
-
-## Recommended model
-
-Use a provider's current top-tier model at high reasoning effort. The skill cannot check or enforce this, so select the model before you start.
+Open Threat Model (OTM) exports are snapshots; regenerate them after model changes. The assistant explains missing inputs and compatibility limits. See the [export guide](references/otm-export.md) for the supported version, required assessments, and filenames.
 
 ## Install from a local checkout
 

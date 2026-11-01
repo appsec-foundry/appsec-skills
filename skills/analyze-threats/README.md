@@ -62,7 +62,7 @@ The comparison addresses who can use a forwarded link, how access can be withdra
 
 ```text
 Use analyze-threats for the changes between main and HEAD.
-Our model is docs/security/threat-model.md; T-003 covers tenant exports.
+Our model is threat-model.md; T-003 covers tenant exports.
 Check whether its assumptions and controls still hold.
 Keep the model unchanged and suggest any necessary updates.
 ```
@@ -77,7 +77,7 @@ Return prioritized findings, source locations, reviewed scope, and open question
 Do not ask questions; mark conclusions that need more context as unresolved.
 ```
 
-Where the host supports separate agents, change reviews run in an agent that receives the selected scope and sources without the author's conversation. Author claims reach it as unverified statements. Without agent support, review runs in the current conversation. The result states whether it was independent.
+Where the host supports separate agents, change reviews run separately from the author's conversation. Otherwise, review runs in the current conversation. The result states whether it was independent.
 
 The skill supplies no CI service or merge gate. Automated use needs host-enforced read-only tools, source scope, execution limits, and cancellation.
 
@@ -98,12 +98,12 @@ Suppose a route requires login but fetches an export by ID without checking its 
 Analysis leaves the model unchanged. To record its findings, request a focused update:
 
 ```text
-Use create-threat-model to update T-003 in docs/security/threat-model.md
+Use create-threat-model to update T-003 in threat-model.md
 for the export change described in this analysis. Preserve other scenarios
 and keep the worker-side tenant check marked as planned until verified.
 ```
 
-If `create-threat-model` is unavailable, take the findings and scenario references to your team's modeling process.
+This example requires [create-threat-model](../create-threat-model/README.md) and a model at the project root. For a model elsewhere, use your team's modeling process.
 
 ## Company context
 

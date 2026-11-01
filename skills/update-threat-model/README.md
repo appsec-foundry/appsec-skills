@@ -15,9 +15,11 @@ npx skills@1.7.2 add appsec-foundry/appsec-skills --skill update-threat-model
 
 Install or update both skills from the same collection revision where possible. For a local checkout, replace `appsec-foundry/appsec-skills` in both commands with the same checkout path.
 
-For manual installation, copy both complete skill directories, including `create-threat-model`'s `requirements.md` and `references/`, into your assistant's skill location. If required guidance is missing or conflicting, the assistant explains the problem and leaves the model unchanged.
+For manual installation, copy both complete skill directories into your assistant's skill location.
 
 ## Use
+
+The model must be `threat-model.md` at the project root. Other locations are unsupported. If no model exists yet, use [create-threat-model](../create-threat-model/README.md) first.
 
 ```text
 Use update-threat-model to incorporate the sharing feature in docs/sharing.md
@@ -47,8 +49,8 @@ Do not ask questions; record unresolved assumptions in the model.
 
 Questions use your language; the model keeps its existing language. Unknowns remain visible, and a planned measure is not recorded as verified. The shared rules for [reading code and configuration](../create-threat-model/README.md#when-code-is-available) apply here too: targeted reading can clarify architecture questions; broader reading requires your opt-in.
 
-The supported model location is `<repo>/threat-model.md`. A model at another location is left unchanged; the assistant does not move or duplicate it. An update may also add a missing model link to the repository's `SECURITY.md` or `security.md`, preserving existing disclosure instructions. If neither security document exists, it creates a minimal root `SECURITY.md` with the link.
+An update also ensures the model is linked from `SECURITY.md` or `security.md`, creating a minimal `SECURITY.md` if needed.
 
-If no maintained model exists, use [create-threat-model](../create-threat-model/README.md) first. An update request does not create a replacement model or authorize code changes, commits, publication, or risk acceptance. Read-only review requests remain read-only.
+Updates do not change application code, commit files, publish the model, or accept risks on your behalf.
 
 See the shared guide for [audience and confidentiality](../create-threat-model/README.md#internal-or-public-models), [reading limits](../create-threat-model/SKILL.md#discovery-budget), and [the update workflow](../create-threat-model/SKILL.md#update-affected-scenarios).

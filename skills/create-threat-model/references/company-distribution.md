@@ -80,7 +80,7 @@ Include these company sources:
 - /work/company-skills/context/known-threats.md
 ```
 
-Replace these paths with accessible locations. Give company requirements and threat patterns stable IDs and record their version. See [supported security context](security-context.md). For project-specific additions, use the README's [checklist](../README.md#adapt-the-checklist) and [abuse-pattern](../README.md#add-project-abuse-patterns) formats.
+Replace these paths with accessible locations. Give company requirements and threat patterns stable IDs and record their version. See [supported security context](security-context.md). For project-specific additions, use the [checklist](checklist.md#project-checklist) and [abuse-pattern](abuse-cases.md#project-customizations) formats.
 
 The installer copies selected skills, not the sibling `context/` directory. Make those context files available separately. A host configuration can explicitly select them; a custom default-loading workflow would be a company change to maintain and test.
 

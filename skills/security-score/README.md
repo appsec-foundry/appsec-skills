@@ -1,6 +1,6 @@
 # Security score skill
 
-This skill runs the standalone [Security Score Python tool](https://github.com/appsec-foundry/appsec-analyzer-tools/tree/main/tools/security-score) and explains its results. The tool scores repositories from 0–100/A–F and classifies the security relevance of changes as high, medium, low, or unclear. It makes no model calls for scanning or calculation.
+This skill runs the standalone [Security Score Python tool](https://github.com/appsec-foundry/appsec-analyzer-tools/tree/main/tools/security-score). Repositories receive a **0–100 score and A–F grade**; changes receive a **high, medium, low, or unclear security relevance** classification. Scanning and calculation make no model calls.
 
 ## Install
 
@@ -18,6 +18,6 @@ Use security-score for the staged changes with --details.
 Use security-score for PR https://github.com/owner/project/pull/42.
 ```
 
-The assistant resolves the trusted tool path outside the examined repository and invokes its CLI. A repository receives a numeric score and grade; a change receives a relevance classification and findings, never a numeric score. `--details` adds reasons, coverage, findings, and calculation details. `--json` and `--yaml` request structured output. A high score does not establish safety; insufficient coverage withholds the score.
+`--details` adds reasons, coverage, findings, and calculation details. `--json` and `--yaml` request structured output. A high score does not establish safety; insufficient coverage withholds the score.
 
-For direct CLI use, supported inputs, limitations, rule maintenance, and the optional `--engine analyzer` variant, see the [tool README](https://github.com/appsec-foundry/appsec-analyzer-tools/tree/main/tools/security-score#readme). The assistant workflow is in [SKILL.md](SKILL.md), and its user-facing contract is in [requirements.md](requirements.md).
+For direct CLI use, supported inputs, limitations, rule maintenance, and the optional `--engine analyzer` variant, see the [tool README](https://github.com/appsec-foundry/appsec-analyzer-tools/tree/main/tools/security-score#readme). See also the [assistant workflow](SKILL.md) and [requirements](requirements.md).
