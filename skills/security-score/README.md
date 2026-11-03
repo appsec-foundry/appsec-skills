@@ -33,4 +33,9 @@ See the [token configuration](https://github.com/appsec-foundry/appsec-tools/blo
 Source files and host settings are read through the API without
 a local checkout. Self-managed GitLab uses the internal engine.
 
+Repository URLs work with or without `.git`. HTTP proxies for HTTPS scans are
+selected from `HTTPS_PROXY`, `ALL_PROXY`, then `HTTP_PROXY`, with `NO_PROXY` for
+host exclusions. See the [proxy reference](https://github.com/appsec-foundry/appsec-tools/blob/main/security-score/references/usage.md#http-proxies)
+for supported proxy URLs and CONNECT behavior.
+
 For direct CLI use, supported inputs, limitations, rule maintenance, and the optional `--engine analyzer` variant, see the [tool README](https://github.com/appsec-foundry/appsec-tools/tree/main/security-score#readme). See also the [assistant workflow](SKILL.md) and [requirements](requirements.md).
