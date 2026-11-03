@@ -1,6 +1,7 @@
 ---
 name: update-threat-model
 description: Update an existing maintained threat model after changes to requirements, design, features, or control evidence. Preserve scenario IDs, manual edits, and unaffected decisions. Requires create-threat-model for the shared modeling workflow. Not for initial creation, read-only reviews, or code vulnerability scans.
+license: Apache-2.0
 metadata:
   version: "0.1.0"
 ---

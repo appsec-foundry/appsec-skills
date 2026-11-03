@@ -1,5 +1,7 @@
 # AppSec Skills
 
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
+
 Application security skills for coding assistants. Part of [AppSec Foundry](https://github.com/appsec-foundry).
 
 ## Skills
@@ -57,3 +59,7 @@ Each `skills/<name>/` directory contains a usage guide (`README.md`), assistant 
 For company use, see [Create Threat Model distribution and updates](skills/create-threat-model/README.md#company-distribution-and-customization) or [Analyze Threats company context](skills/analyze-threats/README.md#company-context).
 
 To work on this collection, follow [AGENTS.md](AGENTS.md) and the affected skill's requirements. Run `make test` for local tests without model calls. `make install-dev` installs a separate `create-threat-model-dev` snapshot for Codex and Claude Code; rerun it after changes. See [DEVELOPMENT.md](DEVELOPMENT.md) for host-specific installation and a fictional test project.
+
+## License
+
+Licensed under the [Apache License 2.0](LICENSE). See [NOTICE](NOTICE) for attribution. Each skill declares `license: Apache-2.0` in its `SKILL.md`, so the license stays visible when a single skill is installed.

@@ -1,6 +1,7 @@
 ---
 name: security-score
 description: Give a deterministic 0–100/A–F repository score or assess the security relevance of changes, diffs and PRs/MRs using the separately installed Security Score Python tool. Analyzer is an explicit repository-only option.
+license: Apache-2.0
 ---
 
 # Security score

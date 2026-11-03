@@ -1,6 +1,7 @@
 ---
 name: analyze-threats
 description: Analyze threats and misuse scenarios in features, code changes, pull/merge requests, and design decisions, and compare them with an existing threat model or company threat catalog. Not for creating or maintaining a threat model; use create-threat-model for that.
+license: Apache-2.0
 ---
 
 # Analyze threats

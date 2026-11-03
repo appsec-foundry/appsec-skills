@@ -1,6 +1,7 @@
 ---
 name: repo-profile
 description: Show the installed AppSec Analyzer's deterministic repository profile (size, languages, build manifests, tracked versus untracked content) without model calls or security judgement.
+license: Apache-2.0
 ---
 
 # Repository profile

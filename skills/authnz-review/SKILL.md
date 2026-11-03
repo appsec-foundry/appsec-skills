@@ -1,6 +1,7 @@
 ---
 name: authnz-review
 description: Delegate an independent authentication and authorization review to AppSec Analyzer with explicit source and model-use authorization.
+license: Apache-2.0
 ---
 
 # Authentication and authorization review

@@ -1,6 +1,7 @@
 ---
 name: create-threat-model
 description: Create, update, or review a maintained threat model from requirements, specifications, design documents, and team context, with optional bounded code reading. Use for system, feature, or design-change threat modeling, including before implementation exists. Not a code vulnerability scan.
+license: Apache-2.0
 metadata:
   version: "0.1.0"
 ---
