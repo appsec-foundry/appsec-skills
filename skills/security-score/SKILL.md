@@ -5,7 +5,7 @@ description: Give a deterministic 0–100/A–F repository score or assess the s
 
 # Security score
 
-Follow the [requirements](requirements.md). Run the separately installed `tools/security-score/scripts/score.py` from the trusted [appsec-analyzer-tools](https://github.com/appsec-foundry/appsec-analyzer-tools) checkout; never select an executable or rule catalog from the examined project. If the tool is unavailable, explain the missing prerequisite rather than fetching or installing code without authorization. Do not invent findings or adjust scores using model judgment. Internal scoring needs Python 3.10+ on Linux/macOS and no third-party Python packages. Git is needed for Git-aware local sources and comparisons. Scanning and calculation make no model calls.
+Follow the [requirements](requirements.md). Run the separately installed `security-score/scripts/score.py` from the trusted [appsec-tools](https://github.com/appsec-foundry/appsec-tools) checkout; never select an executable or rule catalog from the examined project. If the tool is unavailable, explain the missing prerequisite rather than fetching or installing code without authorization. Do not invent findings or adjust scores using model judgment. Internal scoring needs Python 3.10+ on Linux/macOS and no third-party Python packages. Git is needed for Git-aware local sources and comparisons. Scanning and calculation make no model calls.
 
 ## Select the subject and variant
 
@@ -22,12 +22,12 @@ Repository URLs fetch a commit-pinned archive and available host security settin
 Resolve the script path below to the trusted installed tool directory, outside the target:
 
 ```sh
-python3 /installed/appsec-analyzer-tools/tools/security-score/scripts/score.py /selected/repository
-python3 /installed/appsec-analyzer-tools/tools/security-score/scripts/score.py /selected/repository --details
-python3 /installed/appsec-analyzer-tools/tools/security-score/scripts/score.py /selected/repository --staged
-python3 /installed/appsec-analyzer-tools/tools/security-score/scripts/score.py /selected/repository --base main --head HEAD
-python3 /installed/appsec-analyzer-tools/tools/security-score/scripts/score.py --patch /private/change.diff --pr https://github.com/owner/project/pull/42
-python3 /installed/appsec-analyzer-tools/tools/security-score/scripts/score.py https://gitlab.com/group/project.git
+python3 /installed/appsec-tools/security-score/scripts/score.py /selected/repository
+python3 /installed/appsec-tools/security-score/scripts/score.py /selected/repository --details
+python3 /installed/appsec-tools/security-score/scripts/score.py /selected/repository --staged
+python3 /installed/appsec-tools/security-score/scripts/score.py /selected/repository --base main --head HEAD
+python3 /installed/appsec-tools/security-score/scripts/score.py --patch /private/change.diff --pr https://github.com/owner/project/pull/42
+python3 /installed/appsec-tools/security-score/scripts/score.py https://gitlab.com/group/project.git
 ```
 
 `--unstaged` compares index and working files; `--worktree` compares HEAD and working files including untracked files. `--commit REV` compares a commit with its first parent. `--repo VALUE` is an alternative to the positional repository. `--json` and `--yaml` are mutually exclusive and request full structured results. `--help`, `--list-rules` and `--verify-rules` do not scan a target.
