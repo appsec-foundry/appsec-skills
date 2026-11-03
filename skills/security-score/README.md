@@ -25,7 +25,12 @@ with --token-env GITLAB_READ_TOKEN.
 Remote scans support GitHub.com, GitLab.com and self-managed GitLab over HTTPS,
 including internal addresses and custom ports. The GitLab token needs `read_api`
 and project access; set it in the named environment variable before starting
-your assistant. Source files and host settings are read through the API without
+your assistant. You can also configure automatic token selection once in the
+tool's user-level `token-hosts.json`, mapping exact HTTPS API origins to variable
+names such as `GIT_TOKEN`. It starts anonymously and retries an authentication
+failure once with the matching token; `--token-env` overrides that mapping.
+See the [token configuration](https://github.com/appsec-foundry/appsec-tools/blob/main/security-score/references/usage.md#tokens-and-rate-limits).
+Source files and host settings are read through the API without
 a local checkout. Self-managed GitLab uses the internal engine.
 
 For direct CLI use, supported inputs, limitations, rule maintenance, and the optional `--engine analyzer` variant, see the [tool README](https://github.com/appsec-foundry/appsec-tools/tree/main/security-score#readme). See also the [assistant workflow](SKILL.md) and [requirements](requirements.md).
