@@ -15,7 +15,7 @@ Accept a local directory, an explicitly selected HTTPS GitHub/GitLab repository 
 
 For a PR/MR, establish its repository and obtain the selected metadata and diff through an authorized host connector or read-only Git tooling. Pin base/head revisions where available. Pass that local comparison, or save the received patch to a private temporary file and pass `--patch` with the canonical `--pr` or `--mr` URL. The runtime does not independently verify that a host-supplied patch is current. Explain unavailable remote context in details; do not substitute a full repository score. Retrieval authorizes no comments, review-status changes, merges or project execution.
 
-Repository URLs fetch a commit-pinned archive and available host security settings. The runtime never checks out or executes the project. Direct URLs support GitHub.com and GitLab.com HTTPS; other hosts and SSH need an authorized local checkout. Public reads are the default. `--token-env NAME` selects an existing operator-provided read-only API credential; never expose its value in prompts, URLs, arguments or results. Unreadable settings remain unknown.
+Repository URLs fetch selected files at a pinned commit and available host security settings. The runtime never checks out or executes the project. Direct HTTPS URLs support GitHub.com and GitLab instances, including self-managed hosts; the host and optional port come from the explicitly selected repository URL. Other providers and SSH need an authorized local checkout. Public reads are the default. `--token-env NAME` selects an existing operator-provided read-only API credential; GitLab needs `read_api` and project access. Never expose its value in prompts, URLs, arguments or results. Unreadable settings remain unknown.
 
 ## Execute
 
