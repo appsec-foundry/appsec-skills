@@ -3,7 +3,7 @@ name: create-threat-model
 description: Create, update, or review a maintained threat model from requirements, specifications, design documents, and team context, with optional bounded code reading. Derive threat scenarios first, then clarify the facts that decide them with the user, assess risk, and develop measures. Use for system, feature, or design-change threat modeling, including before implementation exists. Not a code vulnerability scan.
 license: Apache-2.0
 metadata:
-  version: "0.2.0"
+  version: "0.2.1"
 ---
 
 # Create a threat model
@@ -61,7 +61,14 @@ Determine the operation from the request, not from the skill's name or from the 
 
 The minimum basis is a system-specific purpose, one valuable asset or operation, one actor, and one interaction. A user description can supply it. Below that, report an incomplete outcome and the missing basis; do not write an empty model or replace an existing one with generic threats.
 
-Then show the system picture as a proposal: who uses the system and for what; a readable diagram of the main flow with three to six familiar components, origin marks, and labeled boundaries; at most two material uncertainties; and the source basis in one line. For focused updates, show only the affected part. Proceed to phase 2 without asking for approval. Ask in phase 1 only what blocks the work: the target or scope, the audience, and the purpose when no source states it.
+Then show the system picture as a proposal:
+
+- who uses the system and for what;
+- a plain-text diagram of the recognized architecture: every actor, component, data store, external service, and entry point found in the inspected sources, their main flows, labeled trust boundaries, an origin mark per element, and optional elements marked. Group similar elements only when the diagram would otherwise be unreadable, and name the members below it. Do not read further sources for the diagram;
+- at most two material uncertainties;
+- the source basis in one line.
+
+For focused updates, show only the affected part. After an architecture-reading opt-in, show the diagram again with what the code added. Proceed to phase 2 without asking for approval. Ask in phase 1 only what blocks the work: the target or scope, the audience, and the purpose when no source states it.
 
 ## Phase 2: Derive threat candidates
 
