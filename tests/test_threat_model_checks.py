@@ -96,13 +96,14 @@ class TranscriptCheckTests(unittest.TestCase):
             questions("Who should be able to read this threat model?",
                       options=("Internal", "Public", "Not decided yet")),
             message("Candidates: T-001 document changes after review; T-002 cross-customer document access."),
-            questions("T-001: Does replacing a document reopen the review?",
-                      "T-002: Do uploaded documents contain bank or health data?"),
+            questions("T-001: Does replacing a document reopen the review?"),
+            message("→ T-001 stays high. Question 2 of about 2 · T-002 Cross-customer document access"),
+            questions("T-002: Do uploaded documents contain bank or health data?"),
             write_model(),
             questions("T-001: Must customers be able to correct a document after approval?"),
         ], "--scenario-bound", "--no-code")
         self.assertEqual(code, 0, result)
-        self.assertEqual(result["summary"]["rounds"], 3)
+        self.assertEqual(result["summary"]["rounds"], 4)
         self.assertEqual(result["summary"]["questions_before_candidates"], 1)
         self.assertEqual(result["summary"]["questions_after_first_write"], 1)
 
@@ -118,10 +119,12 @@ class TranscriptCheckTests(unittest.TestCase):
                       long_title,
                       "May I read more of the source code to trace data flows?"),
             questions("What is the worst outcome? And who would notice it?", options=()),
+            questions("T-001: Does replacing a document reopen the review?",
+                      "T-002: Do uploaded documents contain bank or health data?"),
         ], "--scenario-bound", "--no-code")
         self.assertEqual(code, 1)
         codes = {f["code"] for f in result["findings"]}
-        self.assertTrue({"Q01", "Q02", "Q03", "Q04", "Q05", "Q06", "Q07", "Q09", "Q11"} <= codes,
+        self.assertTrue({"Q01", "Q02", "Q03", "Q04", "Q05", "Q06", "Q07", "Q09", "Q11", "Q12"} <= codes,
                         result["findings"])
 
 

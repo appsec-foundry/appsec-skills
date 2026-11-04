@@ -68,8 +68,8 @@ Modeling does not change application code, create tickets, commit files, or publ
 ## How it works
 
 1. **Understand the system.** The assistant reads your documents and shows what it understood: who uses the system, what it handles, and where trust changes, with a text diagram of the recognized architecture. Each element is marked as intended, observed in code, or assumed. A single requirements file is enough to start; the picture is then smaller, not invented.
-2. **Derive threat candidates.** It lists what could go wrong, with a stable ID, the harm, and the one fact that decides each candidate.
-3. **Ask what decides them.** Each question names the candidate it belongs to and what your answer changes, for example: "T-003: Does an approval stay valid when the recipient changes?" Each round has at most three questions; you can skip or stop, and unknowns remain visible.
+2. **Derive threat candidates.** It lists what could go wrong, one line per candidate with a stable ID and a provisional priority.
+3. **Ask what decides them, one question at a time.** Each question starts with brief background: what could happen, what the documents already say, and what is open. The question names its candidate, for example "T-003: Does an approval stay valid when the recipient changes?", and each answer option says what it changes. After every answer you see its effect, and at the end what your answers changed. You can skip or stop; unknowns remain visible.
 4. **Assess and recommend.** It explains priorities, considers existing protections, and recommends changes and ways to check them.
 5. **Write the model.** It saves `threat-model.md` and summarizes the main threats, open decisions, and next steps.
 

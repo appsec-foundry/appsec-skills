@@ -3,7 +3,7 @@ name: create-threat-model
 description: Create, update, or review a maintained threat model from requirements, specifications, design documents, and team context, with optional bounded code reading. Derive threat scenarios first, then clarify the facts that decide them with the user, assess risk, and develop measures. Use for system, feature, or design-change threat modeling, including before implementation exists. Not a code vulnerability scan.
 license: Apache-2.0
 metadata:
-  version: "0.2.1"
+  version: "0.3.0"
 ---
 
 # Create a threat model
@@ -79,13 +79,13 @@ Derive candidates from the system picture, not from a catalog (REQ-06):
 - Merge overlaps, do not produce one candidate per pattern, and do not treat a catalog as coverage. With thin input most candidates stay conditional; keep them and their condition rather than resolving them by assumption.
 - For updates, derive candidates only for changed flows, assumptions, and shared boundaries, and reopen decisions whose assumptions changed.
 
-Show the candidates briefly, with IDs, before asking anything. This list is what the user's answers will change.
+Show the candidates before asking anything, one line each: ID, what could happen, and the provisional priority. Then say how many questions you expect. The deciding facts belong in the questions, not in this list.
 
 ## Phase 3: Ask what decides the candidates
 
 Every question names the scenario or checklist item it belongs to and what the answer changes (REQ-03, REQ-14). The confirmation of business purpose, data sensitivity, and worst-case consequences happens through these questions, bound to the candidates that depend on them, not as a separate questionnaire.
 
-Follow the [interview guide](references/interview.md): at most three independently answerable questions per round, ordered by their effect on the assessment, with the audience and permission questions counting toward the limit. Wait for answers or an explicit skip. Skipped or unknown facts remain open and do not lower risk; a skipped permission does not authorize the dependent action. In no-questions mode, continue with the candidates as conditional and state what remains unconfirmed.
+Follow the [interview guide](references/interview.md): one question about a scenario or checklist item per round, ordered by its effect on the assessment, each with brief background and what each answer changes. After each answer state its effect, and after the last show what the answers changed. Wait for answers or an explicit skip. Skipped or unknown facts remain open and do not lower risk; a skipped permission does not authorize the dependent action. In no-questions mode, continue with the candidates as conditional and state what remains unconfirmed.
 
 Stop asking when further answers would not change a scenario, priority, or response. Do not ask to fill the checklist.
 

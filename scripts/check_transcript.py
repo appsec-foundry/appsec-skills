@@ -17,6 +17,7 @@ import sys
 from pathlib import Path
 
 SCENARIO_OR_ITEM = re.compile(r"\b(T|C|P|PAC|AC)-\d{2,3}\b")
+SCENARIO_START = re.compile(r"^\W*(T|C|P|PAC|AC)-\d{2,3}\b")
 PERMISSION_START = re.compile(r"^\s*(may i|should i|which file|do you want|darf ich|soll ich|welche datei)\b", re.IGNORECASE)
 AUDIENCE_HINT = re.compile(r"read this threat model|who should be able to read|lesen (darf|soll|dürfen)|public", re.IGNORECASE)
 READING_HINT = re.compile(r"(read|lesen).{0,60}(code|quellcode|source)", re.IGNORECASE)
@@ -97,6 +98,8 @@ def check_transcript(events, no_code=False, scenario_bound=False, max_questions=
             questions_before_candidates += len(data)
         if len(data) > max_questions:
             add("error", "Q01", f"round {rounds} has {len(data)} questions (limit {max_questions})")
+        if len(data) > 1 and any(SCENARIO_START.match(question_text(q)) for q in data):
+            add("error", "Q12", f"round {rounds} asks a scenario question together with {len(data) - 1} other questions")
         for question in data:
             title = question_text(question)
             options = [str(o) for o in (question.get("options") or [])]

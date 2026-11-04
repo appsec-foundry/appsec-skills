@@ -4,9 +4,21 @@ Read this guide before the first question. It governs every question the skill a
 
 ## Form of a question
 
-A question after phase 2 has three parts: the scenario or checklist item it belongs to, one concrete fact or choice, and what the answer changes.
+A question about a scenario or checklist item, after phase 2 or in the threat dialogue, has four parts:
 
-> T-003: What happens to the existing approval when the recipient of a payment changes? This decides whether T-003 stays high or is resolved.
+1. **Heading** in chat: position, ID, and title with the provisional priority.
+2. **Background** in chat, two or three sentences: what could happen, what the sources already establish, and what is open. Name the decisive source.
+3. **Question**: one short sentence on one fact or choice, beginning with the ID, so it is clear without the background.
+4. **Effect**: each option says what that answer changes in priority, applicability, or recommendation. For an open question, the background says what the answer decides.
+
+> Question 1 of about 3 · T-003 Payment details can change after approval (provisional: high)
+>
+> Background: The payment-edit rules let supplier staff correct the recipient after approval. The approval design does not say whether a correction cancels the approval.
+>
+> T-003: Does an approval stay valid when the recipient changes?
+> - Yes: T-003 stays high; renewed approval is recommended.
+> - No: the cancellation is a reported control; the next step is to verify it.
+> - Unknown: T-003 stays high under that condition.
 
 Before the candidates exist, only these questions are allowed, each on one point: the target or scope, the audience, the purpose when no source states it, the operation when it is unclear, the use of another threat model document found in the project, and permission to read more code. The reading question explains the gap: "The documentation leaves data flows unclear. May I read more of the source code to trace them?" with the choices "Yes, include more code" and "Continue with current sources."
 
@@ -15,21 +27,22 @@ Check each question before sending it:
 1. **Necessary.** Would the answer change a scenario, priority, treatment, scope, or authorized action? Otherwise omit it.
 2. **In scope.** It concerns the application or the selected feature, not the user's installation, and the facts it depends on are established.
 3. **Answerable.** One short sentence asks for one fact or choice. If the user could accept one clause and reject another, split it. Keep data, recipients, consequences, and permissions separate.
-4. **Clear to answer.** A bare answer has one meaning: "Yes," "No," and "Unknown" for a proposal, actual alternatives for a choice, otherwise one short open question that says a short answer or "unknown" is fine. One selection must not confirm several assets, several harms, or a permission.
+4. **Clear to answer.** A bare answer has one meaning: "Yes," "No," and "Unknown" for a proposal, actual alternatives for a choice, otherwise one short open question that says a short answer or "unknown" is fine. One selection must not confirm several assets, several harms, or a permission. No option asks for additional text; ask a needed detail, such as where a rule is documented, as its own follow-up question.
 5. **New.** Revisit an answered, skipped, or unknown point only when new evidence changes it or the user reopens it.
 
 Ask what a loss would prevent, not whether a clearly harmful outcome counts as harm. Ask about existing or intended rules, not whether the team wants a protection measure. Attack feasibility is yours to analyze; the user need not prove an attack or assign probabilities. Do not recommend factual answers, and remember that a choice cannot add a claim or a permission: a negative or unknown permission answer leaves the action unauthorized.
 
 ## Rounds
 
-- At most three independently answerable questions per round. Ask dependent questions sequentially. Audience, scope, destination, document-use, and permission questions count toward the limit.
-- Order by effect: first the facts that move the most candidates or the highest provisional priority.
-- Before another round, say which assessment or next action the remaining answers would affect. Give the team room to add concerns without a mandatory extra round.
-- Stop when further answers would not change a scenario, priority, or response, and complete the operation. Do not continue to fill checklist entries.
+- Ask a question about a scenario or checklist item alone, one per round. Target, scope, audience, destination, document-use, and permission questions may share a round of at most three, never with a scenario question. Ask dependent questions sequentially.
+- Order by effect: first the facts that move the most candidates or the highest provisional priority. Announce the expected number with the candidate list and keep it current in the headings.
+- After each answer, state its effect in one line before the next question: "→ T-003 stays high; recommendation: renewed approval. Basis: your statement, unverified." Say so when an answer changes nothing.
+- Give the team room to add concerns without a mandatory extra round.
+- Stop when further answers would not change a scenario, priority, or response. Do not continue to fill checklist entries. Show what the answers changed, one line per affected scenario with its previous and current priority or recommendation, plus the points that remain open; then complete the operation.
 
 ## Ask and wait
 
-Use the host's interactive question tool when available and permitted; put the complete question and choices there without repeating them in chat. Otherwise ask in chat and yield. Ask in the user's language, even when the model uses another language.
+Use the host's interactive question tool when available and permitted. Put the heading and background in chat directly before it, and the question and choices in the tool without repeating them in chat. Ask an open question in chat. Without such a tool, ask in chat and yield. Ask in the user's language, even when the model uses another language.
 
 A displayed question is not an answered one. If an asynchronous tool returns before the user replies, the question is pending: do useful independent work within scope and budget, then use the host's waiting mechanism within its limits. Do not send a final "no files changed" while the host supports waiting, repeat the question, perform filler reads, or treat a timeout or preselected option as a reply. After the answer, resume the pending step and carry the operation through to its deliverable; do not restart the workflow. If the host has only chat turns, present the questions and yield, making clear that the task awaits answers.
 
@@ -54,7 +67,7 @@ Enter directly at the scenarios of the existing model with their recorded scope,
 For each scenario:
 
 1. **Explain it** in a few sentences: ID, actor, action, prerequisites, concrete harm, relevant existing protection, and the uncertainty that matters.
-2. **Clarify decisive facts** with questions in the form above: business rules, permitted actions, reach, recovery, or control behavior that could change the assessment.
+2. **Clarify decisive facts** one question at a time in the form above: business rules, permitted actions, reach, recovery, or control behavior that could change the assessment. The explanation from step 1 is the background of the first question.
 3. **Propose the assessment** under the model guide's [priority guidance](model-guide.md#explain-priorities) and say how the answers changed or supported it. A reported control stays reported until evidence shows it works. If the user disagrees, clarify the differing premise; keep an unresolved difference visible rather than changing the rating to obtain agreement.
 4. **Develop measures** under the [improvement guidance](model-guide.md#derive-actionable-improvements): a concrete change that addresses the cause, alternatives only where protection, workflow, effort, or remaining exposure differ materially, and questions about constraints only when they determine the choice. State the expected remaining risk and the checks for intended behavior and representative abuse. Effective existing protection may make verification the next step instead of another control.
 5. **Show the outcome**: the changed or retained assessment and its reason, the proposed or explicitly chosen measure, the remaining uncertainty, and the next check or decision. Include owners and dates only when known. A planned measure establishes no current risk reduction.
