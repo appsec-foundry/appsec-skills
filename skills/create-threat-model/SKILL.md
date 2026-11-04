@@ -1,6 +1,6 @@
 ---
 name: create-threat-model
-description: Create, update, or review a maintained threat model from requirements, specifications, design documents, and team context, with optional bounded code reading. Use for system, feature, or design-change threat modeling, including before implementation exists. Not a code vulnerability scan.
+description: Create, update, or review a maintained threat model from requirements, specifications, design documents, and team context, with optional bounded code reading. Walk through identified threats with the user to assess risk and develop measures. Use for system, feature, or design-change threat modeling, including before implementation exists. Not a code vulnerability scan.
 license: Apache-2.0
 metadata:
   version: "0.1.0"
@@ -25,7 +25,7 @@ At invocation, display `<name> · Version <metadata.version>` from this file onc
 | 5 | [Develop and evaluate scenarios](#develop-and-evaluate-the-model) | [Model guide](references/model-guide.md), [abuse patterns](references/abuse-cases.md) |
 | 6 | [Write, check, and hand off](#write-and-finish) | [Delivery guide](references/delivery.md) |
 
-Read each guide when its step starts. Updates revisit affected context only. Reviews run the relevant analysis and checks without writes. Measures discussions and exports use their own guides, read only for that operation, without restarting the workflow.
+Read each guide when its step starts. Updates revisit affected context only. Reviews run the relevant analysis and checks without writes. Threat walkthroughs, measures discussions, and exports use their own guides, read only for that operation, without restarting the workflow.
 
 ## Communication
 
@@ -43,6 +43,7 @@ Write all user-visible text for developers without assuming security expertise (
 | Create | Write an initial model. If one exists, preserve it and offer a focused update. |
 | Update | Change affected sections and integrate features into the existing model. Preserve human edits, stable IDs, and unaffected decisions. |
 | Review | Return observations and proposed changes in the conversation. Do not edit the model, its review status, or the security document, even when the user supplies new facts. |
+| Walk through threats | Work through identified scenarios with the user: clarify facts, assess risk, and develop measures under the [guided walkthrough](references/decisions.md#guided-threat-walkthrough). Save outcomes only within an authorized creation or update; treatment decisions require an explicit choice. |
 | Discuss measures | Explain and compare responses from the existing model under the [decisions guide](references/decisions.md). Do not edit files or open a treatment-decision round unless separately requested. |
 | Export | Derive explicitly requested OTM JSON/YAML files under the [export guide](references/otm-export.md). Preserve the Markdown model and security document. |
 
@@ -210,6 +211,8 @@ Trace changed sources to affected model elements and shared boundaries, includin
 Read the [delivery guide](references/delivery.md) before the first write of a creation or update, before reporting a review, and before reporting an incomplete outcome.
 
 Complete the selected operation before optional follow-up work (REQ-07, REQ-08, REQ-10). For creation or an authorized update with sufficient system context, write the supported model or changes and check the resulting files. Open treatment choices, missing owners or dates, unverified controls, and an unanswered optional invitation do not prevent delivering a draft with those points explicit. Do not substitute an interview, a measures comparison, a console-only assessment, or a plan to write later for `threat-model.md`.
+
+If the user already requested a joint threat assessment and measures discussion, continue directly with the [guided walkthrough](references/decisions.md#guided-threat-walkthrough) after handing off the draft. Reuse that request without asking again whether to start. Otherwise offer the walkthrough under the delivery guide; an ordinary creation or update does not start it automatically (REQ-03, REQ-07).
 
 ## Execution boundaries
 

@@ -181,6 +181,8 @@ For each actual question, be able to identify the missing fact and the assessmen
 
 ### Check the transition to measures (REQ-07, REQ-11, REQ-19)
 
+For the guided scenario-by-scenario dialogue, use the [threat walkthrough cases](tests/manual/threat-walkthrough.md). They cover joint assessment, measures, explicit decisions, read-only discussions, unknown controls, skipped questions, and continuation after a requested draft. These manual checks are separate from the local packaging tests.
+
 Supply a fictional local-training model whose T-001 concerns access to unrelated work files, T-002 concerns unwanted network exposure, and T-003 concerns external requests. Request an update for direct Node.js operation. Provide proposed measures in the fixture, but leave runtime effectiveness unverified. Inspect the closing and a separately requested follow-up:
 
 - **Scoped verdict:** Expect a short judgment explaining what the result means for the examined use and why measures or clarification are needed. With low confirmed impact inside a disposable exercise and unknown effects outside it, expect that distinction to remain visible. Reject both "safe because disposable" and "critical because isolation is unverified." With supported controls and no material unresolved question, do not manufacture extra work. The verdict must not invent a release gate, risk acceptance, or security approval.

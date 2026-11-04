@@ -64,12 +64,13 @@ Name a follow-up skill and a copyable example request only when its capabilities
 
 A draft, successful format check, or empty threat list is not team approval or proof of coverage. Record only actual review participation.
 
-Finish after delivery unless further dialogue was explicitly requested or the agent-integration question below applies.
+After delivery, continue any explicitly requested dialogue; otherwise finish with the optional offers below (REQ-07, REQ-08).
 
-- Make at most one optional invitation: the agent-integration question when applicable, otherwise an invitation to review the model or plan measures.
+- Offer one optional guided walkthrough of the central threats to check assumptions, assess risk, and develop measures. Make the offer concrete, for example: "We can work through T-003 and T-007 together, clarify their remaining assumptions, and compare suitable measures." Reuse a prior request or decline instead of repeating the offer.
 - In no-questions mode, phrase any next task as a suggestion.
 - An invitation is not permission to start a question tool, select treatments, or edit files.
-- If the user requested a measures discussion or treatment decisions, continue with the [decisions guide](decisions.md) after delivering any requested draft. A request to plan measures alone does not authorize recording decisions.
+- If the user requested a threat walkthrough, measures discussion, or treatment decisions, continue directly with the [decisions guide](decisions.md) after delivering any requested draft. Do not end the task or ask again whether to start an already requested dialogue. Identifying or planning measures alone does not authorize risk acceptance or require treatment choices.
+- The optional agent-integration offer is separate; it must not replace the walkthrough offer or interrupt requested dialogue. Defer its question until that dialogue ends, subject to the exclusions below.
 
 ### Optional agent integration
 

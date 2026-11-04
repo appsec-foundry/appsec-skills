@@ -2,7 +2,7 @@
 
 Create a threat model from requirements, design documents, and team knowledge, even before code exists. The model describes what could go wrong, what harm it could cause, and what to change. No security expertise is required.
 
-This skill also supports reviews, updates, and discussions of protective measures. For an existing model, [update-threat-model](../update-threat-model/README.md) provides a shortcut to the same update workflow; it requires this skill to be installed.
+This skill also supports reviews, updates, and guided discussions to assess identified threats and develop protective measures. For an existing model, [update-threat-model](../update-threat-model/README.md) provides a shortcut to the same update workflow; it requires this skill to be installed.
 
 ## Quick start
 
@@ -57,6 +57,7 @@ After delivery, the assistant may offer to add a reminder to consult the model i
 | Create | Writes an initial model; preserves an existing one and offers an update. |
 | Update | Revises affected sections while preserving unrelated content, manual edits, and IDs. |
 | Review | Reports gaps and suggestions without changing files or review status. |
+| Walk through threats | Discusses identified threats, clarifies decisive facts, explains their priority, and develops measures. Saves outcomes only within a requested creation or update. |
 | Discuss measures | Explains options and recommends changes without editing files. |
 | Export | Creates an OTM JSON or YAML copy on request; Markdown remains the main document. |
 
@@ -67,8 +68,11 @@ Modeling does not change application code, create tickets, commit files, or publ
 1. **Understand the system.** The assistant reads your documents and asks about gaps that could affect the model, such as who uses the system and what needs protection.
 2. **Assess what could go wrong.** It describes concrete threats, considers existing protections, and recommends changes and ways to check them.
 3. **Write the model.** It saves `threat-model.md` and summarizes the main threats, open questions, and next steps.
+4. **Work through threats together, when requested.** It explains each selected scenario, asks focused questions, proposes a reasoned assessment, and develops measures with you. It starts with the most important or uncertain scenarios and summarizes what your answers changed. Each round has at most three questions; you can skip or stop. Choosing measures is optional, and planned measures remain distinct from verified protection.
 
 You can skip questions or request no questions. Unknowns and assumptions remain visible; if essential context is missing, the assistant explains what it needs.
+
+An ordinary creation or update offers this walkthrough after delivery. If you requested it at the start, the assistant continues directly after the draft without asking again whether to begin.
 
 The model covers the application as designed, including optional features. To focus on a particular deployment, say so in your request.
 
@@ -120,10 +124,27 @@ Use create-threat-model to review threat-model.md against docs/design.md.
 Report gaps and proposed changes without editing files.
 ```
 
-**Discuss measures and record decisions**
+**Create, then assess threats and develop measures together**
 
 ```text
-Use create-threat-model to work through practical measures for T-001 and T-002.
+Use create-threat-model to create a threat model from docs/design.md.
+After the draft, walk through the identified threats with me, assess their
+impact and prerequisites, and develop suitable measures. Incorporate the
+clarified assessments and proposed measures into the model.
+```
+
+**Walk through existing threats without editing files**
+
+```text
+Use create-threat-model to walk through T-001 and T-002 with me.
+Explain what could happen, clarify the facts that affect their priority,
+and help me identify practical measures. Keep the files unchanged.
+```
+
+**Choose measures and record decisions**
+
+```text
+Use create-threat-model to help me choose practical measures for T-001 and T-002.
 Explain the options and trade-offs and recommend where to start.
 Update the model with the decisions I explicitly make.
 ```

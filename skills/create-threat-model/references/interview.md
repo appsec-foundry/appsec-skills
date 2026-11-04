@@ -2,6 +2,8 @@
 
 Read this guide before the first question. It is not needed when no question will be asked.
 
+For a requested walkthrough of already identified threats, use the [guided threat walkthrough](decisions.md#guided-threat-walkthrough) and the question and waiting rules here. Reuse settled system context instead of restarting the intake below (REQ-03, REQ-07).
+
 ## Plan the interview
 
 Work from the [coverage record](checklist.md#coverage-record) and apply its [answer rules](checklist.md#interpret-answers) after each reply. Settle these topics in order, using sources first. They are dependencies, not mandatory rounds; skip settled and irrelevant topics.
