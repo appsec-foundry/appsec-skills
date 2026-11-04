@@ -70,23 +70,25 @@ After delivery, continue any explicitly requested dialogue; otherwise finish wit
 - In no-questions mode, phrase any next task as a suggestion.
 - An invitation is not permission to start a question tool, select treatments, or edit files.
 - If the user requested a threat walkthrough, measures discussion, or treatment decisions, continue directly with the [decisions guide](decisions.md) after delivering any requested draft. Do not end the task or ask again whether to start an already requested dialogue. Identifying or planning measures alone does not authorize risk acceptance or require treatment choices.
-- The optional agent-integration offer is separate; it must not replace the walkthrough offer or interrupt requested dialogue. Defer its question until that dialogue ends, subject to the exclusions below.
+- The optional agent-integration offer is separate; it must not replace the walkthrough offer or interrupt requested dialogue. Defer the offer until that dialogue ends, subject to the exclusions below.
 
 ### Optional agent integration
 
-After handing off a created or updated model, offer once to reference it in the project's active agent instructions (REQ-08). This never blocks delivery.
+After handing off a created or updated model, offer once to reference it in the project's active agent instructions (REQ-08). Include a brief statement in the closing, in the user's language, for example: "On request, I can add a reminder to consult the threat model to your agent instructions." Finish without opening a question tool or waiting for a reply to this offer.
 
-Do not offer it during review or export-only work, in no-questions mode, after a decline in the current conversation, when a suitable reference already exists, or when no existing candidate file exists. Reuse explicit approval that already identifies the destination and this change.
+Do not offer it during review or export-only work, in no-questions mode, after a decline in the current conversation, when a suitable reference already exists, or when no existing candidate file exists. If the user already requested the integration, handle that request below instead of offering it again.
 
-Candidates are existing root `AGENTS.md` and `CLAUDE.md`, or an existing instruction file the user identifies. Their presence alone does not establish which is active. If the active file is known, ask whether to add the reference there. Otherwise combine approval and destination in one question in the user's language, offering only existing files:
+Candidates are existing root `AGENTS.md` and `CLAUDE.md`, or an existing instruction file the user identifies. Their presence alone does not establish which is active. The reminder asks future agents to consult relevant model sections before security-relevant changes and to flag needed model updates.
 
-> Should I add a reminder to consult the threat model to your agent instructions?
+Only after the user requests the integration, clarify any missing destination or approval. Reuse explicit approval that already identifies the destination and this change; do not ask again. If a choice remains necessary, combine destination and approval in one question in the user's language, offering only existing files:
+
+> Which file should receive the reminder to consult the threat model?
 
 - Add to `AGENTS.md`.
 - Add to `CLAUDE.md`.
 - Do not add it.
 
-State that the reminder asks future agents to consult relevant model sections before security-relevant changes and to flag needed model updates. Follow the [ask-and-wait rules](interview.md#ask-and-wait). Silence, a preselected option, or permission to create the model does not authorize this edit; without an answer, leave agent instructions unchanged.
+For a necessary clarification of a requested integration, follow the [ask-and-wait rules](interview.md#ask-and-wait). Silence, a preselected option, or permission to create the model does not authorize this edit. Without explicit approval for the selected file, leave agent instructions unchanged.
 
 After approval, re-read the selected file under the same write checks and add one short reminder with a relative link, matching the file's language and preserving its other instructions:
 

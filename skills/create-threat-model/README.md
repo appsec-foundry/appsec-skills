@@ -50,7 +50,7 @@ A shortened example from a fictional payment system:
 
 See the [full scenario and its evidence](references/model-guide.md#t-003-payment-details-can-change-after-approval). Priorities reflect possible harm and the conditions needed for an attack; missing information stays visible.
 
-After delivery, the assistant may offer to add a reminder to consult the model in an existing `AGENTS.md` or `CLAUDE.md`. It edits that file only with your explicit approval. See [optional agent integration](references/delivery.md#optional-agent-integration) for details.
+In its closing, the assistant may offer to add a reminder to consult the model in an existing `AGENTS.md` or `CLAUDE.md`. It finishes without waiting for a reply to that offer. If you request the addition, it clarifies the destination only when needed and edits the selected file only with your explicit approval, reusing approval already given. See [optional agent integration](references/delivery.md#optional-agent-integration) for details.
 
 | Request | Result |
 | --- | --- |

@@ -181,7 +181,7 @@ For each actual question, be able to identify the missing fact and the assessmen
 
 ### Check the transition to measures (REQ-07, REQ-11, REQ-19)
 
-For the guided scenario-by-scenario dialogue, use the [threat walkthrough cases](tests/manual/threat-walkthrough.md). They cover joint assessment, measures, explicit decisions, read-only discussions, unknown controls, skipped questions, and continuation after a requested draft. These manual checks are separate from the local packaging tests.
+For the guided scenario-by-scenario dialogue, use the [threat walkthrough cases](tests/manual/threat-walkthrough.md). They cover joint assessment, measures, explicit decisions, read-only discussions, unknown controls, skipped questions, and continuation after a requested draft. Cases 7, 9, and 10 also check completion without a reply to the optional agent-integration offer, reuse of explicit approval, and clarification only for a requested integration with an unresolved destination. These manual checks are separate from the local packaging tests.
 
 Supply a fictional local-training model whose T-001 concerns access to unrelated work files, T-002 concerns unwanted network exposure, and T-003 concerns external requests. Request an update for direct Node.js operation. Provide proposed measures in the fixture, but leave runtime effectiveness unverified. Inspect the closing and a separately requested follow-up:
 
