@@ -1,9 +1,9 @@
 ---
 name: create-threat-model
-description: Create, update, or review a maintained threat model from requirements, specifications, design documents, and team context, with optional bounded code reading. Derive threat scenarios first, then clarify the facts that decide them with the user, assess risk, and develop measures. Use for system, feature, or design-change threat modeling, including before implementation exists. Not a code vulnerability scan.
+description: Create, update, or review a maintained threat model from requirements, specifications, design documents, and team context, with optional bounded code reading. Clarify material gaps in the system picture, derive and revisit threat scenarios, assess risk, and develop measures with the user. Use for system, feature, or design-change threat modeling, including before implementation exists. Not a code vulnerability scan.
 license: Apache-2.0
 metadata:
-  version: "0.3.2"
+  version: "0.3.3"
 ---
 
 # Create a threat model
@@ -24,7 +24,7 @@ At invocation, display `<name> · Version <metadata.version>` from this file onc
 | 4 | [Assess and recommend](#phase-4-assess-and-recommend) | Model guide, already read |
 | 5 | [Write and hand off](#phase-5-write-and-hand-off) | [Delivery guide](references/delivery.md) |
 
-Read each guide when its phase starts. Updates run the phases for the affected part only. Reviews run phases 1 to 4 and report without writing. A requested threat dialogue continues phases 3 and 4 after delivery; it does not restart the workflow.
+Read each guide when its phase starts, and the interview guide before any question, including in phase 1. Updates run the phases for the affected part only. Reviews run phases 1 to 4 and report without writing. A requested threat dialogue continues phases 3 and 4 after delivery; it does not restart the workflow.
 
 ## Communication
 
@@ -76,7 +76,7 @@ Determine the operation from the request, not from the skill's name or from the 
 5. **Check** the basis against the [checklist](references/checklist.md) and give each item a status.
 6. **Settle the audience** before showing confidential details, under the [audience guide](references/audience.md).
 
-The minimum basis is a system-specific purpose, one valuable asset or operation, one actor, and one interaction. A user description can supply it. Below that, report an incomplete outcome and the missing basis; do not write an empty model or replace an existing one with generic threats.
+The minimum basis is a system-specific purpose, one valuable asset or operation, one actor, and one interaction. A user description can supply it. Show what is known and the gaps before asking for missing context; do not invent elements to meet the minimum.
 
 Then show the system picture as a proposal:
 
@@ -85,26 +85,30 @@ Then show the system picture as a proposal:
 - at most two material uncertainties;
 - the source basis in one line.
 
-For focused updates, show only the affected part. After an architecture-reading opt-in, show the diagram again with what the code added. Proceed to phase 2 without asking for approval. Ask in phase 1 only what blocks the work: the target or scope, the audience, and the purpose when no source states it.
+For focused updates, show only the affected part. After an architecture-reading opt-in, show the diagram again with what the code added.
+
+If missing context prevents identifying significant assets, actors, interactions, or protection needs, ask focused questions under the [interview guide](references/interview.md), tied to the affected checklist item (REQ-03, REQ-14). Explain what the answer helps identify; no threat candidate is required for these questions. Clarify only what is needed to derive meaningful candidates, then proceed to phase 2 without an approval round. Otherwise, derive candidates first and ask remaining questions in phase 3. Do not require a complete checklist or a formal data classification. If the minimum basis remains missing after answers, a skip, or a no-questions request, report an incomplete outcome and the missing basis instead of writing an empty or generic model.
 
 ## Phase 2: Derive threat candidates
 
 Derive candidates from the system picture, not from a catalog (REQ-06):
 
 - For each significant objective and interaction, use STRIDE as a prompt and check the [abuse patterns](references/abuse-cases.md), the project's `threat-model-abuse-cases.md`, and supplied security context (REQ-13, REQ-18). Each requirement or business rule is a candidate: what if it is bypassed, repeated, or changed after a check?
-- A candidate names the actor, the action, the prerequisites, the harm, the supporting source or assumption, and the one open fact that decides its applicability or priority. Give it a stable ID and a conditional priority such as "High if approval survives a recipient change."
+- A candidate names the actor, the action, the prerequisites, the harm, the supporting source or assumption, and the next open fact to clarify. Retain other material unknowns; asking one question at a time does not limit a scenario to one unknown prerequisite. Give it a stable ID and a conditional priority such as "High if approval survives a recipient change."
 - Merge overlaps, do not produce one candidate per pattern, and do not treat a catalog as coverage. With thin input most candidates stay conditional; keep them and their condition rather than resolving them by assumption.
 - For updates, derive candidates only for changed flows, assumptions, and shared boundaries, and reopen decisions whose assumptions changed.
 
-Show the candidates before asking anything, one line each: ID, what could happen, and the provisional priority. Then say how many questions you expect. The deciding facts belong in the questions, not in this list.
+Show the candidates before asking questions about them, one line each: ID, what could happen, and the provisional priority. Then say how many questions you expect. The deciding facts belong in the questions, not in this list. This does not prevent the focused foundation questions in phase 1.
 
 ## Phase 3: Ask what decides the candidates
 
-Every question names the scenario or checklist item it belongs to and what the answer changes (REQ-03, REQ-14). The confirmation of business purpose, data sensitivity, and worst-case consequences happens through these questions, bound to the candidates that depend on them, not as a separate questionnaire.
+Every question names the scenario or checklist item it belongs to and what the answer changes (REQ-03, REQ-14). Clarify remaining gaps in business purpose, data sensitivity, and consequences through the scenarios or checklist items they affect. Reuse established context instead of requiring a separate confirmation questionnaire.
 
 Follow the [interview guide](references/interview.md): one question about a scenario or checklist item per round, ordered by its effect on the assessment, each with brief background and what each answer changes. After each answer state its effect, and after the last show what the answers changed. Wait for answers or an explicit skip. Skipped or unknown facts remain open and do not lower risk; a skipped permission does not authorize the dependent action. In no-questions mode, continue with the candidates as conditional and state what remains unconfirmed.
 
-Stop asking when further answers would not change a scenario, priority, or response. Do not ask to fill the checklist.
+When an answer reveals new or changed assets, actors, flows, protection needs, or boundaries, update the affected system picture and checklist status, revisit existing candidates, and derive additional candidates where a distinct relevant mechanism is supported (REQ-03, REQ-06). Preserve IDs, merge overlaps, and show added or changed candidates before asking about them. Stay within scope and the shared discovery budget; do not restart the whole analysis.
+
+Stop asking when further answers would neither reveal significant threats nor change a scenario, priority, or response. Do not ask to fill the checklist.
 
 ## Phase 4: Assess and recommend
 

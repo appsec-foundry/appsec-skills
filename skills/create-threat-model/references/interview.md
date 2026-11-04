@@ -4,12 +4,12 @@ Read this guide before the first question. It governs every question the skill a
 
 ## Form of a question
 
-A question about a scenario or checklist item, after phase 2 or in the threat dialogue, has four parts:
+A question about a scenario or checklist item has four parts:
 
-1. **Heading** in chat: position, ID, and title with the provisional priority.
-2. **Background** in chat, two or three sentences: what could happen, what the sources already establish, and what is open. Name the decisive source.
+1. **Heading** in chat: position, ID, and title with the provisional priority. Before candidates exist, use the checklist ID and omit the priority.
+2. **Background** in chat, two or three sentences: what could happen, what the sources already establish, and what is open. Name the decisive source. For an early checklist question, explain the missing system context and which assets, actors, interactions, or protection needs the answer helps identify.
 3. **Question**: one short sentence on one fact or choice, beginning with the ID, so it is clear without the background.
-4. **Effect**: each option says what that answer changes in priority, applicability, or recommendation. For an open question, the background says what the answer decides.
+4. **Effect**: each option says what that answer changes in threat discovery, priority, applicability, or recommendation. For an open question, the background says what the answer decides.
 
 > Question 1 of about 3 · T-003 Payment details can change after approval (provisional: high)
 >
@@ -20,11 +20,11 @@ A question about a scenario or checklist item, after phase 2 or in the threat di
 > - No: the cancellation is a reported control; the next step is to verify it.
 > - Unknown: T-003 stays high under that condition.
 
-Before the candidates exist, only these questions are allowed, each on one point: the target or scope, the audience, the purpose when no source states it, the operation when it is unclear, the use of another threat model document found in the project, and permission to read more code. The reading question explains the gap: "The documentation leaves data flows unclear. May I read more of the source code to trace them?" with the choices "Yes, include more code" and "Continue with current sources."
+Before candidates exist, ask focused checklist questions only when missing context prevents identifying significant assets, actors, interactions, or protection needs (REQ-03). Show the preliminary system picture and the gap first; proceed to candidates as soon as the basis permits. Other early questions concern the target or scope, the audience, the operation when unclear, the use of another threat model document found in the project, and permission to read more code. The reading question explains the gap: "The documentation leaves data flows unclear. May I read more of the source code to trace them?" with the choices "Yes, include more code" and "Continue with current sources."
 
 Check each question before sending it:
 
-1. **Necessary.** Would the answer change a scenario, priority, treatment, scope, or authorized action? Otherwise omit it.
+1. **Necessary.** Would the answer enable discovery of significant threats or change a scenario, priority, treatment, scope, or authorized action? Otherwise omit it.
 2. **In scope.** It concerns the application or the selected feature, not the user's installation, and the facts it depends on are established.
 3. **Answerable.** One short sentence asks for one fact or choice. If the user could accept one clause and reject another, split it. Keep data, recipients, consequences, and permissions separate.
 4. **Clear to answer.** A bare answer has one meaning: "Yes," "No," and "Unknown" for a proposal, actual alternatives for a choice, otherwise one short open question that says a short answer or "unknown" is fine. One selection must not confirm several assets, several harms, or a permission. No option asks for additional text; ask a needed detail, such as where a rule is documented, as its own follow-up question.
@@ -35,10 +35,10 @@ Ask what a loss would prevent, not whether a clearly harmful outcome counts as h
 ## Rounds
 
 - Ask a question about a scenario or checklist item alone, one per round. Target, scope, audience, destination, document-use, and permission questions may share a round of at most three, never with a scenario question. Ask dependent questions sequentially.
-- Order by effect: first the facts that move the most candidates or the highest provisional priority. Announce the expected number with the candidate list and keep it current in the headings.
-- After each answer, state its effect in one line before the next question: "→ T-003 stays high; recommendation: renewed approval. Basis: your statement, unverified." Say so when an answer changes nothing.
+- Order by effect: first any missing basis needed for meaningful candidates, then the facts that move the most candidates or the highest provisional priority. Announce the expected number of foundation questions before asking them, and update the estimate with the candidate list and in the headings.
+- After each answer, state its effect in one line before the next question: "→ T-003 stays high; recommendation: renewed approval. Basis: your statement, unverified." Before candidates exist, state what the answer adds to the system picture and what remains missing, without inventing a priority. Say so when an answer changes nothing.
 - Give the team room to add concerns without a mandatory extra round.
-- Stop when further answers would not change a scenario, priority, or response. Do not continue to fill checklist entries. Show what the answers changed, one line per affected scenario with its previous and current priority or recommendation, plus the points that remain open; then complete the operation.
+- Stop when further answers would neither reveal significant threats nor change a scenario, priority, or response. Do not continue to fill checklist entries. Show what the answers changed, one line per affected scenario with its previous and current priority or recommendation, plus the points that remain open; then complete the operation. If the minimum basis is still missing, report that incomplete outcome.
 
 ## Ask and wait
 
@@ -55,6 +55,7 @@ Apply these rules to every statement from the user, including facts in the reque
 - Keep contradictions unless the user clearly corrects the earlier fact for the same scope. If an ambiguous bundled answer matters, ask one focused clarification.
 - A statement keeps its scope. A note that limits "no material harm" to a training exercise says nothing about harm outside it; if the scope is unclear, ask only whether the statement refers to the exercise alone.
 - A user answer clarifies a checklist item as an attributed, unverified statement. If the user cannot answer, the point stays open.
+- When an answer changes the system picture, update affected elements and checklist items, reassess existing candidates, and derive any additional supported candidates. Preserve IDs and merge overlapping mechanisms; new sensitivity may change a rating without creating a distinct threat. Show added or changed candidates before asking about them. Stay within the selected scope and discovery budget, and reuse prior answers.
 
 Skipped and unknown facts remain open and do not lower risk. No-questions mode, requested by the user or by stopping the interview, means continuing with conditional candidates and stating what remains unconfirmed. A skipped permission or operation choice does not authorize the dependent action. Cancellation stops the work.
 
@@ -62,7 +63,7 @@ Skipped and unknown facts remain open and do not lower risk. No-questions mode, 
 
 Use this section when the user asks to go through identified threats together, to discuss measures, or to choose treatments (REQ-12). An earlier request for that dialogue remains sufficient; do not ask again whether to start. A request for an assessment or recommendations alone starts no dialogue.
 
-Enter directly at the scenarios of the existing model with their recorded scope, audience, sources, and previous answers. Do not restart phases 1 and 2; read more or ask only when a material gap affects the discussion. Start with the user's selected scenarios, otherwise those with the greatest supported harm or the uncertainty most likely to change a decision; for updates, stay with affected scenarios. Work through one scenario at a time.
+Enter directly at the scenarios of the existing model with their recorded scope, audience, sources, and previous answers. Do not restart phases 1 and 2 for the whole system; revisit affected elements and candidates when answers change them, and read more or ask only when a material gap affects the discussion. Start with the user's selected scenarios, otherwise those with the greatest supported harm or the uncertainty most likely to change a decision; for updates, stay with affected scenarios. Work through one scenario at a time.
 
 For each scenario:
 
@@ -108,6 +109,7 @@ If a measure is needed: "Invalidating approval when payment details change would
 
 Use these only when the project context supports them.
 
+- Missing foundation (C-03): "C-03: Which kinds of data does the described import handle? A short answer or 'unknown' is fine." Use this before candidates only when the missing context prevents meaningful threat discovery.
 - Permitted readers (C-03): "T-002: Under the intended workflow, who may read uploaded customer records?"
 - Business misuse (C-11): "T-005: Does marking an invoice as paid trigger shipment of the order?" Use the answer for consequences, not as evidence that an unauthorized change is possible.
 - Availability (C-04): "T-006: How long could order processing be unavailable before it causes serious problems? A rough duration is enough."

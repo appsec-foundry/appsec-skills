@@ -1,6 +1,6 @@
 # Modeling checklist
 
-Use this list in phase 1 to find gaps in the modeling basis. It guides coverage; it is not a questionnaire. Each item names an aspect and what the model must state for it to count as clarified. Revisit affected items when candidates reveal new gaps, and ask about an open item only through the candidate it decides, under the [interview guide](interview.md). The [abuse patterns](abuse-cases.md) explore how the described behavior could be misused; checklist entries define information to clarify.
+Use this list in phase 1 to find gaps in the modeling basis. It guides coverage; it is not a questionnaire. Each item names an aspect and what the model must state for it to count as clarified. Revisit affected items when candidates or answers reveal new gaps. Under the [interview guide](interview.md), ask about a material open item when the answer enables threat discovery or changes a scenario, priority, or response. If missing context prevents identifying significant assets, actors, interactions, or protection needs, a focused checklist question may precede candidates; no invented scenario is needed. The [abuse patterns](abuse-cases.md) explore how the described behavior could be misused; checklist entries define information to clarify.
 
 | ID | Aspect | Clarified when the model states |
 | --- | --- | --- |
