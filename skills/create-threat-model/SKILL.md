@@ -3,7 +3,7 @@ name: create-threat-model
 description: Create, update, or review a maintained threat model from requirements, specifications, design documents, and team context, with optional bounded code reading. Derive threat scenarios first, then clarify the facts that decide them with the user, assess risk, and develop measures. Use for system, feature, or design-change threat modeling, including before implementation exists. Not a code vulnerability scan.
 license: Apache-2.0
 metadata:
-  version: "0.3.0"
+  version: "0.3.1"
 ---
 
 # Create a threat model
@@ -40,7 +40,7 @@ Write every user-visible text for developers without assuming security expertise
 | Threat dialogue | Walk through scenarios, clarify decisive facts, assess, develop measures, or choose treatments under [continue the dialogue](references/interview.md#continue-the-dialogue). |
 | Export | Derive explicitly requested OTM files under the [export guide](references/otm-export.md) (REQ-20). |
 
-**Write rule.** Only Create and Update change files, and only `threat-model.md`, the security document, requested exports, and an agent-instruction reference approved under the delivery guide. Every other operation returns proposals in the conversation, including a threat dialogue without an update request. A decision reached in dialogue is saved only within an authorized creation or update, and risk acceptance only as an explicit decision of a responsible person (REQ-07).
+**Write rule.** Only Create and Update change files, and only `threat-model.md`, the security document, requested exports, and an agent-instruction reference approved under the delivery guide. Every other operation returns proposals in the conversation, including a threat dialogue without an update request. Dialogue outcomes are saved only within an authorized creation or update, which includes approving the save offer at the end of a dialogue (REQ-12), and risk acceptance only as an explicit decision of a responsible person (REQ-07).
 
 Determine the operation from the request, not from the skill's name or from the existence of `threat-model.md`. If a creation request meets an existing model, or the operation is unclear, offer the focused update and [wait for the answer](references/interview.md#ask-and-wait); an unanswered creation request does not permit editing the existing model. An update without an existing model needs a creation request.
 

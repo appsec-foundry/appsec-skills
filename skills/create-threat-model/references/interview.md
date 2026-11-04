@@ -72,9 +72,7 @@ For each scenario:
 4. **Develop measures** under the [improvement guidance](model-guide.md#derive-actionable-improvements): a concrete change that addresses the cause, alternatives only where protection, workflow, effort, or remaining exposure differ materially, and questions about constraints only when they determine the choice. State the expected remaining risk and the checks for intended behavior and representative abuse. Effective existing protection may make verification the next step instead of another control.
 5. **Show the outcome**: the changed or retained assessment and its reason, the proposed or explicitly chosen measure, the remaining uncertainty, and the next check or decision. Include owners and dates only when known. A planned measure establishes no current risk reduction.
 
-Continue with the next scenario without asking for permission after every answer. Stop when the user skips further dialogue or no material points remain, and summarize pending scenarios without marking them reviewed or accepted. For a measures-only request, go directly to the responses and end without requiring a treatment selection, owner, date, or risk acceptance.
-
-Under the skill's write rule, outcomes are saved only within an authorized creation or update, with the delivery guide's [write checks](delivery.md#write-and-check); otherwise return the proposed records in the conversation. Save concise conclusions and their source, not a transcript.
+Continue with the next scenario without asking for permission after every answer. Stop when the user skips further dialogue or no material points remain, summarize pending scenarios without marking them reviewed or accepted, and [save the outcomes](#save-the-outcomes). For a measures-only request, go directly to the responses and end without requiring a treatment selection, owner, date, or risk acceptance.
 
 ### Treatment decisions
 
@@ -87,6 +85,16 @@ Enter this round only when the user asks to choose treatments, accept a risk, or
 | Clarify first | What is missing; the scenario stays open. |
 
 Record only explicit decisions with the details the team states; do not fill in a person or date. An acceptance without a named responsible person stays open. A decision does not authorize implementing the measure, creating tickets, or changing code.
+
+### Save the outcomes
+
+At the end of the dialogue, list the outcomes worth keeping, one line per scenario: the changed or retained assessment, clarified facts, the proposed or chosen measure, explicit decisions, and any remaining disagreement (REQ-12).
+
+- If the user already asked to update the model with the results, write them without asking again.
+- Otherwise ask once: "Should I add these results to threat-model.md?" with "Yes, update the model" and "No, keep them in the conversation." A yes is an update request limited to the discussed scenarios and the open-decision list.
+- Do not ask during a review, in no-questions mode, after a request to keep files unchanged, or when nothing material changed. Say in one sentence that the results are not saved and that an update request would save them.
+
+Write under the skill's write rule and the delivery guide's [write checks](delivery.md#write-and-check). Save concise conclusions and their source, not a transcript. Without an explicit yes, leave the model unchanged.
 
 ### Example
 

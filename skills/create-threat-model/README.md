@@ -59,7 +59,7 @@ In its closing, the assistant may offer to add a reminder to consult the model i
 | Create | Writes an initial model; preserves an existing one and offers an update. |
 | Update | Revises affected sections while preserving unrelated content, manual edits, and IDs. |
 | Review | Reports gaps and suggestions without changing files or review status. |
-| Walk through threats | Discusses identified threats, clarifies decisive facts, explains their priority, and develops measures. Saves outcomes only within a requested creation or update. |
+| Walk through threats | Discusses identified threats, clarifies decisive facts, explains their priority, and develops measures. At the end, offers to save the outcomes in the model and writes them only after your explicit approval or update request. |
 | Discuss measures | Explains options and recommends changes without editing files. |
 | Export | Creates an OTM JSON or YAML copy on request; Markdown remains the main document. |
 
@@ -75,7 +75,7 @@ Modeling does not change application code, create tickets, commit files, or publ
 
 If essential context is missing, the assistant explains what it needs instead of inventing a model.
 
-**Work through threats together, when requested.** After delivery, the assistant can continue the dialogue scenario by scenario: explain the threat, clarify decisive facts, propose an assessment, and develop measures with you. Choosing measures is optional, and planned measures remain distinct from verified protection. An ordinary creation or update offers this after delivery; if you requested it at the start, the assistant continues directly without asking again.
+**Work through threats together, when requested.** After delivery, the assistant can continue the dialogue scenario by scenario: explain the threat, clarify decisive facts, propose an assessment, and develop measures with you. Choosing measures is optional, and planned measures remain distinct from verified protection. An ordinary creation or update offers this after delivery; if you requested it at the start, the assistant continues directly without asking again. At the end it lists the results and asks whether to add them to the model, unless you already requested an update or asked to keep the files unchanged.
 
 The model covers the application as designed, including optional features. To focus on a particular deployment, say so in your request.
 
@@ -152,7 +152,7 @@ Explain the options and trade-offs and recommend where to start.
 Update the model with the decisions I explicitly make.
 ```
 
-Use your actual scenario IDs. Include an update request to save decisions; discussion alone does not edit the model. Accepting a risk requires an explicit decision by a responsible person, with a rationale and review date or trigger.
+Use your actual scenario IDs. With the update request, decisions are saved without a further question; otherwise the assistant asks at the end of the dialogue whether to save them. Discussion alone does not edit the model. Accepting a risk requires an explicit decision by a responsible person, with a rationale and review date or trigger.
 
 ## Internal or public models
 
