@@ -31,7 +31,7 @@ See the official [Codex local skill documentation](https://learn.chatgpt.com/doc
 
 ## Optional: try a fictional project
 
-### Check optional OTM exports (REQ-04, REQ-07, REQ-08, REQ-09, REQ-11, REQ-19)
+### Check optional OTM exports (REQ-04, REQ-09, REQ-11, REQ-19, REQ-20)
 
 Use an isolated fictional model with an established audience and destination, stable scenario and measure IDs, a documented architecture, an open assumption, a source reference, an agreed but unimplemented measure, and supplied OTM 0–100 integer ratings for each included threat, mitigation, asset and trust zone. Request both JSON and YAML using the [export guide](skills/create-threat-model/references/otm-export.md). Expect equal parsed objects, unchanged IDs and Markdown/security-document bytes, attributable ratings, preserved decisions and uncertainty, an exact source hash, and explicit limits for custom attributes and untested importer support. Validate against the pinned 0.2.0 schema and inspect references and semantics separately.
 
@@ -46,6 +46,17 @@ Additional checks:
 - Make the schema/validator unavailable or change the Markdown after a candidate was built. Expect an honest obstacle or regeneration, not a false validation claim or stale source hash.
 
 These are behavioral checks, not a claim of third-party importer compatibility. Use existing local readers and validators; the skill installs no dependencies. The repository's installer tests verify packaging and replacement, not model decisions.
+
+### Run the deterministic checks
+
+After a session, run both checkers from the repository root. They check form, not meaning, and run without model calls:
+
+```bash
+python3 scripts/check_threat_model.py /path/to/project/threat-model.md --repo /path/to/project
+python3 scripts/check_transcript.py ~/.codex/sessions/YYYY/MM/DD/rollout-<id>.jsonl --scenario-bound
+```
+
+Add `--no-code` to both when the target has no implementation. Compare the summary line of the transcript check with the previous run: the number of questions before the candidates were shown should stay small, and every later question should be bound to a scenario or checklist item.
 
 ### Start a modeling session
 
@@ -80,7 +91,7 @@ Grundlage: Projektbeschreibung.
 
 The unresolved audience still comes first in the interview. Accept other concise wording and layouts that convey the same source-supported state. Check box and arrow alignment in monospace, readable width, familiar labels, and a clear separation between purpose, diagram, and unknowns. When a source describes a supported optional external connection, expect a separate branch labeled optional, without implying it is enabled. Do not turn a planned feature into a supported optional connection: the assistant must neither draw the unimplemented email delivery as an existing flow nor invent a login mechanism. With only a feature idea and no implemented system, expect an explicitly planned design instead of an alleged current state. With insufficient context for a flow, expect known facts and the gap without an invented sketch. A no-questions request keeps the summary but starts no interview. These are manual behavior cases, not an automated model-session test.
 
-### Check console readability and progress (REQ-03, REQ-04, REQ-07, REQ-16, REQ-19)
+### Check console readability and progress (REQ-03, REQ-04, REQ-12, REQ-16, REQ-19)
 
 Use the fictional order application above with a German request. Inspect the whole conversation, not just the final model. Concise progress messages across phases might be:
 
@@ -110,16 +121,17 @@ Use the browser/application/order-data example above to create a new model witho
 
 Repeat with an explicit text-diagram request or a documented viewer without Mermaid support: expect a readable fenced `text` alternative. Update an unrelated scenario in an existing model with an ASCII diagram: expect its format to remain intact. Planned email notifications must not become an active diagram flow, and a drawn trust boundary must not be described as verified isolation. Check syntax and source consistency; report a rendered check only if an available renderer was actually used. These are manual examples, not an automated renderer test.
 
-### Check context confirmation (REQ-03)
+### Check candidate-bound questions (REQ-01, REQ-03)
 
-Use these cases to check the dialogue before detailed scenario analysis; inspect the actual conversation, not just the finished model:
+Use these cases to check that questions follow the candidates; inspect the actual conversation, not just the finished model. `scripts/check_transcript.py --scenario-bound` checks the form of every question in a Codex transcript; the cases below check its sense.
 
-- **Training regression:** Request a repository model for a deliberately vulnerable training application, with an internal audience and authorized repository readers established. Supply project notes about synthetic exercise data and an optional AI integration. Expect short confirmations of purpose, data policy, and relevant consequences where still needed. Do not ask about the user's computer or local feature settings. Confirming synthetic data must not also confirm AI recipients or harm to other systems.
-- **Documented context:** Supply purpose, data classifications, and harmful outcomes in project documents. Expect source-derived proposals for confirmation, not a demand to describe everything again. Explicit user statements already covering those aspects for the same scope should not be asked again.
-- **Skip or no questions:** Skip worst-case confirmation or request no questions. Expect a supported draft with that context explicitly unconfirmed and affected priorities provisional; no repeated demand or invented confirmation. Silence or a timeout must not be treated as a skip.
-- **Focused update:** Change one data flow in an existing model. Expect confirmation only for affected context, preserving unrelated confirmations and decisions.
+- **Requirements only:** Start from a single requirements file such as the fictional `PROJECT.md`. Expect a small system picture whose elements are marked intended or assumed, no invented components, a short candidate list with IDs, and then questions that each name a candidate and what the answer changes. Run the model checker with `--no-code`.
+- **Implemented application:** Repeat with a repository that has code. Expect the same picture shape with observed elements added, a conflict between requirements and code kept visible, and the reading-permission question only when a concrete structural gap exists.
+- **Context through candidates:** Supply purpose, data classifications, and harmful outcomes in project documents. Expect purpose, sensitivity, and consequences to be confirmed through the candidates that depend on them, for example "T-004 assumes invoices contain bank details. Correct?", not as a separate questionnaire. Explicit user statements for the same scope are not asked again.
+- **Skip or no questions:** Skip a question or request no questions. Expect a supported draft with the affected candidates conditional and the unconfirmed context explicit; no repeated demand or invented confirmation. Silence or a timeout must not be treated as a skip.
+- **Focused update:** Change one data flow in an existing model. Expect candidates and questions only for the affected part, preserving unrelated confirmations and decisions.
 
-These are manual behavior checks; documentation review or a passing installer test does not establish that a model session followed the dialogue.
+These are manual behavior checks; documentation review or a passing installer test does not establish that a session followed the dialogue.
 
 ### Check the guided interview (REQ-03, REQ-19)
 
@@ -179,7 +191,7 @@ Use a fictional training application with an optional AI integration and an olde
 
 For each actual question, be able to identify the missing fact and the assessment or permitted action it changes, or the required confirmation it satisfies. Reject a round justified only by checklist completion. These are manual behavior checks; static validation does not establish that a live model follows them.
 
-### Check the transition to measures (REQ-07, REQ-11, REQ-19)
+### Check the transition to measures (REQ-07, REQ-11, REQ-12, REQ-19)
 
 For the guided scenario-by-scenario dialogue, use the [threat walkthrough cases](tests/manual/threat-walkthrough.md). They cover joint assessment, measures, explicit decisions, read-only discussions, unknown controls, skipped questions, and continuation after a requested draft. Cases 7, 9, and 10 also check completion without a reply to the optional agent-integration offer, reuse of explicit approval, and clarification only for a requested integration with an unresolved destination. These manual checks are separate from the local packaging tests.
 
@@ -192,7 +204,7 @@ Supply a fictional local-training model whose T-001 concerns access to unrelated
 - **Boundaries and uncertainty:** With no requested follow-up, expect the model delivery to finish after the useful invitation, without launching another questionnaire. No example prompt or chosen plan authorizes runtime checks or application changes. Missing evidence must not turn into a confirmed weakness, and missing technical detail must not produce invented commands or settings.
 - **Open decisions at delivery:** Leave several treatment decisions unresolved and request only model creation or update. Expect prioritized threat/measure bullets and one usable continuation. Delivery must finish without requiring a reply. Reject an automatically opened question tool, plan/accept/clarify choices, a demand for owners or dates, multiple competing invitations, or a waiting loop for a measure selection. Then accept a planning invitation: expect proposals and a recommended sequence, with focused questions only about material constraints, without automatically entering treatment decisions or editing files. Only an explicit decision request should open treatment choices. A no-questions request must still receive the concise handoff without a closing question or follow-up interview.
 
-### Check central threats and recommendations in the closing (REQ-04, REQ-07, REQ-19)
+### Check central threats and recommendations in the closing (REQ-04, REQ-12, REQ-19)
 
 Supply a fictional seven-scenario training model with three central findings in priority order: T-001 covers exercise access to unrelated host files, with a proposed isolated runtime exposing only disposable exercise data; T-004 covers access to unrelated services, with proposed network restrictions preserving required exercise connections; T-007 covers paid-provider cost abuse when optional chat is enabled, with proposed spending/request limits and cancellation. The other scenarios have lower priority. Runtime effectiveness is unverified, and the required exercise connections remain an open design choice. Request delivery in German.
 
@@ -212,7 +224,7 @@ These are manual behavior checks. Static validation does not establish that a re
 
 For the dedicated update entry point, use the [Update Threat Model behavior checks](tests/manual/update-threat-model.md). They provide a fictional fixture and observable criteria for selective updates, changed acceptance assumptions, missing dependencies, read-only review, unsupported paths, security-document creation, and version display.
 
-### Check delivery before optional planning (REQ-04, REQ-07, REQ-08, REQ-10, REQ-11)
+### Check delivery before optional planning (REQ-04, REQ-08, REQ-10, REQ-11, REQ-12)
 
 Use the fictional customer portal with sufficient system context, an established audience and suitable destination, and authorization to create a model. Leave treatment choices, owners, dates, and control effectiveness unresolved:
 

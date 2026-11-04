@@ -2,96 +2,48 @@
 
 Read this guide before the first write of a creation or update, before reporting a review, and before reporting an incomplete outcome.
 
-For review, perform the content checks below without writes, including the model guide's [review checks](model-guide.md#review-and-maintenance). Report each finding with the affected section, rationale, and proposed change. A review remains read-only and ends with observations.
+For a review, perform the content checks below without writing, including the model guide's [review checks](model-guide.md#review-and-maintenance), and report each finding with the affected section, rationale, and proposed change.
 
 ## Write and check
 
-### 1. Re-read the write targets
+1. **Re-read the write targets** immediately before editing: the model, the security document, requested exports, and an approved agent-instruction file. Reconcile intervening changes before applying a focused patch; never replace them with a stale full document. If the remaining budget cannot cover this, do not edit, and report the limitation.
+2. **Check audience and content** before every write, including later decision patches: prose, diagrams, tables, source paths, link labels and URLs, appendices, and team answers against the [audience rules](audience.md). Exclude real secrets and unnecessary personal data. Check whether each source is suitable to cite, not only to read; if no safe reference exists, state the evidence limitation without inventing a link. Do not write a confidential draft as an intermediate step before sanitizing it.
+3. **Write the model, then its link.** Preserve the location, naming, disclosure instructions, and valid links of an existing `SECURITY.md` or `security.md`; if several exist, use the documented entry point and ask if it remains ambiguous. Add one relative link to the model. If no security document exists, create `<repo>/SECURITY.md` with a short security heading and the link; do not invent a reporting address or disclosure policy.
+4. **Review the actual diff:**
 
-Edit only the selected model and security document, plus exports explicitly requested under the [export guide](otm-export.md) and an agent-instruction reference approved under [Optional agent integration](#optional-agent-integration).
+   | Check | Verify |
+   | --- | --- |
+   | Scope and integrity | No unrelated changes, duplicate or broken IDs, unresolved local links, unsupported claims, or accidentally retained review or acceptance status. |
+   | Confidentiality | Nothing unsuitable for the audience, no real secrets, no unnecessary personal data. |
+   | Coverage | Each significant objective and interaction has a scenario or an explained gap; each checklist item is clarified in the model or listed with its status. |
+   | Readability | Overview and scenario decisions agree; future checks are distinct from observed results; repetition is removed while decision-relevant detail remains. |
+   | Recommendations | Each names the affected component or file supported by the sources, or is marked as an operator task. |
+   | Diagram | Each trust boundary in the system section appears in the diagram, or its omission is explained. |
+   | Length | Simple scenarios stay near the model guide's length guide; detail moves to the appendix without dropping material facts. |
 
-Re-read write targets immediately before editing. Reconcile intervening changes before applying a focused patch; never replace them with a stale full document. If the remaining discovery budget cannot cover these checks, do not edit, and report the limitation.
-
-### 2. Check audience and content
-
-Before every write, including later decision patches:
-
-- Check prose, diagrams, tables, source paths, link labels and URLs, appendices, and team answers against the [audience rules](audience.md).
-- Exclude real secrets and unnecessary personal data.
-- Use roles, data categories, or safe source descriptions where needed. Do not copy access tokens or confidential identifiers into references.
-- Check whether each source is suitable to cite, not just to read. If no safe reference exists, state the evidence limitation without inventing a link.
-- Check that the audience notice is prominent and accurate. It does not replace the content check.
-
-Do not write a confidential draft to the repository as an intermediate step before sanitizing it.
-
-### 3. Write the model and its link
-
-Write the model before adding its link.
-
-- Preserve the location, naming, disclosure instructions, and valid model links in an existing `SECURITY.md` or `security.md`.
-- If several security documents exist, use the documented entry point; ask if it remains ambiguous.
-- Add one relative link to the model, resolved from the security document's directory.
-- If no security document exists, create `<repo>/SECURITY.md` with a short security heading and the link. Do not invent a reporting address or disclosure policy.
-
-### 4. Review the actual diff
-
-| Check | What to verify |
-| --- | --- |
-| Scope and integrity | No unrelated changes, duplicate or broken IDs, unresolved local links, unsupported claims, or accidentally retained review or acceptance status. |
-| Confidentiality | No content unsuitable for the audience, real secrets, or unnecessary personal data. |
-| Coverage | Each significant objective and interaction has a scenario or an explained gap. Each checklist item is clarified in the model or listed with its status. |
-| Readability | Summary and scenario decisions agree. Future checks are distinct from observed results. Repetition is removed while decision-relevant detail remains. The model guide's readability check passes. |
-| Recommendations | Each names the affected component or file supported by the sources, or is marked as an operator task. |
-| Diagram | Each trust boundary described in the system section appears in the diagram, or its omission is explained. |
-| Scenario length | Simple scenarios stay near the model guide's length guide. Detail moves to the appendix without dropping material facts. |
-
-### 5. Confirm the result
-
-Before claiming creation or update, confirm from the content and diff that the target contains the intended changes and that its security-document link resolves. File existence alone does not establish that an update was applied.
-
-If a write or required check failed, report the incomplete deliverable, the obstacle, the partial result, and the next action. Do not claim success or start a decision round instead. If the basis is insufficient, authorization is missing, or preservation or audience rules prevent the write, report an incomplete outcome rather than creating an empty placeholder.
+5. **Confirm the result** from the content and the diff: the target contains the intended changes and the security-document link resolves. If a write or required check failed, report the incomplete deliverable, the obstacle, the partial result, and the next action; do not claim success or start a dialogue instead. If the basis is insufficient or authorization is missing, report an incomplete outcome rather than writing a placeholder.
 
 ## Finish
 
-Give a concise handoff in the user's language (REQ-07, REQ-19):
+Give a concise handoff in the user's language (REQ-12, REQ-19):
 
-1. **Consequence:** State the main consequence and what needs action or clarification. Unknown controls are not confirmed weaknesses; do not invent a score or release gate.
-2. **Central threats:** In priority order, pair each scenario ID, concrete harm, and material condition with the recommended change and why it helps. Include important open decisions without filling a quota. Do not defer supported recommendations to a later discussion.
-3. **Result:** Link the file actually written or report the review observations. State whether it was created, updated, reviewed without edits, or remains incomplete. Identify draft status and material coverage limits, and distinguish new threats from changed assessments in updates. State once when application behavior was not tested. Do not repeat routine checks or source inventories.
-4. **Next task:** Recommend one concrete task and its expected result, such as checking a named assumption, planning a priority measure, or choosing between responses. Tie a proposed verification to the decision it informs. Implementation and runtime checks need separate authorization.
+1. **Consequence.** The main consequence and what needs action or clarification. Unknown controls are not confirmed weaknesses; do not invent a score or release gate.
+2. **Central threats.** In priority order, each scenario ID with its concrete harm and material condition, paired with the recommended change and why it helps. Include important open decisions. Do not defer supported recommendations to a later discussion.
+3. **Result.** Link the file actually written, or report the review observations. State whether it was created, updated, reviewed without edits, or remains incomplete; name draft status and material coverage limits; for updates, distinguish new threats from changed assessments. State once when application behavior was not tested.
+4. **Next task.** One concrete task and its expected result, such as checking a named assumption or choosing between responses.
 
-Name a follow-up skill and a copyable example request only when its capabilities and prerequisites are known, including material installation or model-use prerequisites. Do not discover or install one to fill the handoff, and do not bundle review, implementation, and approval in one continuation.
+Name a follow-up skill with a copyable example request only when its capabilities and prerequisites are known; do not discover or install one to fill the handoff. A draft, a passed format check, or an empty threat list is not team approval or proof of coverage.
 
-A draft, successful format check, or empty threat list is not team approval or proof of coverage. Record only actual review participation.
-
-After delivery, continue any explicitly requested dialogue; otherwise finish with the optional offers below (REQ-07, REQ-08).
-
-- Offer one optional guided walkthrough of the central threats to check assumptions, assess risk, and develop measures. Make the offer concrete, for example: "We can work through T-003 and T-007 together, clarify their remaining assumptions, and compare suitable measures." Reuse a prior request or decline instead of repeating the offer.
-- In no-questions mode, phrase any next task as a suggestion.
-- An invitation is not permission to start a question tool, select treatments, or edit files.
-- If the user requested a threat walkthrough, measures discussion, or treatment decisions, continue directly with the [decisions guide](decisions.md) after delivering any requested draft. Do not end the task or ask again whether to start an already requested dialogue. Identifying or planning measures alone does not authorize risk acceptance or require treatment choices.
-- The optional agent-integration offer is separate; it must not replace the walkthrough offer or interrupt requested dialogue. Defer the offer until that dialogue ends, subject to the exclusions below.
+After delivery, continue a dialogue the user already requested under the interview guide's [continue the dialogue](interview.md#continue-the-dialogue). Otherwise offer it once and concretely, for example: "We can work through T-003 and T-007 together, clarify their remaining assumptions, and compare suitable measures." In no-questions mode, phrase the next task as a suggestion. The offer is not permission to start a question tool, select treatments, or edit files.
 
 ### Optional agent integration
 
-After handing off a created or updated model, offer once to reference it in the project's active agent instructions (REQ-08). Include a brief statement in the closing, in the user's language, for example: "On request, I can add a reminder to consult the threat model to your agent instructions." Finish without opening a question tool or waiting for a reply to this offer.
+After handing off a created or updated model, offer once to reference it in the project's active agent instructions (REQ-08), in one sentence of the closing: "On request, I can add a reminder to consult the threat model to your agent instructions." Finish without waiting for a reply. Skip the offer during review or export-only work, in no-questions mode, after a decline in the current conversation, when a suitable reference already exists, or when no root `AGENTS.md` or `CLAUDE.md` exists. Do not let it replace or interrupt the dialogue offer.
 
-Do not offer it during review or export-only work, in no-questions mode, after a decline in the current conversation, when a suitable reference already exists, or when no existing candidate file exists. If the user already requested the integration, handle that request below instead of offering it again.
+Only after the user requests the integration, clarify a missing destination or approval in one question offering only existing files: "Which file should receive the reminder to consult the threat model?" with "Add to `AGENTS.md`," "Add to `CLAUDE.md`," and "Do not add it." Reuse explicit approval that already names the destination. Silence, a preselected option, or permission to create the model does not authorize this edit.
 
-Candidates are existing root `AGENTS.md` and `CLAUDE.md`, or an existing instruction file the user identifies. Their presence alone does not establish which is active. The reminder asks future agents to consult relevant model sections before security-relevant changes and to flag needed model updates.
-
-Only after the user requests the integration, clarify any missing destination or approval. Reuse explicit approval that already identifies the destination and this change; do not ask again. If a choice remains necessary, combine destination and approval in one question in the user's language, offering only existing files:
-
-> Which file should receive the reminder to consult the threat model?
-
-- Add to `AGENTS.md`.
-- Add to `CLAUDE.md`.
-- Do not add it.
-
-For a necessary clarification of a requested integration, follow the [ask-and-wait rules](interview.md#ask-and-wait). Silence, a preselected option, or permission to create the model does not authorize this edit. Without explicit approval for the selected file, leave agent instructions unchanged.
-
-After approval, re-read the selected file under the same write checks and add one short reminder with a relative link, matching the file's language and preserving its other instructions:
+After approval, re-read the selected file under the write checks and add one short reminder with a relative link, in the file's language, preserving its other instructions:
 
 > Before security-relevant changes, read the relevant sections of [threat-model.md](threat-model.md). Consider their assumptions, threats, and decisions, and flag any needed model updates.
 
-Do not copy model content or source instructions into the reminder, authorize automatic updates or implementation, create missing instruction files, add a duplicate, or edit both files without explicit approval for both. Check the diff and link, then report which file was updated.
+Do not copy model content into the reminder, create missing instruction files, add a duplicate, or edit both files without explicit approval for both. Check the diff and link, then report which file was updated.

@@ -1,79 +1,95 @@
 # Interview guide
 
-Read this guide before the first question. It is not needed when no question will be asked.
+Read this guide before the first question. It governs every question the skill asks, in any phase and operation, and the threat dialogue after delivery.
 
-For a requested walkthrough of already identified threats, use the [guided threat walkthrough](decisions.md#guided-threat-walkthrough) and the question and waiting rules here. Reuse settled system context instead of restarting the intake below (REQ-03, REQ-07).
+## Form of a question
 
-## Plan the interview
+A question after phase 2 has three parts: the scenario or checklist item it belongs to, one concrete fact or choice, and what the answer changes.
 
-Work from the [coverage record](checklist.md#coverage-record) and apply its [answer rules](checklist.md#interpret-answers) after each reply. Settle these topics in order, using sources first. They are dependencies, not mandatory rounds; skip settled and irrelevant topics.
+> T-003: What happens to the existing approval when the recipient of a payment changes? This decides whether T-003 stays high or is resolved.
 
-| Order | Establish | Ask only when needed |
-| --- | --- | --- |
-| 1. Readers | Who the model is for. | If unresolved, ask internal/public/undecided first. Resolve who may receive confidential findings before including them. |
-| 2. Purpose and scope | What the application is intended to do and what is covered (C-01, C-04). | Confirm a source-derived purpose unless the user stated it. Do not substitute their personal use for the project's intended uses. |
-| 3. Architecture and operating assumptions | Supported operating modes, exposed interfaces, and optional integrations (C-05, C-07, C-08, C-13). | Ask about missing architectural expectations only when they affect the assessment. Keep configuration-dependent flows conditional. |
-| 4. Data and recipients | Which data the intended uses involve and who may receive it (C-03, C-10). | Reuse project-level statements. One person's synthetic test data does not establish the application's data scope. Ask about another category or recipient only when evidence or a concrete unresolved flow makes it relevant. |
-| 5. Consequences | What people could lose or be unable to do (C-04). | Confirm concrete consequences grounded in the preceding context. Ask about the value of assets or disruption, not whether an attack can succeed. |
+Before the candidates exist, only these questions are allowed, each on one point: the target or scope, the audience, the purpose when no source states it, the operation when it is unclear, the use of another threat model document found in the project, and permission to read more code. The reading question explains the gap: "The documentation leaves data flows unclear. May I read more of the source code to trace them?" with the choices "Yes, include more code" and "Continue with current sources."
 
-If a structural gap requires a [reading decision](../SKILL.md#optional-architecture-reading), ask about the reading itself: "The documentation leaves data flows unclear. May I read more of the source code to trace them?" Choices: "Yes, include more code" and "Continue with current sources." If needed, explain once that this reads files without running the application.
+Check each question before sending it:
 
-If [other threat model documents](../SKILL.md#other-threat-model-documents) were found, ask about them directly: "I found `docs/threat-assessment-2023.md` from 2023. Should I use it as a source?" Choices: "Yes, use it" and "No, leave it out." With several documents, let the user choose per document.
+1. **Necessary.** Would the answer change a scenario, priority, treatment, scope, or authorized action? Otherwise omit it.
+2. **In scope.** It concerns the application or the selected feature, not the user's installation, and the facts it depends on are established.
+3. **Answerable.** One short sentence asks for one fact or choice. If the user could accept one clause and reject another, split it. Keep data, recipients, consequences, and permissions separate.
+4. **Clear to answer.** A bare answer has one meaning: "Yes," "No," and "Unknown" for a proposal, actual alternatives for a choice, otherwise one short open question that says a short answer or "unknown" is fine. One selection must not confirm several assets, several harms, or a permission.
+5. **New.** Revisit an answered, skipped, or unknown point only when new evidence changes it or the user reopens it.
 
-## Check each question
+Ask what a loss would prevent, not whether a clearly harmful outcome counts as harm. Ask about existing or intended rules, not whether the team wants a protection measure. Attack feasibility is yours to analyze; the user need not prove an attack or assign probabilities. Do not recommend factual answers, and remember that a choice cannot add a claim or a permission: a negative or unknown permission answer leaves the action unauthorized.
 
-Before sending a question, check:
+## Rounds
 
-1. **Necessary:** Would the answer change a scenario, priority, treatment, scope, or authorized next action? Otherwise omit it, except outstanding context confirmations and permission checks.
-2. **In scope and timely:** Does it concern the repository's application or the selected feature, and are the facts it depends on established? Remove questions about the user's installation.
-3. **Answerable:** Does one short sentence ask for one concrete fact or choice? If the user could accept one clause and reject another, simplify or split it. Keep data policy, recipients, consequences, and permission distinct.
-4. **Clear to answer:** Would a bare answer have one meaning? Use "Yes," "No," and "Unknown" for a single proposal and actual alternatives for a choice. Otherwise ask one short open question. One selection must not confirm several assets, several harms, a reinterpreted answer, or a permission.
-5. **New:** Revisit an answered, skipped, or unknown point only when new evidence changes it or the user reopens it. A later round needs a specific remaining gap, not unused checklist items.
-
-Ask what a loss would prevent, not whether a clearly harmful outcome counts as harm. Once confidential financial records and their permitted readers are established, do not ask whether disclosure to other customers is harmful; ask for the missing business consequence, such as which payment an approval triggers. This filter does not replace outstanding context confirmation. Attack feasibility is for the assistant to analyze.
-
-## End the interview
-
-Before another round, say which assessment or next action the remaining answer would affect.
-
-Once context confirmations are answered, unknown, or skipped, stop when further answers would not change scenarios, priorities, or responses (REQ-03, REQ-14), and complete the operation: a supported draft for creation or update, observations for review. Do not continue merely to fill checklist entries. Insufficient system context still gives an incomplete outcome, and unresolved permissions still block dependent actions.
+- At most three independently answerable questions per round. Ask dependent questions sequentially. Audience, scope, destination, document-use, and permission questions count toward the limit.
+- Order by effect: first the facts that move the most candidates or the highest provisional priority.
+- Before another round, say which assessment or next action the remaining answers would affect. Give the team room to add concerns without a mandatory extra round.
+- Stop when further answers would not change a scenario, priority, or response, and complete the operation. Do not continue to fill checklist entries.
 
 ## Ask and wait
 
-Use the host's interactive question tool when available and permitted; this skill enables no tools or modes. Put the complete question and choices there without repeating them in chat. Otherwise ask in chat and yield. Ask in the user's language, even when the model uses another language.
+Use the host's interactive question tool when available and permitted; put the complete question and choices there without repeating them in chat. Otherwise ask in chat and yield. Ask in the user's language, even when the model uses another language.
 
-These rules apply to every question, including operation selection, audience, context confirmation, and reading permission:
+A displayed question is not an answered one. If an asynchronous tool returns before the user replies, the question is pending: do useful independent work within scope and budget, then use the host's waiting mechanism within its limits. Do not send a final "no files changed" while the host supports waiting, repeat the question, perform filler reads, or treat a timeout or preselected option as a reply. After the answer, resume the pending step and carry the operation through to its deliverable; do not restart the workflow. If the host has only chat turns, present the questions and yield, making clear that the task awaits answers.
 
-- **Batches:** Up to three short, independent questions on related topics. Ask sequentially when one answer determines the next. Scope, audience, destination, and permission questions count toward the limit.
-- **Each question:** One concrete point and at most one brief context sentence.
-- **Selections:** Use short, parallel labels. A selection must suffice without typing: accept a bare "No" as rejection and "Unknown" as unresolved. Do not demand an explanation or ask again as free text.
-- **Open questions:** Make clear that a short answer suffices and "unknown" is fine. Do not invent alternatives to fit a selection tool.
-- **Neutrality:** Do not recommend factual answers. Choices cannot add claims or permissions; a negative or unknown permission answer leaves the action unauthorized.
+## Interpret answers
 
-### Waiting for answers
+Apply these rules to every statement from the user, including facts in the request. Update only what a statement establishes and drop questions it makes unnecessary.
 
-A displayed question is not an answered one. If an asynchronous tool returns before the user replies, the question is pending. It is neither skipped nor a reason to finish.
+- A concern, a desired limit, a factual description, and a permission are different answers.
+- Confirming that a consequence matters does not establish that an attack can cause it.
+- Keep contradictions unless the user clearly corrects the earlier fact for the same scope. If an ambiguous bundled answer matters, ask one focused clarification.
+- A statement keeps its scope. A note that limits "no material harm" to a training exercise says nothing about harm outside it; if the scope is unclear, ask only whether the statement refers to the exercise alone.
+- A user answer clarifies a checklist item as an attributed, unverified statement. If the user cannot answer, the point stays open.
 
-- While pending, do useful independent work within scope and budget, then use the host's waiting or yielding mechanism within its limits.
-- Do not send a final "No files changed" or "Please select an option" while the host supports waiting. Do not repeat the question, perform filler reads, or treat a timeout or preselected option as a reply.
-- After the answer, resume the pending step and carry the operation through to its deliverable. Do not restart the interview.
-- If the host has only chat turns, present the questions and yield, making clear the task awaits answers. Do not invent a waiting tool or bypass host restrictions.
+Skipped and unknown facts remain open and do not lower risk. No-questions mode, requested by the user or by stopping the interview, means continuing with conditional candidates and stating what remains unconfirmed. A skipped permission or operation choice does not authorize the dependent action. Cancellation stops the work.
 
-An explicit skip, stop-interview, or no-questions request follows the [skip rules](../SKILL.md#skipped-or-unanswered-questions). Cancellation stops work.
+## Continue the dialogue
+
+Use this section when the user asks to go through identified threats together, to discuss measures, or to choose treatments (REQ-12). An earlier request for that dialogue remains sufficient; do not ask again whether to start. A request for an assessment or recommendations alone starts no dialogue.
+
+Enter directly at the scenarios of the existing model with their recorded scope, audience, sources, and previous answers. Do not restart phases 1 and 2; read more or ask only when a material gap affects the discussion. Start with the user's selected scenarios, otherwise those with the greatest supported harm or the uncertainty most likely to change a decision; for updates, stay with affected scenarios. Work through one scenario at a time.
+
+For each scenario:
+
+1. **Explain it** in a few sentences: ID, actor, action, prerequisites, concrete harm, relevant existing protection, and the uncertainty that matters.
+2. **Clarify decisive facts** with questions in the form above: business rules, permitted actions, reach, recovery, or control behavior that could change the assessment.
+3. **Propose the assessment** under the model guide's [priority guidance](model-guide.md#explain-priorities) and say how the answers changed or supported it. A reported control stays reported until evidence shows it works. If the user disagrees, clarify the differing premise; keep an unresolved difference visible rather than changing the rating to obtain agreement.
+4. **Develop measures** under the [improvement guidance](model-guide.md#derive-actionable-improvements): a concrete change that addresses the cause, alternatives only where protection, workflow, effort, or remaining exposure differ materially, and questions about constraints only when they determine the choice. State the expected remaining risk and the checks for intended behavior and representative abuse. Effective existing protection may make verification the next step instead of another control.
+5. **Show the outcome**: the changed or retained assessment and its reason, the proposed or explicitly chosen measure, the remaining uncertainty, and the next check or decision. Include owners and dates only when known. A planned measure establishes no current risk reduction.
+
+Continue with the next scenario without asking for permission after every answer. Stop when the user skips further dialogue or no material points remain, and summarize pending scenarios without marking them reviewed or accepted. For a measures-only request, go directly to the responses and end without requiring a treatment selection, owner, date, or risk acceptance.
+
+Under the skill's write rule, outcomes are saved only within an authorized creation or update, with the delivery guide's [write checks](delivery.md#write-and-check); otherwise return the proposed records in the conversation. Save concise conclusions and their source, not a transcript.
+
+### Treatment decisions
+
+Enter this round only when the user asks to choose treatments, accept a risk, or work through treatment decisions. Explain the proposals and trade-offs first, then ask about the most important open scenarios in priority order, with the actual alternatives in the team's language and an option to leave the decision open: "Plan renewed approval after a recipient change," not "Plan a response." Do not force a risk-acceptance option into every choice, and make clear that the round asks for decisions, not system facts.
+
+| Answer | Record |
+| --- | --- |
+| Plan a response | The measure, responsible person, and target date. A plan, not an implementation. |
+| Accept | Who accepts, the rationale, and the review date or trigger. |
+| Clarify first | What is missing; the scenario stays open. |
+
+Record only explicit decisions with the details the team states; do not fill in a person or date. An acceptance without a named responsible person stays open. A decision does not authorize implementing the measure, creating tickets, or changing code.
+
+### Example
+
+T-003 already establishes that supplier staff can edit the recipient after approval and that a diverted payment is a substantial, unrecoverable loss. Whether approval survives the edit is unknown.
+
+Ask: "T-003: What happens to the existing approval when the recipient changes? A short answer or 'unknown' is fine." If unknown, keep the path conditional, explain the provisional priority from the established harm, and name the next check. If renewed approval is reported, attribute the statement to the user and say what would verify it, including a change concurrent with payout; do not call the threat resolved.
+
+If a measure is needed: "Invalidating approval when payment details change would require finance to approve the new recipient. Locking details after approval is another option, but legitimate corrections would then need a new payment request." Ask "Must staff be able to correct an approved payment before it is sent?" only if that affects the choice. If the user requested choosing measures, ask one explicit choice: "Shall we plan renewed approval after recipient changes, or leave that decision open?" "Sounds serious" confirms neither a measure nor an acceptance.
 
 ## Question examples
 
-Use these only when their application context is supported; they are not a fixed interview. Ask about existing or intended rules; do not turn fact-finding into a request to adopt a protection measure (REQ-07).
+Use these only when the project context supports them.
 
-- **Purpose:** "What main workflow does the application support?"
-- **Permitted readers:** "Under the intended workflow, who may read uploaded customer records?" If the design names them: "The design limits access to assigned caseworkers. Is that correct?"
-- **Business misuse:** "Does marking an invoice as paid trigger shipment of the order?" Use the answer to analyze the consequences of an unauthorized change, not as evidence that one is possible.
-- **Availability:** "How long could order processing be unavailable before it causes serious problems?" A rough duration is enough. Propose a threshold only when project context supports it.
-- **Permissions (C-06):** "Under the intended support role, may staff change customer records?"
-- **Business rules (C-11):** "What approval is required before a payout?"
-- **External recipients (C-03, C-07):** "Which data categories does the external analytics service receive?" Ask about an unresolved project-level data flow, not the user's provider choice.
-- **Recovery (C-13):** "Can an accidentally released payment still be recalled?"
-- **Detection (C-13):** "How would the team notice an unauthorized change to a payment recipient's bank details?"
-- **Training application:** "The project is intended for security training and tool testing. Is that correct?" If participant separation is supported but its rules are unclear: "Under the intended exercise rules, may participants change another participant's progress?" Do not turn the training purpose into questions about the user's computer or work files.
-
-Select follow-ups only when they could change a scenario or decision, such as affected recipients, one record versus bulk disclosure, recoverability, or a business deadline. Ask for data categories and qualitative consequences, not actual sensitive records. Retain unknown or skipped gaps with their effect on priority.
+- Permitted readers (C-03): "T-002: Under the intended workflow, who may read uploaded customer records?"
+- Business misuse (C-11): "T-005: Does marking an invoice as paid trigger shipment of the order?" Use the answer for consequences, not as evidence that an unauthorized change is possible.
+- Availability (C-04): "T-006: How long could order processing be unavailable before it causes serious problems? A rough duration is enough."
+- Permissions (C-06): "T-004: Under the intended support role, may staff change customer records?"
+- Recovery and detection (C-13): "T-003: Can an accidentally released payment still be recalled?" "T-003: How would the team notice a changed bank account on a payment recipient?"
+- External recipients (C-07): "T-007: Which data categories does the external analytics service receive?"

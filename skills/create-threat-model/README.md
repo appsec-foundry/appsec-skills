@@ -25,6 +25,8 @@ Start with docs/requirements.md and docs/architecture.md.
 
 Replace the paths with your documents. Without documents, describe what the system does, who uses it, what data it handles, and what needs protection.
 
+Use a current top-tier model at high reasoning effort. The skill cannot check or enforce this, so select the model before you start.
+
 New models use **English** unless you request another language. Updates keep the model's language; the conversation can use yours.
 
 ## What you get
@@ -65,14 +67,15 @@ Modeling does not change application code, create tickets, commit files, or publ
 
 ## How it works
 
-1. **Understand the system.** The assistant reads your documents and asks about gaps that could affect the model, such as who uses the system and what needs protection.
-2. **Assess what could go wrong.** It describes concrete threats, considers existing protections, and recommends changes and ways to check them.
-3. **Write the model.** It saves `threat-model.md` and summarizes the main threats, open questions, and next steps.
-4. **Work through threats together, when requested.** It explains each selected scenario, asks focused questions, proposes a reasoned assessment, and develops measures with you. It starts with the most important or uncertain scenarios and summarizes what your answers changed. Each round has at most three questions; you can skip or stop. Choosing measures is optional, and planned measures remain distinct from verified protection.
+1. **Understand the system.** The assistant reads your documents and shows what it understood: who uses the system, what it handles, and where trust changes. Each element is marked as intended, observed in code, or assumed. A single requirements file is enough to start; the picture is then smaller, not invented.
+2. **Derive threat candidates.** It lists what could go wrong, with a stable ID, the harm, and the one fact that decides each candidate.
+3. **Ask what decides them.** Each question names the candidate it belongs to and what your answer changes, for example: "T-003: Does an approval stay valid when the recipient changes?" Each round has at most three questions; you can skip or stop, and unknowns remain visible.
+4. **Assess and recommend.** It explains priorities, considers existing protections, and recommends changes and ways to check them.
+5. **Write the model.** It saves `threat-model.md` and summarizes the main threats, open decisions, and next steps.
 
-You can skip questions or request no questions. Unknowns and assumptions remain visible; if essential context is missing, the assistant explains what it needs.
+If essential context is missing, the assistant explains what it needs instead of inventing a model.
 
-An ordinary creation or update offers this walkthrough after delivery. If you requested it at the start, the assistant continues directly after the draft without asking again whether to begin.
+**Work through threats together, when requested.** After delivery, the assistant can continue the dialogue scenario by scenario: explain the threat, clarify decisive facts, propose an assessment, and develop measures with you. Choosing measures is optional, and planned measures remain distinct from verified protection. An ordinary creation or update offers this after delivery; if you requested it at the start, the assistant continues directly without asking again.
 
 The model covers the application as designed, including optional features. To focus on a particular deployment, say so in your request.
 

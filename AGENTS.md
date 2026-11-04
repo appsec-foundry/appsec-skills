@@ -21,3 +21,11 @@ Before changing `skills/create-threat-model/` or `skills/analyze-threats/`, read
 - Check changed behavior with a small relevant example, including a failure case when a security boundary changes. For documentation-only edits, check clarity, links, and consistency; do not claim unexecuted behavior was tested.
 
 The [repository README](README.md) introduces the collection. Each skill's README explains installation and usage; its `SKILL.md` contains the assistant workflow. Preserve that separation when adding material.
+
+## Skill versions
+
+Raise `metadata.version` in a skill's `SKILL.md` whenever its behavior changes, not only its wording. The version is shown at every invocation (REQ-16) and is the only way a user can tell which behavior they run.
+
+## Deterministic checks
+
+`scripts/check_threat_model.py` checks the structure of a written `threat-model.md`; `scripts/check_transcript.py` checks the question rounds of a Codex run. Run both on the outputs of a test run before and after changing `create-threat-model`, and keep `tests/fixtures/threat-model-checks/` consistent with the model guide.
