@@ -30,7 +30,7 @@
 
 - **REQ-15 — Offer architecture reading for existing code.** When the target has code, offer to derive components, entry points, data stores, external connections, and authentication paths from code and configuration. Read more broadly only after the user opts in, within a larger but fixed budget. Record results as implementation observations, show conflicts with requirements, and do not report code-level vulnerabilities.
 
-- **REQ-16 — Show the skill version.** At the start of each invocation, display the installed skill’s name and version.
+- **REQ-16 — Show the skill version and progress.** At the start of each invocation, display the installed skill’s name and version, the planned steps, and the current step. During the work, show briefly which step is running and what the skill is doing.
 
 - **REQ-17 — Default model language.** Create new threat models in English unless the user explicitly requests another language. Preserve an existing model’s language during updates unless translation is requested. The conversation may use the user’s language.
 

@@ -93,24 +93,24 @@ The unresolved audience still comes first in the interview. Accept other concise
 
 ### Check console readability and progress (REQ-03, REQ-04, REQ-12, REQ-16, REQ-19)
 
-Use the fictional order application above with a German request. Inspect the whole conversation, not just the final model. Concise progress messages across phases might be:
+Use the fictional order application above with a German request. Inspect the whole conversation, not just the final model. Concise status lines across steps might be:
 
-| Activity | Example message |
+| Activity | Example status line |
 | --- | --- |
-| Reading sources | **Quellen sichten** — Der Bestellablauf ist beschrieben; ich prüfe noch die Supportrolle. |
-| Clarifying context | **Kontext klären** — Die Zielgruppe steht fest; offen ist noch die Vertraulichkeit der Bestelldaten. |
-| Assessing scenarios | **Szenarien bewerten** — Ich prüfe, welche Bestellaktionen Kunden und Support laut Entwurf ausführen dürfen. |
-| Writing | **Modell schreiben** — Ich halte die Szenarien und offenen Entscheidungen im Entwurf fest. |
-| Checking | **Modell prüfen** — Ich prüfe Quellenverweise und die Verknüpfung der offenen Entscheidungen mit den Szenarien. |
+| Start | `Schritte: 1 System verstehen → 2 Bedrohungskandidaten → 3 Fragen → 4 Bewertung → 5 Modell schreiben` |
+| Reading sources | Schritt 1/5 · Ich lese 4 Quellen: Anforderungen, Architektur, Supportprozess, README. |
+| Architecture reading | Schritt 1/5 · Ich lese den Code der Bestell-API, um die Rechte der Supportrolle nachzuvollziehen. |
+| Assessing scenarios | Schritt 4/5 · Ich bewerte 7 Kandidaten mit deinen Antworten. |
+| Writing | Schritt 5/5 · Ich schreibe threat-model.md und verlinke es aus SECURITY.md. |
 
 Check these cases without requiring exact wording:
 
-- **Opening and ordinary progress:** Show the actual installed name/version once, the scope and expected result, and a useful next step. Keep the source-backed summary and diagram readable. Later messages normally use one short sentence after the activity label, aiming for about 25 words total, with one useful result or next action. Reject repeated banners, file-by-file narration, fabricated percentages, and unsubstantiated “almost finished” claims.
+- **Opening and ordinary progress:** Show the actual installed name/version once, the operation and scope, the steps of the operation, and the current step, before the first source read. If the host has a plan or task-list tool, expect the steps there too. Keep the source-backed summary and diagram readable. Later status lines name the step and one activity with its basis, about 25 words at most. Expect a status line at each step and before longer work, so no long stretch passes without one. Reject repeated banners, file-by-file narration, fabricated percentages, and unsubstantiated “almost finished” claims.
 - **All phases and operations:** Apply the same brevity check to source reading, clarification transitions, analysis, writing, checking, focused updates, reviews, and exports. Inspect answer acknowledgments and waiting notices too; reject repeated context summaries and detailed assessments inserted into status text. Use only phases relevant to the request. The opening system summary, actual questions, and final delivery retain their own formats.
-- **Detailed assessment during progress:** Supply observations that exercise handlers use application filesystem/network access, handler safety settings differ, and chat has a ten-step limit with configured retries but unverified spending limits and cancellation. Expect a short update such as “**Szenarien bewerten** — Ich prüfe Dateizugriffe, Netzwerkaufrufe und Verbrauchsgrenzen der Übungen und des Chats.” Keep the detailed control comparison and verification gaps in the model or substantive explanation; do not turn existing limits into verified containment or proposed safeguards into implemented controls. A blocker or required decision may need a second short sentence, even beyond the length target.
+- **Detailed assessment during progress:** Supply observations that exercise handlers use application filesystem/network access, handler safety settings differ, and chat has a ten-step limit with configured retries but unverified spending limits and cancellation. Expect a short status line such as “Schritt 4/5 · Ich prüfe Dateizugriffe, Netzwerkaufrufe und Verbrauchsgrenzen der Übungen und des Chats.” Keep the detailed control comparison and verification gaps in the model or substantive explanation; do not turn existing limits into verified containment or proposed safeguards into implemented controls. A blocker or required decision may need a second short sentence, even beyond the length target.
 - **Questions and waiting:** Keep each question and its concise choices together in the permitted interface. Delay an answer: independent work may continue, then the assistant should make the waiting state clear without duplicating the question or sending repetitive waiting notices. After the answer, expect continuation from the established context. With no questions requested, expect no waiting state for skipped factual questions and no invented confirmation.
 - **Limited evidence:** Make a relevant design source unavailable. Expect the missing basis, its effect, and a next step. If the remaining sources suffice, continue with the gap visible; otherwise report an incomplete result. An unanswered permission question must not become permission or a completed step.
-- **Focused update and read-only review:** Request each separately. Expect labels and scope appropriate to the actual work, without a forced full-creation sequence. Review completion must not claim that files were updated or application controls tested.
+- **Focused update and read-only review:** Request each separately. Expect steps and scope appropriate to the actual work, without a forced full-creation sequence. Review completion must not claim that files were updated or application controls tested.
 - **Closing and narrow console:** Read the transcript at roughly 80 columns. Ordinary prose should wrap naturally; diagrams and comparisons should stay understandable. Expect a self-contained assessment, accurate delivery status and file link where applicable, central findings, and actionable next steps without repeated findings or source inventories. An actually written draft may be delivered with open points; it must not be presented as security approval.
 
 These are manual reading and behavior cases. Static documentation and link checks do not establish how a live host renders messages or handles waiting; report a live session only if one was actually run.

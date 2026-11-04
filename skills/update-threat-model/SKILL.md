@@ -3,7 +3,7 @@ name: update-threat-model
 description: Update an existing maintained threat model after changes to requirements, design, features, or control evidence. Preserve scenario IDs, manual edits, and unaffected decisions. Requires create-threat-model for the shared modeling workflow. Not for initial creation, read-only reviews, or code vulnerability scans.
 license: Apache-2.0
 metadata:
-  version: "0.2.0"
+  version: "0.2.1"
 ---
 
 # Update a threat model
@@ -12,7 +12,7 @@ Provide a focused entry point to the Update operation of `create-threat-model`. 
 
 ## Load the shared workflow
 
-Display `<name> · Version <metadata.version>` from this file once and briefly state the requested change and next step (REQ-16). Use the user's language for conversation.
+Display `<name> · Version <metadata.version>` from this file once and briefly state the requested change and next step (REQ-16). After loading the shared workflow, show the Update steps and status lines under its progress rules. Use the user's language for conversation.
 
 Locate the installed `create-threat-model` skill through the host's skill catalog and read its `SKILL.md`. In this collection or a manual installation with sibling skill directories, the shared entry point is [create-threat-model](../create-threat-model/SKILL.md). Resolve its references relative to that skill's directory. If neither location provides the complete skill, explain the missing dependency and stop the update; do not improvise a substitute workflow, install packages, or fetch files automatically.
 

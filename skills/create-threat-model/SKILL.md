@@ -3,7 +3,7 @@ name: create-threat-model
 description: Create, update, or review a maintained threat model from requirements, specifications, design documents, and team context, with optional bounded code reading. Derive threat scenarios first, then clarify the facts that decide them with the user, assess risk, and develop measures. Use for system, feature, or design-change threat modeling, including before implementation exists. Not a code vulnerability scan.
 license: Apache-2.0
 metadata:
-  version: "0.3.1"
+  version: "0.3.2"
 ---
 
 # Create a threat model
@@ -14,7 +14,7 @@ The deliverable is `<repo>/threat-model.md`, linked from the repository's securi
 
 ## Workflow
 
-At invocation, display `<name> · Version <metadata.version>` from this file once, then state the operation, scope, and next step (REQ-16). The [execution boundaries](#execution-boundaries) apply throughout.
+At invocation, display `<name> · Version <metadata.version>` from this file once, followed by the [start status](#progress) (REQ-16). The [execution boundaries](#execution-boundaries) apply throughout.
 
 | Phase | Do | Read first |
 | --- | --- | --- |
@@ -28,7 +28,24 @@ Read each guide when its phase starts. Updates run the phases for the affected p
 
 ## Communication
 
-Write every user-visible text for developers without assuming security expertise (REQ-19): who could do what, the possible harm, and the useful response, in plain language. Distinguish facts, proposals, decisions, and verified controls. Use consistent component names and concise Markdown. Report blockers and partial results honestly; do not narrate the process, invent percentages, or claim verification you did not perform.
+Write every user-visible text for developers without assuming security expertise (REQ-19): who could do what, the possible harm, and the useful response, in plain language. Distinguish facts, proposals, decisions, and verified controls. Use consistent component names and concise Markdown. Report blockers and partial results honestly; beyond the progress lines below, do not narrate file reads or tool calls, invent percentages, or claim verification you did not perform.
+
+### Progress
+
+Show from the start what is running, so the user never waits without a status (REQ-16, REQ-19).
+
+- **Start.** Directly after the version line: the operation and scope, the steps this operation runs, and the current activity.
+
+  ```text
+  create-threat-model · Version <version>
+  Create · invoice approval in acme-payments
+  Steps: 1 Understand the system → 2 Threat candidates → 3 Questions → 4 Assessment → 5 Write the model
+  Step 1/5 · Looking for requirements, design documents, and an existing threat model
+  ```
+
+  List only the steps the operation runs: a review ends with "Report", an update names the affected part, a threat dialogue lists its scenarios ("Scenario 2/4 · T-003"). When the host has a plan or task-list tool, also keep the steps there and mark the current one.
+- **During the work.** One status line at each step and before longer work within it, such as reading a group of sources, architecture reading after an opt-in, assessing, or writing. Name the activity and its basis with real counts: "Step 1/5 · Reading 6 sources: requirements, two design documents, README."
+- **Limits.** Write status lines in the user's language. No percentages, time estimates, or a line per file or tool call. A status line does not replace a step's result, such as the system picture, the candidate list, or the question headings.
 
 ## Operations
 
