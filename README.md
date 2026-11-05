@@ -50,7 +50,7 @@ Use security-score for the staged changes with --details.
 Use security-score for PR https://github.com/owner/project/pull/42.
 ```
 
-Repositories receive **five 0–100 subscores with plain-language ratings** by default, separate evidence coverage, and an overall verdict without a numeric average. Unassessed areas stay explicit. Changes receive **high, medium, low, or unclear security relevance** and separate findings. PR/MR checks need read access or a supplied diff. Repository assessments require Security Score 0.2.1 or later; the Python tool needs Python 3.10+ and Git for local comparisons. See the [skill guide](skills/security-score/README.md) for details.
+Repositories receive **one score with a plain-language rating**, such as `59/100 (Bad)`. Details show the version and **five 0–100 subscores with colored bars**, grouped findings and evidence coverage. Unassessed areas stay explicit. Changes receive **high, medium, low, or unclear security relevance** and separate findings. PR/MR checks need read access or a supplied diff. Repository assessments require Security Score 0.3.2 or later; the Python tool needs Python 3.10+ and Git for local comparisons. See the [skill guide](skills/security-score/README.md) for details.
 
 ## Installation and development
 
