@@ -1,6 +1,6 @@
 # Security score skill
 
-This skill runs the standalone [Security Score Python tool](https://github.com/appsec-foundry/appsec-tools/tree/main/security-score). Repositories receive a **0–100 score and A–F grade**; changes receive a **high, medium, low, or unclear security relevance** classification. Scanning and calculation make no model calls.
+This skill runs the standalone [Security Score Python tool](https://github.com/appsec-foundry/appsec-tools/tree/main/security-score). Repositories receive **five evidence-qualified 0–100 subscores with plain-language ratings**, plus an overall verdict and its main reason. Changes retain **high, medium, low, or unclear security relevance**. Scanning and calculation make no model calls.
 
 ## Install
 
@@ -20,7 +20,11 @@ Use security-score for https://gitlab.company.example/team/project
 with --token-env GITLAB_READ_TOKEN.
 ```
 
-`--details` adds reasons, coverage, findings, and calculation details. `--json` and `--yaml` request structured output. A high score does not establish safety; insufficient coverage withholds the score.
+The skill uses tool version 0.2.0 or later with `--score`. Its five areas are Architecture & isolation, Identity & access, Data & processing, Dependencies & supply chain, and Deployment & operations. Ratings run from Very good to Very bad; coverage is shown separately, and insufficient evidence leaves an area Not assessed. A serious design or control weakness can determine the overall verdict; there is no overall numeric average.
+
+`--details` adds reasons, coverage, findings and calculations, plus recognized SSO endpoint URLs and artifact repositories such as Nexus or Artifactory. Useful endpoint paths are retained without credentials or query tokens; configuration and lockfile observations do not prove runtime use. `--json` and `--yaml` request structured output. The bounded architecture checks cover declared isolation and privileges; wider trust boundaries and authorization need additional review. A high score does not establish safety.
+
+Details also show declared Terraform/cloud targets and selected security properties, plus Python/Node dependency-management evidence: version and lock consistency, artifact hashes, and applicable locked-install declarations. Unsupported formats and unresolved build workflows remain visible as gaps.
 
 Remote scans support GitHub.com, GitLab.com and self-managed GitLab over HTTPS,
 including internal addresses and custom ports. The GitLab token needs `read_api`
