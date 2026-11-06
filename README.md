@@ -42,7 +42,7 @@ Replace the paths with your documents. The assistant writes `threat-model.md` an
 npx skills@1.7.2 add appsec-foundry/appsec-skills --skill security-score
 ```
 
-Install the [Security Score Python tool](https://github.com/appsec-foundry/appsec-tools/tree/main/security-score) separately. The skill calls that tool; installing the skill alone does not provide the scorer.
+The skill calls the [Security Score tool](https://github.com/appsec-foundry/appsec-tools/tree/main/security-score), version 0.3.2 or later, which you install separately. The tool needs Python 3.10+, and Git for local comparisons.
 
 ```text
 Use security-score for this repository.
@@ -50,7 +50,7 @@ Use security-score for the staged changes with --details.
 Use security-score for PR https://github.com/owner/project/pull/42.
 ```
 
-Repositories receive **one score with a plain-language rating**, such as `59/100 (Bad)`. Details show the version and **five 0–100 subscores with colored bars**, grouped findings and evidence coverage. Unassessed areas stay explicit. Changes receive **high, medium, low, or unclear security relevance** and separate findings. PR/MR checks need read access or a supplied diff. Repository assessments require Security Score 0.3.2 or later; the Python tool needs Python 3.10+ and Git for local comparisons. See the [skill guide](skills/security-score/README.md) for details.
+A repository gets one score with a rating, such as `59/100 (Bad)`; `--details` adds five subscores, findings, and the areas that could not be assessed. A change gets a security relevance of high, medium, low, or unclear. See the [skill guide](skills/security-score/README.md).
 
 ## Installation and development
 
@@ -62,4 +62,4 @@ To work on this collection, follow [AGENTS.md](AGENTS.md) and the affected skill
 
 ## License
 
-Licensed under the [Apache License 2.0](LICENSE). See [NOTICE](NOTICE) for attribution. Each skill declares `license: Apache-2.0` in its `SKILL.md`, so the license stays visible when a single skill is installed.
+Licensed under the [Apache License 2.0](LICENSE). See [NOTICE](NOTICE) for attribution.

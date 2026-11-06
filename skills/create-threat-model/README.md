@@ -1,8 +1,8 @@
 # Create Threat Model
 
-Create a threat model from requirements, design documents, and team knowledge, even before code exists. The model describes what could go wrong, what harm it could cause, and what to change. No security expertise is required.
+Create a threat model from requirements, design documents, and what your team knows, even before code exists. The model describes what could go wrong, what harm it could cause, and what to change. You do not need security expertise.
 
-This skill also supports reviews, updates, and guided discussions to assess identified threats and develop protective measures. For an existing model, [update-threat-model](../update-threat-model/README.md) provides a shortcut to the same update workflow; it requires this skill to be installed.
+The skill can also review or update a model and walk through its threats with you. [update-threat-model](../update-threat-model/README.md) is a shortcut to the update workflow and needs this skill installed.
 
 ## Quick start
 
@@ -25,20 +25,20 @@ Start with docs/requirements.md and docs/architecture.md.
 
 Replace the paths with your documents. Without documents, describe what the system does, who uses it, what data it handles, and what needs protection.
 
-Use a current top-tier model at high reasoning effort. The skill cannot check or enforce this, so select the model before you start.
+Select a current top-tier model with high reasoning effort before you start; the skill cannot check this.
 
-New models use **English** unless you request another language. Updates keep the model's language; the conversation can use yours.
+New models are written in English unless you ask for another language. Updates keep the model's language. The conversation can use yours.
 
 ## What you get
 
-The assistant writes **`threat-model.md` at the project root** and links it from `SECURITY.md` or `security.md`, creating that file if needed. The draft contains:
+The assistant writes `threat-model.md` at the project root and links it from `SECURITY.md` or `security.md`, creating that file if needed. The model contains:
 
-- A system overview and diagram, using Mermaid by default.
-- Threat scenarios: who could do what, under which conditions, and with what harm.
-- Existing controls, recommended changes, priorities, and checks.
-- Open decisions, source references, and important gaps in the evidence.
+- a system overview with a diagram (Mermaid by default)
+- threat scenarios: who could do what, under which conditions, and with what harm
+- existing controls, recommended changes, priorities, and checks
+- open decisions, source references, and gaps in the evidence
 
-Scenarios have stable IDs such as `T-003` for tickets and pull requests. You can edit the model in any Markdown editor. Proposed controls remain distinct from implemented or verified ones. The closing summary highlights the main threats and recommended next steps.
+Each scenario has a stable ID such as `T-003` that you can use in tickets and pull requests. Proposed controls are kept apart from implemented or verified ones. The model is plain Markdown, so you can edit it in any editor. The closing summary names the main threats and next steps.
 
 A shortened example from a fictional payment system:
 
@@ -50,44 +50,44 @@ A shortened example from a fictional payment system:
 >
 > **Proposed check:** An unchanged approved payment succeeds; changing its recipient blocks payment until renewed approval. These checks have not run.
 
-See the [full scenario and its evidence](references/model-guide.md#t-003-payment-details-can-change-after-approval). Priorities reflect possible harm and the conditions needed for an attack; missing information stays visible.
+See the [full scenario and its evidence](references/model-guide.md#t-003-payment-details-can-change-after-approval). Priorities depend on the possible harm and on what an attacker needs to succeed. Missing information is marked as such.
 
-In its closing, the assistant may offer to add a reminder to consult the model in an existing `AGENTS.md` or `CLAUDE.md`. It finishes without waiting for a reply to that offer. If you request the addition, it clarifies the destination only when needed and edits the selected file only with your explicit approval, reusing approval already given. See [optional agent integration](references/delivery.md#optional-agent-integration) for details.
+At the end, the assistant may offer to add a pointer to the model in an existing `AGENTS.md` or `CLAUDE.md`. It edits that file only with your approval; see [agent integration](references/delivery.md#optional-agent-integration).
 
 | Request | Result |
 | --- | --- |
-| Create | Writes an initial model; preserves an existing one and offers an update. |
-| Update | Revises affected sections while preserving unrelated content, manual edits, and IDs. |
-| Review | Reports gaps and suggestions without changing files or review status. |
-| Walk through threats | Discusses identified threats, clarifies decisive facts, explains their priority, and develops measures. At the end, offers to save the outcomes in the model and writes them only after your explicit approval or update request. |
+| Create | Writes a new model. If one exists, keeps it and offers an update. |
+| Update | Revises affected sections; keeps unrelated content, manual edits, and IDs. |
+| Review | Reports gaps and suggestions without changing files. |
+| Walk through threats | Discusses threats one at a time, clarifies the facts that decide their priority, and develops measures. Saves the results only if you approve or asked for an update. |
 | Discuss measures | Explains options and recommends changes without editing files. |
-| Export | Creates an OTM JSON or YAML copy on request; Markdown remains the main document. |
+| Export | Writes an OTM JSON or YAML copy; Markdown stays the main document. |
 
-Modeling does not change application code, create tickets, commit files, or publish the model.
+The skill does not change application code, create tickets, commit files, or publish the model.
 
 ## How it works
 
-From the start, the assistant shows the skill version, the steps it will run, and a short status line whenever it begins a step or longer work within it, so you can see what it is doing.
+At the start, the assistant shows the skill version and its steps, then a short status line whenever it begins a step or longer work.
 
-1. **Understand the system.** The assistant reads your documents and shows what it understood: who uses the system, what it handles, and where trust changes, with a text diagram of the recognized architecture. Each element is marked as intended, observed in code, or assumed. A single requirements file is enough to start; the picture is then smaller, not invented. If missing context prevents identifying important data, operations, actors, interactions, or protection needs, it asks focused questions before deriving threats.
-2. **Derive threat candidates.** It lists what could go wrong, one line per candidate with a stable ID and a provisional priority.
-3. **Ask what decides them, one question at a time.** Each question starts with brief background: what could happen, what the documents already say, and what is open. The question names its candidate or checklist item, for example "T-003: Does an approval stay valid when the recipient changes?", and each answer option says what it changes. After every answer you see its effect. If an answer reveals new data, actors, flows, or protection needs, the assistant updates the system picture and revisits affected threats, adding distinct scenarios where needed. At the end you see what your answers changed. You can skip or stop; unknowns remain visible.
-4. **Assess and recommend.** It explains priorities, considers existing protections, and recommends changes and ways to check them.
+1. **Understand the system.** The assistant reads your documents and summarizes who uses the system, what it handles, and where trust changes, with a text diagram. Each element is marked as intended, observed in code, or assumed. A single requirements file is enough to start; the picture is then smaller, not invented. If it cannot tell which data, operations, actors, or protection needs matter, it asks before deriving threats.
+2. **List threat candidates.** One line per candidate, with an ID and a provisional priority.
+3. **Ask what decides them.** One question at a time, each tied to a candidate, for example "T-003: Does an approval stay valid when the recipient changes?". Each question gives brief background, and each answer option says what it would change. After each answer the assistant shows the effect. If an answer reveals new data, actors, or flows, it revisits the affected threats and adds scenarios where needed. You can skip or stop; unknowns stay visible.
+4. **Assess and recommend.** It explains priorities, considers existing protections, and recommends changes and how to check them.
 5. **Write the model.** It saves `threat-model.md` and summarizes the main threats, open decisions, and next steps.
 
-Early questions clarify only what is needed for meaningful threat discovery; they are not a complete questionnaire. If essential context remains missing after your answers or a request to skip questions, the assistant explains the incomplete result instead of inventing a model.
+The questions cover only what is needed to find threats; they are not a full questionnaire. If essential context is still missing, the assistant says the result is incomplete instead of inventing a model.
 
-**Work through threats together, when requested.** After delivery, the assistant can continue the dialogue scenario by scenario: explain the threat, clarify decisive facts, propose an assessment, and develop measures with you. Choosing measures is optional, and planned measures remain distinct from verified protection. An ordinary creation or update offers this after delivery; if you requested it at the start, the assistant continues directly without asking again. At the end it lists the results and asks whether to add them to the model, unless you already requested an update or asked to keep the files unchanged.
+After delivery, the assistant offers to walk through the threats with you, one scenario at a time. If you asked for this at the start, it continues directly. Planned measures stay separate from verified protection.
 
-The model covers the application as designed, including optional features. To focus on a particular deployment, say so in your request.
+The model covers the application as designed, including optional features. To focus on one deployment, say so in your request.
 
 ### When code is available
 
-The assistant can read selected code and configuration to clarify architecture questions. It also offers to read more broadly to understand the architecture. **Broader reading requires your opt-in**, which you can include in the initial request.
+The assistant can read selected code and configuration to answer architecture questions. It may offer to read more broadly; that needs your opt-in, which you can give in the first request.
 
-Code helps explain how the system is built; it does not replace requirements or resolve conflicting evidence. This is not a code vulnerability scan, and the assistant does not run the application or tests.
+Code shows how the system is built. It does not replace requirements or settle conflicting evidence. This is not a code vulnerability scan, and the assistant does not run the application or tests.
 
-For large projects, name the service or feature to focus on. Reading has [fixed limits](SKILL.md#discovery-budget), and the model records coverage gaps.
+For large projects, name the service or feature to focus on. Reading has [fixed limits](SKILL.md#discovery-budget), and the model records what was not covered.
 
 ## Common requests
 
@@ -154,30 +154,32 @@ Explain the options and trade-offs and recommend where to start.
 Update the model with the decisions I explicitly make.
 ```
 
-Use your actual scenario IDs. With the update request, decisions are saved without a further question; otherwise the assistant asks at the end of the dialogue whether to save them. Discussion alone does not edit the model. Accepting a risk requires an explicit decision by a responsible person, with a rationale and review date or trigger.
+Use your own scenario IDs. Discussion alone does not change the model. If your request asks for an update, decisions are saved directly; otherwise the assistant asks at the end. Accepting a risk needs an explicit decision by a responsible person, with a reason and a review date or trigger.
 
 ## Internal or public models
 
-If the intended audience is unknown, the assistant asks whether the model is internal, public, or undecided. You can specify it in the request:
+If the audience is unclear, the assistant asks whether the model is internal, public, or undecided. You can state it in the request:
 
 ```text
 Create a public threat model using only information suitable for publication.
 ```
 
-Internal models may include confidential findings only when the repository's readers may receive them. Public models omit confidential details. Neither includes real secrets or unnecessary personal data.
+Internal models may include confidential findings only if everyone who can read the repository may see them. Public models leave confidential details out. Neither contains real secrets or unnecessary personal data.
 
-If you skip the audience question, a new model is provisionally marked internal. Disclosure questions remain recorded as unresolved; affected confidential details are omitted. The audience notice does not restrict file access or authorize publication. See the [audience notices](references/audience.md#audience-notice).
+If you skip the question, a new model is marked internal for now, the disclosure question stays open, and affected confidential details are left out. This marking does not restrict file access or approve publication. See [audience notices](references/audience.md#audience-notice).
 
 ## Keep the model current
 
-Use [update-threat-model](../update-threat-model/README.md) or request an update through this skill when requirements, design, or evidence about controls changes. Supply the change documents and any verification results; a merged PR or test code alone does not establish that a control works.
+When requirements, design, or evidence about controls change, use [update-threat-model](../update-threat-model/README.md) or ask this skill for an update. Supply the change documents and any verification results; a merged PR or test code alone does not show that a control works.
 
 ## Add project context
 
-The skill uses a checklist to find missing context and common abuse patterns to explore what could go wrong. You can adapt both without editing the skill:
+The skill uses a checklist to find missing context and a set of abuse patterns to explore what could go wrong. You can extend both with files at the project root, without editing the skill:
 
-- **Checklist:** Add project-specific questions or explain exclusions in `threat-model-checklist.md` at the project root. See the [project checklist format](references/checklist.md#project-checklist).
-- **Abuse patterns:** Add cases such as splitting purchases to bypass approval limits in `threat-model-abuse-cases.md` at the project root. See the [customization format](references/abuse-cases.md#project-customizations).
+| File | Content |
+| --- | --- |
+| `threat-model-checklist.md` | Project-specific questions or reasons for exclusions ([format](references/checklist.md#project-checklist)) |
+| `threat-model-abuse-cases.md` | Abuse cases, such as splitting purchases to stay under approval limits ([format](references/abuse-cases.md#project-customizations)) |
 
 These files survive skill updates. After changing them, request a model update. You can also name company guidance or known threats in your request; see [supported security context](references/security-context.md).
 
@@ -188,7 +190,7 @@ Use create-threat-model to export threat-model.md as OTM YAML.
 Keep the Markdown model unchanged and explain any export limitations.
 ```
 
-Open Threat Model (OTM) exports are snapshots; regenerate them after model changes. The assistant explains missing inputs and compatibility limits. See the [export guide](references/otm-export.md) for the supported version, required assessments, and filenames.
+Open Threat Model (OTM) exports are snapshots; regenerate them after the model changes. The [export guide](references/otm-export.md) lists the supported version, required assessments, and filenames.
 
 ## Install from a local checkout
 
@@ -202,11 +204,11 @@ For manual installation, copy the complete `create-threat-model` directory, incl
 
 ## Company distribution and customization
 
-You can distribute a customized copy from your company's skills repository. Track the upstream commit and keep company changes separate so later updates can be merged without losing them.
+You can distribute a customized copy from your company's skills repository. Record the upstream commit and keep company changes separate so you can merge later updates.
 
-Keep company requirements and known threats in separate context files where possible. Select them explicitly when invoking the skill; this skill does not automatically load a company context directory.
+Where possible, put company requirements and known threats in separate context files and name them in your request. The skill does not load a company context directory automatically.
 
-See the [technical distribution guide](references/company-distribution.md) for importing the skill, making company changes, installing from your repository, and merging upstream updates.
+The [distribution guide](references/company-distribution.md) covers importing the skill, making company changes, installing from your repository, and merging upstream updates.
 
 ## Further reading
 
