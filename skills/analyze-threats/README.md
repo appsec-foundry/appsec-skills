@@ -19,11 +19,11 @@ Replace the path with your document. The assistant reads the relevant context, a
 
 ## What you get
 
-Each finding says who could misuse the behavior, under which conditions, what harm follows, what protection exists, and what to change or check. Findings are ordered by priority and cite design documents, code locations, or model scenarios. The result names the examined scope, the threat model and version it used, and important evidence gaps.
+Each finding says who could misuse the behavior, under which conditions, what harm follows, what protection exists, and what to change or check. Findings are ordered by priority and cite design documents, code locations, or model scenarios. The result names the examined scope and its version, the threat model used, and important evidence gaps.
 
 With an existing model, findings are marked as already covered, new, reassessed, or a gap in the model. Planned controls stay marked as planned. Without a model, the analysis works from the context you supply.
 
-The skill does not run attacks or prove exploitability. An empty result does not mean the change is safe. Recommendations name concrete changes and checks; implementing them is a separate request.
+The skill does not run attacks or prove exploitability. An empty finding list does not mean the design or change is safe. Recommendations name concrete changes and checks; implementing them is a separate request.
 
 ## Examples
 
@@ -135,6 +135,6 @@ and threat-model.md. Do not run model-backed analysis yet.
 
 A local preview makes no model calls; a remote PR/MR preview still fetches metadata and Git content. Analyzer's spending limit applies per model call, not per job. If you ask for a total job limit, the assistant tells you before the run that it is not supported.
 
-The skill installs no packages. If you ask for an Analyzer result and the engine is missing, the assistant says so.
+The skill installs no packages. If you ask for an Analyzer result and no compatible engine is available, the assistant says so.
 
 See the [workflow](SKILL.md), [requirements](requirements.md), [engine dependencies](dependencies.json), [compatibility](references/compatibility.md), and [validation cases](references/validation.md).

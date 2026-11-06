@@ -8,7 +8,7 @@ Score a repository's security or rate how security-relevant a change is. The ski
 npx skills@1.7.2 add appsec-foundry/appsec-skills --skill security-score
 ```
 
-The skill does not download or install the tool. Clone a trusted copy of [appsec-tools](https://github.com/appsec-foundry/appsec-tools) over HTTPS; public repositories need no GitHub account or SSH key. Use tool version 0.3.2 or later. It needs Python 3.10+ on Linux or macOS, and Git for local comparisons. The default engine needs no third-party Python packages and no AppSec Analyzer.
+The skill does not download or install the tool. Clone a trusted copy of [appsec-tools](https://github.com/appsec-foundry/appsec-tools) over HTTPS; public repositories need no GitHub account or SSH key. Repository assessments need tool version 0.3.2 or later. The tool needs Python 3.10+ on Linux or macOS, and Git for local comparisons. The default engine needs no third-party Python packages and no AppSec Analyzer.
 
 ## Use
 
@@ -27,7 +27,7 @@ A change gets a security relevance of high, medium, low, or unclear, with findin
 | Option | Output |
 | --- | --- |
 | none or `--score` | Overall score and rating |
-| `--details` | Tool version, colored bars for the five subscores, grouped findings with point deductions, and the evidence behind them, such as SSO endpoints, artifact repositories, Compose services, Terraform targets, and dependency locking |
+| `--details` | Tool version, colored bars for the five subscores, grouped findings with point deductions, and the evidence behind them, such as SSO endpoints (without credentials or query tokens), artifact repositories, Compose services, Terraform targets, and dependency locking |
 | `--json`, `--yaml` | Full structured result, including internal check states and exact calculations |
 | `--version` | Tool version and source commit |
 
@@ -35,7 +35,7 @@ Configuration and lockfiles show what is declared, not what runs. Architecture i
 
 ## Remote repositories
 
-Remote scans support GitHub.com, GitLab.com, and self-managed GitLab over HTTPS, including internal hosts and custom ports. Files are read through the API without a checkout. URLs work with or without `.git`.
+Remote scans support GitHub.com, GitLab.com, and self-managed GitLab over HTTPS, including internal hosts and custom ports. Source files and host security settings are read through the API without a checkout. URLs work with or without `.git`.
 
 For GitLab, use a token with `read_api` and project access. Set it in an environment variable before you start your assistant and name the variable with `--token-env`. Alternatively, map API hosts to token variables once in the tool's `token-hosts.json`; the tool then tries anonymous access first and uses the token only after an authentication failure. HTTPS scans honor `HTTPS_PROXY`, `ALL_PROXY`, `HTTP_PROXY`, and `NO_PROXY`. See [tokens](https://github.com/appsec-foundry/appsec-tools/blob/main/security-score/references/usage.md#tokens-and-rate-limits) and [proxies](https://github.com/appsec-foundry/appsec-tools/blob/main/security-score/references/usage.md#http-proxies).
 

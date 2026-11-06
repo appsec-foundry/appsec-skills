@@ -42,7 +42,7 @@ Replace the paths with your documents. The assistant writes `threat-model.md` an
 npx skills@1.7.2 add appsec-foundry/appsec-skills --skill security-score
 ```
 
-The skill calls the [Security Score tool](https://github.com/appsec-foundry/appsec-tools/tree/main/security-score), version 0.3.2 or later, which you install separately. The tool needs Python 3.10+, and Git for local comparisons.
+The skill calls the [Security Score tool](https://github.com/appsec-foundry/appsec-tools/tree/main/security-score), which you install separately. Repository assessments need version 0.3.2 or later. The tool needs Python 3.10+, and Git for local comparisons.
 
 ```text
 Use security-score for this repository.

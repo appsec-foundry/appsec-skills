@@ -58,7 +58,7 @@ At the end, the assistant may offer to add a pointer to the model in an existing
 | --- | --- |
 | Create | Writes a new model. If one exists, keeps it and offers an update. |
 | Update | Revises affected sections; keeps unrelated content, manual edits, and IDs. |
-| Review | Reports gaps and suggestions without changing files. |
+| Review | Reports gaps and suggestions without changing files or the review status. |
 | Walk through threats | Discusses threats one at a time, clarifies the facts that decide their priority, and develops measures. Saves the results only if you approve or asked for an update. |
 | Discuss measures | Explains options and recommends changes without editing files. |
 | Export | Writes an OTM JSON or YAML copy; Markdown stays the main document. |
@@ -71,7 +71,7 @@ At the start, the assistant shows the skill version and its steps, then a short 
 
 1. **Understand the system.** The assistant reads your documents and summarizes who uses the system, what it handles, and where trust changes, with a text diagram. Each element is marked as intended, observed in code, or assumed. A single requirements file is enough to start; the picture is then smaller, not invented. If it cannot tell which data, operations, actors, or protection needs matter, it asks before deriving threats.
 2. **List threat candidates.** One line per candidate, with an ID and a provisional priority.
-3. **Ask what decides them.** One question at a time, each tied to a candidate, for example "T-003: Does an approval stay valid when the recipient changes?". Each question gives brief background, and each answer option says what it would change. After each answer the assistant shows the effect. If an answer reveals new data, actors, or flows, it revisits the affected threats and adds scenarios where needed. You can skip or stop; unknowns stay visible.
+3. **Ask what decides them.** One question at a time, each tied to a candidate or checklist item, for example "T-003: Does an approval stay valid when the recipient changes?". Each question gives brief background, and each answer option says what it would change. After each answer the assistant shows the effect. If an answer reveals new data, actors, or flows, it revisits the affected threats and adds scenarios where needed. You can skip or stop; unknowns stay visible.
 4. **Assess and recommend.** It explains priorities, considers existing protections, and recommends changes and how to check them.
 5. **Write the model.** It saves `threat-model.md` and summarizes the main threats, open decisions, and next steps.
 
@@ -166,7 +166,7 @@ Create a public threat model using only information suitable for publication.
 
 Internal models may include confidential findings only if everyone who can read the repository may see them. Public models leave confidential details out. Neither contains real secrets or unnecessary personal data.
 
-If you skip the question, a new model is marked internal for now, the disclosure question stays open, and affected confidential details are left out. This marking does not restrict file access or approve publication. See [audience notices](references/audience.md#audience-notice).
+If you skip the question, a new model is marked internal for now, the disclosure question stays open, and affected confidential details are left out. The audience notice in the model never restricts file access or approves publication. See [audience notices](references/audience.md#audience-notice).
 
 ## Keep the model current
 
@@ -190,7 +190,7 @@ Use create-threat-model to export threat-model.md as OTM YAML.
 Keep the Markdown model unchanged and explain any export limitations.
 ```
 
-Open Threat Model (OTM) exports are snapshots; regenerate them after the model changes. The [export guide](references/otm-export.md) lists the supported version, required assessments, and filenames.
+Open Threat Model (OTM) exports are snapshots; regenerate them after the model changes. The assistant points out missing inputs and compatibility limits. The [export guide](references/otm-export.md) lists the supported version, required assessments, and filenames.
 
 ## Install from a local checkout
 
