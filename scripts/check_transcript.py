@@ -7,7 +7,9 @@ Usage: check_transcript.py ROLLOUT.jsonl [--no-code] [--scenario-bound]
 Reads a Codex rollout transcript (~/.codex/sessions/.../rollout-*.jsonl),
 extracts the question rounds, assistant messages, and writes to the model
 file, and checks the interview rules of the skill. The checks cover form,
-not whether a question was sensible. Exit code 1 when an error was found.
+not whether a question was sensible. Only question-tool calls are counted;
+chat questions, answers and waiting are not checked. Exit code 1 when an
+error was found. An error-free run is not a passed behavioral evaluation.
 """
 
 import argparse
@@ -24,6 +26,14 @@ READING_HINT = re.compile(r"(read|lesen).{0,60}(code|quellcode|source)", re.IGNO
 OPEN_ANSWER_HINT = re.compile(r"unknown|short answer|unbekannt|kurze antwort|one sentence|ein satz", re.IGNORECASE)
 MODEL_WRITE = re.compile(r"\*\*\* (Add|Update) File: .*threat-model\.md")
 VERSION_BANNER = re.compile(r"Version \d+\.\d+")
+SKILL_NAME = re.compile(r"\bcreate-threat-model(?:-dev)?\b")
+COVERAGE = {
+    "question_source": "request_user_input tool calls",
+    "candidate_detection": "heuristic: scenario ID in assistant text",
+    "write_detection": "apply_patch text only; execution success not checked",
+    "not_checked": ["chat_questions", "answers_and_waiting", "semantic_quality",
+                    "non_patch_writes"],
+}
 
 
 def load_events(path):
@@ -71,21 +81,33 @@ def check_transcript(events, no_code=False, scenario_bound=False, max_questions=
     seen_titles = {}
     audience_rounds = 0
     candidates_shown = False
-    first_message_checked = False
+    startup_messages = 0
+    version_shown = False
+    version_error = False
     writes = 0
     questions_after_write = 0
     questions_before_candidates = 0
     total_questions = 0
 
+    def require_version():
+        nonlocal version_error
+        if not version_shown and not version_error:
+            add("error", "Q09", "skill name and version missing at startup "
+                "(one initial skill announcement may precede reading the version; REQ-16)")
+            version_error = True
+
     for kind, data in events:
         if kind == "message":
-            if not first_message_checked and data.strip():
-                first_message_checked = True
-                if not VERSION_BANNER.search(data):
-                    add("error", "Q09", "first assistant message does not show the skill name and version (REQ-16)")
-            if len(set(re.findall(r"\bT-\d{3}\b", data))) >= 2:
+            if not version_shown and not version_error and data.strip():
+                startup_messages += 1
+                if SKILL_NAME.search(data) and VERSION_BANNER.search(data):
+                    version_shown = True
+                elif startup_messages > 1 or not SKILL_NAME.search(data):
+                    require_version()
+            if re.search(r"\bT-\d{3}\b", data):
                 candidates_shown = True
             continue
+        require_version()
         if kind == "write":
             writes += 1
             continue
@@ -126,6 +148,7 @@ def check_transcript(events, no_code=False, scenario_bound=False, max_questions=
                 if not SCENARIO_OR_ITEM.search(title) and not PERMISSION_START.match(title):
                     add("error", "Q07", f"{label} is not bound to a scenario or checklist item")
 
+    require_version()
     summary = {
         "rounds": rounds,
         "questions": total_questions,
@@ -153,12 +176,14 @@ def main(argv=None):
                                          args.max_questions, args.max_words)
     errors = [f for f in findings if f["level"] == "error"]
     if args.json:
-        print(json.dumps({"findings": findings, "summary": summary}, indent=2))
+        print(json.dumps({"findings": findings, "summary": summary, "coverage": COVERAGE}, indent=2))
     else:
         for finding in findings:
             print(f"{finding['level'].upper()} {finding['code']} {finding['message']}")
         print(", ".join(f"{k} {v}" for k, v in summary.items()))
         print(f"{len(errors)} errors, {len(findings) - len(errors)} warnings")
+        print("Scope: question-tool calls; candidate detection is heuristic; writes are patch text, not confirmed execution.")
+        print("Not checked: chat questions, answers and waiting, semantic quality, non-patch writes.")
     return 1 if errors else 0
 
 

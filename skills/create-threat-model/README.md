@@ -75,7 +75,7 @@ At the start, the assistant shows the skill version and its steps, then a short 
 4. **Assess and recommend.** It explains priorities, considers existing protections, and recommends changes and how to check them.
 5. **Write the model.** It saves `threat-model.md` and summarizes the main threats, open decisions, and next steps.
 
-The questions cover only what is needed to find threats; they are not a full questionnaire. If essential context is still missing, the assistant says the result is incomplete instead of inventing a model.
+The questions cover only what is needed to find threats; they are not a full questionnaire. Factual questions come individually; up to three independent questions about scope, readers, or permissions may share a round. If essential context is still missing, the assistant says the result is incomplete instead of inventing a model.
 
 After delivery, the assistant offers to walk through the threats with you, one scenario at a time. If you asked for this at the start, it continues directly. Planned measures stay separate from verified protection.
 

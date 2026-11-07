@@ -24,7 +24,7 @@ The [repository README](README.md) introduces the collection. Each skill's READM
 
 ## Skill versions
 
-Raise `metadata.version` in a skill's `SKILL.md` whenever its behavior changes, not only its wording. The version is shown at every invocation (REQ-16) and is the only way a user can tell which behavior they run.
+Keep `metadata.version` in a skill's `SKILL.md` unchanged during ordinary development, including fixes and behavior changes. Change it only when the user explicitly requests a version change or a release; do not propose or ask for a version bump after each edit. Continue showing the installed skill version at invocation (REQ-16). Development snapshots use a source fingerprint to distinguish revisions without raising the base version.
 
 ## Deterministic checks
 

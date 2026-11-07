@@ -19,8 +19,10 @@ SCENARIO_ID = re.compile(r"\bT-\d{3}\b")
 CHECKLIST_ID = re.compile(r"\b[CP]-\d{2}\b")
 HEADING = re.compile(r"^(#{1,6})\s+(.*?)\s*#*\s*$")
 LOCAL_LINK = re.compile(r"\[([^\]]*)\]\(#([^)\s]+)\)")
-STATUS_WORDS = ("clarified", "open", "not applicable", "not examined")
-ORIGIN_MARKERS = ("intended", "observed", "assumed")
+STATUS_WORDS = ("clarified", "open", "not applicable", "not examined",
+                "geklärt", "offen", "nicht anwendbar", "nicht untersucht")
+ORIGIN_MARKERS = ("intended", "observed", "assumed", "beabsichtigt", "vorgesehen",
+                  "beobachtet", "angenommen")
 SCENARIO_WORDS_WARN = 180
 SCENARIO_WORDS_ERROR = 320
 
@@ -99,6 +101,21 @@ def check_model(path, repo=None, no_code=False):
     lines = text.splitlines()
     headings = parse_headings(lines)
     anchors = {h["anchor"] for h in headings}
+    model_sections = list(sections(lines, headings))
+    by_anchor = {h["anchor"]: (h, body) for h, body, _ in model_sections}
+    scenario_spans = [(h["line"], h["line"] + len(body))
+                      for h, body, _ in model_sections if SCENARIO_ID.match(h["text"])]
+
+    def is_evidence(anchor, scenario_id):
+        target = by_anchor.get(anchor)
+        if target is None:
+            return False
+        heading, body = target
+        return (
+            scenario_id in SCENARIO_ID.findall(heading["text"])
+            and not any(start <= heading["line"] <= end for start, end in scenario_spans)
+            and any(line.strip() and not HEADING.match(line) for line in body)
+        )
 
     # M01 title and audience notice
     title = next((h for h in headings if h["level"] == 1), None)
@@ -142,7 +159,7 @@ def check_model(path, repo=None, no_code=False):
 
     # M05 evidence link per scenario, M06 length, M09 verified claims
     verified = re.compile(r"(?<!un)(?<!not )(?<!not-)\bverified\b", re.IGNORECASE)
-    for heading, body, start in sections(lines, headings):
+    for heading, body, start in model_sections:
         match = SCENARIO_ID.match(heading["text"])
         if not match:
             continue
@@ -150,10 +167,11 @@ def check_model(path, repo=None, no_code=False):
         body_text = "\n".join(body)
         evidence_links = [
             (label, anchor) for label, anchor in LOCAL_LINK.findall(body_text)
-            if scenario_id.lower() in anchor
+            if is_evidence(anchor, scenario_id)
         ]
         if not evidence_links:
-            report.error("M05", heading["line"], f"{scenario_id} has no evidence link to an appendix entry for the same ID")
+            report.error("M05", heading["line"],
+                         f"{scenario_id} has no evidence link to a nonempty, separate appendix entry for the same ID")
         else:
             label, anchor = evidence_links[-1]
             main_text = body_text.split(f"[{label}](#{anchor})")[0]
@@ -181,7 +199,8 @@ def check_model(path, repo=None, no_code=False):
         cells = [c.strip().lower() for c in line.strip("|").split("|")]
         if len(cells) < 2 or not any(cells[1].startswith(s) for s in STATUS_WORDS):
             report.error("M08", number, "checklist row without a status in its second column "
-                                        "(clarified, open, not applicable, not examined)")
+                                        "(clarified, open, not applicable, not examined; "
+                                        "geklärt, offen, nicht anwendbar, nicht untersucht)")
     if not checklist_rows and not re.search(r"not listed .{0,40}clarified", text, re.IGNORECASE):
         report.warning("M08", 0, "no checklist status table and no statement that unlisted items are clarified")
 

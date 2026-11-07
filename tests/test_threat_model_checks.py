@@ -23,6 +23,48 @@ def run(script, *args):
 
 
 class ModelCheckTests(unittest.TestCase):
+    def check_variant(self, text):
+        with tempfile.TemporaryDirectory() as repo:
+            model = Path(repo) / "threat-model.md"
+            model.write_text(text)
+            (Path(repo) / "SECURITY.md").write_text("[Threat model](threat-model.md)\n")
+            return run(MODEL_CHECK, str(model), "--repo", repo)
+
+    def test_evidence_must_be_a_separate_populated_section_for_the_same_scenario(self):
+        original = (FIXTURES / "model-good.md").read_text()
+        evidence_link = "](#evidence-and-verification-for-t-001)"
+        start = original.index("### Evidence and verification for T-001")
+        end = original.index("### Evidence and verification for T-002")
+        variants = {
+            "self-reference": original.replace(evidence_link, "](#t-001-document-changes-after-review)"),
+            "wrong scenario": original.replace(evidence_link, "](#evidence-and-verification-for-t-002)"),
+            "missing section": original[:start] + original[end:],
+            "empty section": original[:start] + "### Evidence and verification for T-001\n\n" + original[end:],
+            "scenario subsection": original[:start] + original[end:],
+        }
+        variants["scenario subsection"] = variants["scenario subsection"].replace(
+            "### T-002 Customer reads another customer's documents",
+            "#### Evidence and verification for T-001\n\nNot an appendix entry.\n\n"
+            "### T-002 Customer reads another customer's documents",
+        )
+        for name, text in variants.items():
+            with self.subTest(name=name):
+                code, findings = self.check_variant(text)
+                self.assertEqual(code, 1, findings)
+                self.assertIn("M05", {f["code"] for f in findings if f["level"] == "error"})
+
+    def test_german_statuses_and_evidence_headings_are_valid(self):
+        original = (FIXTURES / "model-good.md").read_text()
+        translated = original.replace("Evidence and verification for", "Nachweise und Prüfung für")
+        translated = translated.replace("evidence-and-verification-for", "nachweise-und-prüfung-für")
+        for status in ("Geklärt", "Offen", "Nicht anwendbar", "Nicht untersucht"):
+            with self.subTest(status=status):
+                code, findings = self.check_variant(
+                    translated.replace("| Open |", f"| {status} |")
+                    .replace("| Not examined |", f"| {status} |")
+                )
+                self.assertEqual(code, 0, findings)
+
     def test_good_model_has_no_errors(self):
         with tempfile.TemporaryDirectory() as repo:
             model = Path(repo) / "threat-model.md"
@@ -106,6 +148,46 @@ class TranscriptCheckTests(unittest.TestCase):
         self.assertEqual(result["summary"]["rounds"], 4)
         self.assertEqual(result["summary"]["questions_before_candidates"], 1)
         self.assertEqual(result["summary"]["questions_after_first_write"], 1)
+
+    def test_single_candidate_also_requires_bound_questions(self):
+        code, result = self.run_transcript([
+            message("create-threat-model · Version 0.3.3"),
+            message("Candidates: T-001 document changes after review."),
+            questions("Which colour should the portal use?"),
+        ], "--scenario-bound")
+        self.assertEqual(code, 1, result)
+        self.assertIn("Q07", {f["code"] for f in result["findings"]})
+        self.assertEqual(result["summary"]["questions_before_candidates"], 0)
+
+    def test_version_may_follow_one_initial_skill_announcement(self):
+        announcement = message("Ich nutze create-threat-model und lese seine Anweisungen.")
+        banner = message("create-threat-model · Version 0.3.4\nReview · GrantDesk")
+        cases = [
+            ([announcement, banner], 0),
+            ([announcement], 1),
+            ([announcement, questions("Who may read the model?"), banner], 1),
+            ([announcement, write_model(), banner], 1),
+            ([announcement, message("Here is the assessment."), banner], 1),
+            ([message("Version 0.3.4")], 1),
+        ]
+        for events, expected in cases:
+            with self.subTest(events=events):
+                code, result = self.run_transcript(events)
+                self.assertEqual(code, expected, result)
+                self.assertEqual("Q09" in {f["code"] for f in result["findings"]}, expected == 1)
+
+    def test_chat_questions_and_waiting_are_explicitly_unchecked(self):
+        code, result = self.run_transcript([
+            message("create-threat-model · Version 0.3.3"),
+            message("T-001: Who approves? T-001: Which documents? T-001: What happens next?"),
+            questions("T-001: Does replacement reopen the review?"),
+            write_model(),
+        ], "--scenario-bound")
+        self.assertEqual(code, 0, result)
+        self.assertEqual(result["summary"]["questions"], 1)
+        self.assertIn("chat_questions", result["coverage"]["not_checked"])
+        self.assertIn("answers_and_waiting", result["coverage"]["not_checked"])
+        self.assertIn("semantic_quality", result["coverage"]["not_checked"])
 
     def test_violations_are_reported(self):
         long_title = "Could you please describe in as much detail as possible " * 5 + "?"

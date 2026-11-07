@@ -58,6 +58,12 @@ python3 scripts/check_transcript.py ~/.codex/sessions/YYYY/MM/DD/rollout-<id>.js
 
 Add `--no-code` to both when the target has no implementation. Compare the summary line of the transcript check with the previous run: questions before candidates should be limited to necessary foundation or operation/permission questions. Judge early foundation questions by the missing context they resolve, not by the count alone; every later question should be bound to a scenario or checklist item. Neither checker establishes that answers caused the appropriate system or scenario changes.
 
+The transcript checker counts recognized question-tool calls only. It reports its coverage in text and JSON: chat questions, answers and waiting, semantic quality, and writes through other mechanisms are not checked. Candidate detection uses scenario IDs as a heuristic; detected patch text does not prove that a write succeeded. Zero recognized questions can mean no-questions mode or an unsupported transport, not a verified absence of questions. The model checker recognizes English and German checklist statuses and requires a separate, nonempty evidence entry per scenario. It checks same-document anchors and the security-document link, not the existence or content of other cited files. Review other languages and source references manually.
+
+The startup check allows one initial message naming the skill before its installed version is read. The next nonempty assistant message must show the skill name and version, before any recognized question round or model write. A missing banner or one delayed until the assessment does not pass.
+
+Use the [model-quality cases](tests/manual/model-quality.md) to assess the actual dialogue and resulting document for both requirements-only and implemented systems. Keep those behavioral results separate from the deterministic check results.
+
 ### Start a modeling session
 
 From the root of this repository, run:
@@ -139,7 +145,7 @@ These are manual behavior checks; documentation review or a passing installer te
 
 ### Check the guided interview (REQ-03, REQ-19)
 
-Use the training example above with a German user request and an English model. Check that questions use German and the host's permitted interactive question interface. Expect one short proposal for confirmation, with a context sentence only when needed; at most three independent questions may be grouped. For example, "Sind für die Anwendung ausschließlich erfundene Übungsdaten vorgesehen?" can offer "Ja," "Nein," and "Unklar." Each selection must work without additional text. Derive AI data flows from the supplied sources; ask separately about intended recipients only if that point remains material and unresolved. The system explanation must make sense without reading Mermaid syntax.
+Use the training example above with a German user request and an English model. Check that questions use German and the host's permitted interactive question interface. Each scenario or checklist question comes alone with brief background and the effect of its answers. Only independent questions about target, scope, audience, destination, document use, or permission may share a round of at most three; never combine them with a scenario or checklist question. For example, "Sind für die Anwendung ausschließlich erfundene Übungsdaten vorgesehen?" can offer "Ja," "Nein," and "Unklar." Each selection must work without additional text. Derive AI data flows from the supplied sources; ask separately about intended recipients only if that point remains material and unresolved. The system explanation must make sense without reading Mermaid syntax.
 
 Check relevance and clarity against REQ-03, REQ-04, REQ-15, and REQ-19:
 
